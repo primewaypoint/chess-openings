@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChessOpenings — Free, offline chess opening trainer</title>
+  <meta name="description" content="Learn and practice 80+ chess openings on Mac and Windows. 100% free, fully offline, open source. No account, no ads, no subscription — forever.">
+  <style>
+    :root {
+      --bg: #0e0e10;
+      --bg-card: #18181b;
+      --bg-card-hover: #1f1f23;
+      --border: #2a2a2e;
+      --text: #ececef;
+      --text-secondary: #9b9ba3;
+      --text-muted: #5e5e66;
+      --gold: #e8b54d;
+      --green: #4caf6e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--gold); text-decoration: none; }
+
+    .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 96px 0 72px;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% -10%, rgba(232, 181, 77, 0.07), transparent),
+        var(--bg);
+    }
+    .crown {
+      width: 72px;
+      height: 56px;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(34px, 6vw, 52px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    h1 .thin { font-weight: 300; }
+    .tagline {
+      margin: 18px auto 0;
+      font-size: clamp(16px, 2.5vw, 19px);
+      color: var(--text-secondary);
+      max-width: 540px;
+    }
+    .tagline strong { color: var(--text); font-weight: 600; }
+    .hero-cta { margin-top: 40px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-gold { background: var(--gold); color: #1a1a1c; }
+    .btn-gold:hover { background: #f0c266; }
+    .btn-ghost { border: 1px solid var(--border); color: var(--text); background: var(--bg-card); }
+    .btn-ghost:hover { border-color: var(--text-muted); background: var(--bg-card-hover); }
+    .hero-note { margin-top: 18px; font-size: 13px; color: var(--text-muted); }
+
+    /* Sections */
+    section { padding: 72px 0; border-top: 1px solid var(--border); }
+    h2 {
+      font-size: clamp(24px, 4vw, 30px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+    }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    p.body { color: var(--text-secondary); font-size: 16px; max-width: 640px; }
+    p.body + p.body { margin-top: 14px; }
+    p.body strong { color: var(--text); }
+
+    /* Features grid */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .feature {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .feature .icon { font-size: 22px; margin-bottom: 10px; display: block; }
+    .feature h3 { font-size: 15.5px; font-weight: 650; margin-bottom: 6px; }
+    .feature p { font-size: 13.5px; color: var(--text-secondary); }
+
+    /* Download */
+    .dl-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .dl-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 22px;
+      text-align: center;
+      color: var(--text);
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .dl-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .dl-card .os { width: 30px; height: 30px; margin-bottom: 12px; color: var(--text); }
+    .dl-card h3 { font-size: 15.5px; font-weight: 650; }
+    .dl-card p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .dl-note {
+      margin-top: 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .dl-note strong { color: var(--text); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 56px;
+      text-align: center;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+    footer .crown-sm { width: 26px; height: 20px; color: var(--gold); opacity: 0.8; margin-bottom: 12px; }
+    footer a { color: var(--text-secondary); }
+    footer a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="wrap">
+      <svg class="crown" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1><span class="thin">Chess</span>Openings</h1>
+      <p class="tagline">
+        Learn and practice <strong>80+ chess openings</strong> on your Mac or Windows PC.
+        <strong>100% free. Fully offline. Forever.</strong>
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-gold" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">↓&nbsp; Download</a>
+        <a class="btn btn-ghost" href="https://github.com/YOUR_USERNAME/chess-openings">View on GitHub</a>
+      </div>
+      <p class="hero-note">No account · No ads · No subscription · Open source (GPL-3.0)</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="section-label">Why this exists</div>
+      <h2>Opening training shouldn't cost a subscription</h2>
+      <p class="body">
+        Most chess opening trainers lock their best features behind a monthly fee.
+        ChessOpenings was built on a simple conviction: <strong>learning the Italian Game,
+        the Sicilian or the Queen's Gambit should be free for everyone</strong> — the openings
+        themselves are centuries old and belong to all of us.
+      </p>
+      <p class="body">
+        So this app does one thing, does it well, and asks for nothing back. Every opening,
+        every line, every feature — free on day one, free forever. The full source code is
+        public under the GPL-3.0 license, which legally guarantees it can never be turned
+        into a paid, closed product. Not even by its author.
+      </p>
+      <p class="body">
+        It also runs <strong>entirely offline</strong>. No servers, no tracking, no data
+        leaving your computer. Train on a plane, in a park, anywhere.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-label">Features</div>
+      <h2>Everything you need to master your repertoire</h2>
+      <div class="features">
+        <div class="feature">
+          <span class="icon">📖</span>
+          <h3>Learn mode</h3>
+          <p>Step through every move with plain-language explanations of the ideas behind it.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">♟️</span>
+          <h3>Practice mode</h3>
+          <p>Play the moves yourself. The opponent replies automatically — and wrong moves show you which piece punishes them.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">👑</span>
+          <h3>80+ openings</h3>
+          <p>From beginner classics to the Najdorf — plus fun gambits like the Bongcloud. Each with multiple lines.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">🔥</span>
+          <h3>Daily streaks</h3>
+          <p>Build a training habit with streak tracking and a weekly calendar of your progress.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">⭐</span>
+          <h3>Favorites & filters</h3>
+          <p>Star your repertoire, filter by difficulty or color, and find any opening instantly.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">🌙</span>
+          <h3>Polished experience</h3>
+          <p>Dark and light themes, subtle sounds, keyboard shortcuts, progress saved per opening.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="wrap">
+      <div class="section-label">Download</div>
+      <h2>Get it for your system</h2>
+      <div class="dl-cards">
+        <a class="dl-card" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
+          <svg class="os" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+          <h3>Mac — Apple Silicon</h3>
+          <p>M1 chip or newer</p>
+        </a>
+        <a class="dl-card" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
+          <svg class="os" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+          <h3>Mac — Intel</h3>
+          <p>Intel-based Macs</p>
+        </a>
+        <a class="dl-card" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
+          <svg class="os" viewBox="0 0 448 512" fill="currentColor"><path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"/></svg>
+          <h3>Windows</h3>
+          <p>Windows 10 / 11 (64-bit)</p>
+        </a>
+      </div>
+      <div class="dl-note">
+        <strong>First launch:</strong> the app is free and unsigned (signing certificates cost money),
+        so your system warns you once. On Mac: right-click → <strong>Open</strong> → <strong>Open</strong>.
+        On Windows: click <strong>More info</strong> → <strong>Run anyway</strong>. That's it — only the first time.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <svg class="crown-sm" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p>Created by <strong>David Carvalho</strong> · <a href="https://github.com/YOUR_USERNAME/chess-openings">Source code</a> · <a href="https://github.com/YOUR_USERNAME/chess-openings/blob/main/LICENSE">GPL-3.0 license</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>
