@@ -4,18 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChessOpenings — Free, offline chess opening trainer</title>
-  <meta name="description" content="Learn and practice 80+ chess openings on Mac and Windows. 100% free, fully offline, open source. No account, no ads, no subscription — forever.">
+  <meta name="description" content="Learn and practice 84 chess openings on Mac and Windows. 100% free, fully offline, open source. No account, no ads, no subscription — forever.">
   <style>
     :root {
-      --bg: #0e0e10;
-      --bg-card: #18181b;
-      --bg-card-hover: #1f1f23;
-      --border: #2a2a2e;
-      --text: #ececef;
-      --text-secondary: #9b9ba3;
-      --text-muted: #5e5e66;
+      --bg: #0d0d0f;
+      --bg-2: #121214;
+      --card: #17171a;
+      --card-2: #1d1d21;
+      --border: #26262b;
+      --border-2: #34343a;
+      --text: #ededf0;
+      --text-2: #a2a2ab;
+      --text-3: #61616a;
       --gold: #e8b54d;
+      --gold-soft: rgba(232, 181, 77, 0.12);
       --green: #4caf6e;
+      --sq-light: #ecd9b9;
+      --sq-dark: #ae8a68;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -25,40 +30,118 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     a { color: var(--gold); text-decoration: none; }
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 0 28px; }
 
-    .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-
-    /* Hero */
-    .hero {
-      text-align: center;
-      padding: 96px 0 72px;
-      background:
-        radial-gradient(ellipse 60% 50% at 50% -10%, rgba(232, 181, 77, 0.07), transparent),
-        var(--bg);
+    /* ── Nav ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      transition: background 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+      border-bottom: 1px solid transparent;
     }
-    .crown {
-      width: 72px;
-      height: 56px;
+    nav.scrolled {
+      background: rgba(13, 13, 15, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom-color: var(--border);
+      padding: 12px 0;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 700; font-size: 16px; }
+    .nav-logo svg { width: 22px; height: 17px; color: var(--gold); }
+    .nav-logo .thin { font-weight: 300; }
+    .nav-cta {
+      font-size: 13.5px; font-weight: 600;
+      padding: 8px 18px;
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+      color: var(--text);
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .nav-cta:hover { border-color: var(--gold); background: var(--gold-soft); }
+
+    /* ── Hero ────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0 80px;
+      background:
+        radial-gradient(ellipse 70% 55% at 70% 20%, rgba(232, 181, 77, 0.055), transparent 70%),
+        var(--bg);
+      overflow: hidden;
+    }
+    #glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(560px circle at var(--mx, 70%) var(--my, 30%), rgba(232, 181, 77, 0.06), transparent 65%);
+      transition: opacity 0.4s ease;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 24px;
+      margin-bottom: 22px;
+    }
+    .hero-label::before {
+      content: "";
+      width: 22px; height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
     }
     h1 {
-      font-size: clamp(34px, 6vw, 52px);
+      font-size: clamp(38px, 5.4vw, 60px);
       font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
     }
-    h1 .thin { font-weight: 300; }
-    .tagline {
-      margin: 18px auto 0;
-      font-size: clamp(16px, 2.5vw, 19px);
-      color: var(--text-secondary);
-      max-width: 540px;
+    h1 .rv {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(26px);
+      animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+      animation-delay: var(--d, 0s);
     }
-    .tagline strong { color: var(--text); font-weight: 600; }
-    .hero-cta { margin-top: 40px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    h1 .gold { color: var(--gold); }
+    @keyframes rise {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-sub {
+      margin-top: 22px;
+      font-size: clamp(15.5px, 2vw, 17.5px);
+      color: var(--text-2);
+      max-width: 480px;
+      opacity: 0;
+      animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.55s forwards;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 600; }
+    .hero-cta {
+      margin-top: 36px;
+      display: flex;
+      gap: 13px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.7s forwards;
+    }
     .btn {
       display: inline-flex;
       align-items: center;
@@ -67,216 +150,605 @@
       border-radius: 10px;
       font-size: 15px;
       font-weight: 600;
-      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
     }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-gold { background: var(--gold); color: #1a1a1c; }
-    .btn-gold:hover { background: #f0c266; }
-    .btn-ghost { border: 1px solid var(--border); color: var(--text); background: var(--bg-card); }
-    .btn-ghost:hover { border-color: var(--text-muted); background: var(--bg-card-hover); }
-    .hero-note { margin-top: 18px; font-size: 13px; color: var(--text-muted); }
+    .btn svg { width: 15px; height: 15px; }
+    .btn-gold { background: var(--gold); color: #1b1505; }
+    .btn-gold:hover {
+      background: #f1c463;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(232, 181, 77, 0.25);
+    }
+    .btn-ghost { border: 1px solid var(--border-2); color: var(--text); background: rgba(255,255,255,0.02); }
+    .btn-ghost:hover { border-color: var(--text-3); background: var(--card); transform: translateY(-2px); }
+    .hero-note {
+      margin-top: 20px;
+      font-size: 12.5px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+      opacity: 0;
+      animation: rise 0.7s ease 0.85s forwards;
+    }
 
-    /* Sections */
-    section { padding: 72px 0; border-top: 1px solid var(--border); }
-    h2 {
-      font-size: clamp(24px, 4vw, 30px);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 18px;
+    /* ── Live board ──────────────────────────────────── */
+    .board-stage {
+      perspective: 1100px;
+      opacity: 0;
+      animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.45s forwards;
     }
+    .board-tilt {
+      transform: rotateY(-7deg) rotateX(4deg);
+      transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .board-stage:hover .board-tilt { transform: rotateY(0) rotateX(0); }
+    #board {
+      position: relative;
+      width: min(440px, 100%);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      background-image: conic-gradient(
+        var(--sq-dark) 90deg,
+        var(--sq-light) 90deg 180deg,
+        var(--sq-dark) 180deg 270deg,
+        var(--sq-light) 270deg
+      );
+      background-size: 25% 25%;
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.55),
+        0 0 0 1px var(--border),
+        0 0 90px rgba(232, 181, 77, 0.06);
+    }
+    #board .hl {
+      position: absolute;
+      width: 12.5%; height: 12.5%;
+      top: 0; left: 0;
+      background: rgba(232, 181, 77, 0.42);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.3, 0.8, 0.3, 1), opacity 0.3s ease;
+    }
+    #board .piece {
+      position: absolute;
+      width: 12.5%; height: 12.5%;
+      top: 0; left: 0;
+      transition: transform 0.5s cubic-bezier(0.3, 0.8, 0.3, 1), opacity 0.35s ease;
+      will-change: transform;
+      z-index: 2;
+      pointer-events: none;
+    }
+    #board .piece img { width: 100%; height: 100%; display: block; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.25)); }
+    #board .piece.captured { opacity: 0; transform: scale(0.55) !important; z-index: 1; }
+    #board.resetting .piece, #board.resetting .hl { transition: opacity 0.5s ease; opacity: 0; }
+    .board-caption {
+      margin-top: 20px;
+      text-align: center;
+      font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+      font-size: 13.5px;
+      color: var(--text-2);
+      min-height: 21px;
+      letter-spacing: 0.01em;
+      transition: opacity 0.25s ease;
+    }
+    .board-caption .num { color: var(--gold); }
+    .board-name {
+      margin-top: 6px;
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    /* ── Stats ───────────────────────────────────────── */
+    .stats {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      text-align: center;
+    }
+    .stat { padding: 42px 12px; }
+    .stat + .stat { border-left: 1px solid var(--border); }
+    .stat .num {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat .num .accent { color: var(--gold); }
+    .stat .lbl { margin-top: 4px; font-size: 12.5px; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+
+    /* ── Sections ────────────────────────────────────── */
+    section { padding: 96px 0; }
     .section-label {
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
-    p.body { color: var(--text-secondary); font-size: 16px; max-width: 640px; }
+    h2 {
+      font-size: clamp(26px, 3.6vw, 34px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
+    }
+    p.body { color: var(--text-2); font-size: 16px; max-width: 660px; }
     p.body + p.body { margin-top: 14px; }
     p.body strong { color: var(--text); }
 
-    /* Features grid */
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: var(--d, 0s);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ── Features ────────────────────────────────────── */
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 14px;
-      margin-top: 36px;
+      margin-top: 44px;
     }
     .feature {
-      background: var(--bg-card);
+      position: relative;
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px;
+      border-radius: 16px;
+      padding: 26px 24px;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
     }
-    .feature .icon { font-size: 22px; margin-bottom: 10px; display: block; }
-    .feature h3 { font-size: 15.5px; font-weight: 650; margin-bottom: 6px; }
-    .feature p { font-size: 13.5px; color: var(--text-secondary); }
+    .feature:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-2);
+      background: var(--card-2);
+    }
+    .feature::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232, 181, 77, 0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .feature:hover::after { opacity: 1; }
+    .feature .ficon {
+      width: 42px; height: 42px;
+      border-radius: 11px;
+      background: var(--gold-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feature .ficon svg { width: 21px; height: 21px; color: var(--gold); }
+    .feature h3 { font-size: 15.5px; font-weight: 600; margin-bottom: 7px; }
+    .feature p { font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
 
-    /* Download */
+    /* ── Mission ─────────────────────────────────────── */
+    .mission { border-top: 1px solid var(--border); background: var(--bg-2); }
+    .mission-quote {
+      margin-top: 30px;
+      padding: 22px 26px;
+      border-left: 2px solid var(--gold);
+      background: var(--card);
+      border-radius: 0 12px 12px 0;
+      max-width: 660px;
+      font-size: 15.5px;
+      color: var(--text);
+      font-style: italic;
+    }
+    .mission-quote span { display: block; margin-top: 8px; font-style: normal; font-size: 13px; color: var(--text-3); }
+
+    /* ── Download ────────────────────────────────────── */
+    .download { border-top: 1px solid var(--border); }
     .dl-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 14px;
-      margin-top: 36px;
+      margin-top: 44px;
     }
     .dl-card {
-      background: var(--bg-card);
+      position: relative;
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 26px 22px;
+      border-radius: 16px;
+      padding: 32px 24px 28px;
       text-align: center;
       color: var(--text);
-      transition: border-color 0.15s ease, transform 0.15s ease;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    .dl-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-    .dl-card .os { width: 30px; height: 30px; margin-bottom: 12px; color: var(--text); }
-    .dl-card h3 { font-size: 15.5px; font-weight: 650; }
-    .dl-card p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .dl-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+    }
+    .dl-card .os { width: 30px; height: 30px; margin-bottom: 14px; color: var(--text); }
+    .dl-card h3 { font-size: 15.5px; font-weight: 600; }
+    .dl-card p { font-size: 13px; color: var(--text-3); margin-top: 4px; }
+    .dl-card .get {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold);
+      transition: transform 0.2s ease;
+    }
+    .dl-card:hover .get { transform: translateX(3px); }
     .dl-note {
-      margin-top: 28px;
-      background: var(--bg-card);
+      margin-top: 30px;
+      background: var(--card);
       border: 1px solid var(--border);
       border-left: 3px solid var(--gold);
       border-radius: 10px;
       padding: 16px 20px;
       font-size: 14px;
-      color: var(--text-secondary);
+      color: var(--text-2);
     }
     .dl-note strong { color: var(--text); }
 
-    /* Footer */
+    /* ── Footer ──────────────────────────────────────── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 40px 0 56px;
+      padding: 44px 0 60px;
       text-align: center;
       font-size: 13.5px;
-      color: var(--text-muted);
+      color: var(--text-3);
     }
-    footer .crown-sm { width: 26px; height: 20px; color: var(--gold); opacity: 0.8; margin-bottom: 12px; }
-    footer a { color: var(--text-secondary); }
+    footer svg { width: 26px; height: 20px; color: var(--gold); opacity: 0.85; margin-bottom: 12px; }
+    footer a { color: var(--text-2); transition: color 0.2s ease; }
     footer a:hover { color: var(--gold); }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 880px) {
+      .hero { padding: 110px 0 64px; min-height: auto; }
+      .hero-grid { grid-template-columns: 1fr; gap: 52px; }
+      .board-tilt { transform: none; }
+      .features, .dl-cards { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(3) { border-left: none; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--border); }
+      section { padding: 72px 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+      h1 .rv, .hero-sub, .hero-cta, .hero-note, .board-stage { opacity: 1; transform: none; }
+    }
   </style>
+  <noscript>
+    <style>
+      .reveal, h1 .rv, .hero-sub, .hero-cta, .hero-note, .board-stage { opacity: 1 !important; transform: none !important; animation: none !important; }
+    </style>
+  </noscript>
 </head>
 <body>
 
+  <nav id="nav">
+    <div class="wrap nav-inner">
+      <a class="nav-logo" href="#">
+        <svg viewBox="0 0 18 14" fill="none"><path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span><span class="thin">Chess</span>Openings</span>
+      </a>
+      <a class="nav-cta" href="#download">Download</a>
+    </div>
+  </nav>
+
   <header class="hero">
-    <div class="wrap">
-      <svg class="crown" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <h1><span class="thin">Chess</span>Openings</h1>
-      <p class="tagline">
-        Learn and practice <strong>80+ chess openings</strong> on your Mac or Windows PC.
-        <strong>100% free. Fully offline. Forever.</strong>
-      </p>
-      <div class="hero-cta">
-        <a class="btn btn-gold" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">↓&nbsp; Download</a>
-        <a class="btn btn-ghost" href="https://github.com/YOUR_USERNAME/chess-openings">View on GitHub</a>
+    <div id="glow"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-label">Free · Offline · Open source</div>
+        <h1>
+          <span class="rv" style="--d:0.05s">Master</span>
+          <span class="rv" style="--d:0.13s">the</span>
+          <span class="rv" style="--d:0.21s">opening.</span><br>
+          <span class="rv gold" style="--d:0.34s">Own</span>
+          <span class="rv gold" style="--d:0.42s">the</span>
+          <span class="rv gold" style="--d:0.50s">game.</span>
+        </h1>
+        <p class="hero-sub">
+          Learn and practice <strong>84 chess openings</strong> with move-by-move explanations,
+          on your Mac or Windows PC. <strong>No account. No ads. No subscription. Ever.</strong>
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-gold" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download free
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/YOUR_USERNAME/chess-openings">View source</a>
+        </div>
+        <p class="hero-note">GPL-3.0 licensed — legally free forever, for everyone.</p>
       </div>
-      <p class="hero-note">No account · No ads · No subscription · Open source (GPL-3.0)</p>
+
+      <div class="board-stage">
+        <div class="board-tilt">
+          <div id="board">
+            <div class="hl" id="hlFrom"></div>
+            <div class="hl" id="hlTo"></div>
+          </div>
+        </div>
+        <div class="board-caption" id="caption">&nbsp;</div>
+        <div class="board-name">Fried Liver Attack — live replay</div>
+      </div>
     </div>
   </header>
 
-  <section>
-    <div class="wrap">
-      <div class="section-label">Why this exists</div>
-      <h2>Opening training shouldn't cost a subscription</h2>
-      <p class="body">
-        Most chess opening trainers lock their best features behind a monthly fee.
-        ChessOpenings was built on a simple conviction: <strong>learning the Italian Game,
-        the Sicilian or the Queen's Gambit should be free for everyone</strong> — the openings
-        themselves are centuries old and belong to all of us.
-      </p>
-      <p class="body">
-        So this app does one thing, does it well, and asks for nothing back. Every opening,
-        every line, every feature — free on day one, free forever. The full source code is
-        public under the GPL-3.0 license, which legally guarantees it can never be turned
-        into a paid, closed product. Not even by its author.
-      </p>
-      <p class="body">
-        It also runs <strong>entirely offline</strong>. No servers, no tracking, no data
-        leaving your computer. Train on a plane, in a park, anywhere.
-      </p>
+  <div class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat reveal"><div class="num"><span data-count="84">0</span></div><div class="lbl">Openings</div></div>
+      <div class="stat reveal" style="--d:0.08s"><div class="num"><span data-count="181">0</span></div><div class="lbl">Lines to master</div></div>
+      <div class="stat reveal" style="--d:0.16s"><div class="num"><span data-count="1394">0</span></div><div class="lbl">Explained moves</div></div>
+      <div class="stat reveal" style="--d:0.24s"><div class="num"><span class="accent">€0</span></div><div class="lbl">Forever</div></div>
     </div>
-  </section>
+  </div>
 
   <section>
     <div class="wrap">
-      <div class="section-label">Features</div>
-      <h2>Everything you need to master your repertoire</h2>
+      <div class="section-label reveal">Built for training</div>
+      <h2 class="reveal" style="--d:0.06s">Everything you need to build a repertoire</h2>
       <div class="features">
-        <div class="feature">
-          <span class="icon">📖</span>
+        <div class="feature reveal" style="--d:0.05s">
+          <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
           <h3>Learn mode</h3>
-          <p>Step through every move with plain-language explanations of the ideas behind it.</p>
+          <p>Step through every move with plain-language explanations of the ideas behind it — not just the notation.</p>
         </div>
-        <div class="feature">
-          <span class="icon">♟️</span>
+        <div class="feature reveal" style="--d:0.11s">
+          <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
           <h3>Practice mode</h3>
           <p>Play the moves yourself. The opponent replies automatically — and wrong moves show you which piece punishes them.</p>
         </div>
-        <div class="feature">
-          <span class="icon">👑</span>
-          <h3>80+ openings</h3>
-          <p>From beginner classics to the Najdorf — plus fun gambits like the Bongcloud. Each with multiple lines.</p>
+        <div class="feature reveal" style="--d:0.17s">
+          <div class="ficon"><svg viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13"/></svg></div>
+          <h3>84 openings, 181 lines</h3>
+          <p>From beginner classics to the Najdorf — plus fun gambits like the Bongcloud. Filtered by difficulty and color.</p>
         </div>
-        <div class="feature">
-          <span class="icon">🔥</span>
+        <div class="feature reveal" style="--d:0.05s">
+          <div class="ficon"><svg viewBox="0 0 14 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M7 17c3.5 0 6-2.5 6-5.5 0-2-1-3.5-2-4.5 0 1.5-.8 2.5-1.8 2.8C9.5 8 8.5 5.5 7 3c0 2.5-1.5 4-1.5 5.5C4.5 8.2 4 7.5 4 6.5 2.5 8 1 10 1 11.5 1 14.5 3.5 17 7 17z"/></svg></div>
           <h3>Daily streaks</h3>
-          <p>Build a training habit with streak tracking and a weekly calendar of your progress.</p>
+          <p>Build a training habit with streak tracking and a weekly calendar of the days you showed up.</p>
         </div>
-        <div class="feature">
-          <span class="icon">⭐</span>
-          <h3>Favorites & filters</h3>
-          <p>Star your repertoire, filter by difficulty or color, and find any opening instantly.</p>
+        <div class="feature reveal" style="--d:0.11s">
+          <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <h3>Favorites and search</h3>
+          <p>Star the openings in your repertoire, search instantly, and track progress per opening and per line.</p>
         </div>
-        <div class="feature">
-          <span class="icon">🌙</span>
-          <h3>Polished experience</h3>
-          <p>Dark and light themes, subtle sounds, keyboard shortcuts, progress saved per opening.</p>
+        <div class="feature reveal" style="--d:0.17s">
+          <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+          <h3>Polished details</h3>
+          <p>Dark and light themes, subtle sounds, keyboard shortcuts, smooth animations. Built with care, not bloat.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="download">
+  <section class="mission">
     <div class="wrap">
-      <div class="section-label">Download</div>
-      <h2>Get it for your system</h2>
+      <div class="section-label reveal">Why this exists</div>
+      <h2 class="reveal" style="--d:0.06s">Opening training shouldn't cost a subscription</h2>
+      <p class="body reveal" style="--d:0.1s">
+        Most opening trainers lock their best features behind a monthly fee. But the Italian Game,
+        the Sicilian and the Queen's Gambit are <strong>centuries old — they belong to everyone</strong>.
+        ChessOpenings was built on that conviction: one focused tool, done well, free on day one and free forever.
+      </p>
+      <p class="body reveal" style="--d:0.14s">
+        It runs <strong>entirely offline</strong>. No servers, no tracking, no data ever leaving your computer.
+        And the full source code is public under the GPL-3.0 license — which legally guarantees that no one
+        can ever turn this into a paid, closed product. Not even its author.
+      </p>
+      <div class="mission-quote reveal" style="--d:0.18s">
+        "The free alternative — that was always the goal."
+        <span>— David Carvalho, creator</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="download" id="download">
+    <div class="wrap">
+      <div class="section-label reveal">Download</div>
+      <h2 class="reveal" style="--d:0.06s">Get it for your system</h2>
       <div class="dl-cards">
-        <a class="dl-card" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
+        <a class="dl-card reveal" style="--d:0.05s" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
           <svg class="os" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
           <h3>Mac — Apple Silicon</h3>
           <p>M1 chip or newer</p>
+          <span class="get">Download .dmg →</span>
         </a>
-        <a class="dl-card" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
+        <a class="dl-card reveal" style="--d:0.11s" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
           <svg class="os" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
           <h3>Mac — Intel</h3>
           <p>Intel-based Macs</p>
+          <span class="get">Download .dmg →</span>
         </a>
-        <a class="dl-card" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
+        <a class="dl-card reveal" style="--d:0.17s" href="https://github.com/YOUR_USERNAME/chess-openings/releases/latest">
           <svg class="os" viewBox="0 0 448 512" fill="currentColor"><path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"/></svg>
           <h3>Windows</h3>
           <p>Windows 10 / 11 (64-bit)</p>
+          <span class="get">Download installer →</span>
         </a>
       </div>
-      <div class="dl-note">
-        <strong>First launch:</strong> the app is free and unsigned (signing certificates cost money),
-        so your system warns you once. On Mac: right-click → <strong>Open</strong> → <strong>Open</strong>.
-        On Windows: click <strong>More info</strong> → <strong>Run anyway</strong>. That's it — only the first time.
+      <div class="dl-note reveal" style="--d:0.22s">
+        <strong>First launch:</strong> the app is free and unsigned (signing certificates cost money), so your
+        system warns you once. On Mac: right-click → <strong>Open</strong> → <strong>Open</strong>.
+        On Windows: click <strong>More info</strong> → <strong>Run anyway</strong>. Only the first time.
       </div>
     </div>
   </section>
 
   <footer>
     <div class="wrap">
-      <svg class="crown-sm" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <svg viewBox="0 0 18 14" fill="none"><path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <p>Created by <strong>David Carvalho</strong> · <a href="https://github.com/YOUR_USERNAME/chess-openings">Source code</a> · <a href="https://github.com/YOUR_USERNAME/chess-openings/blob/main/LICENSE">GPL-3.0 license</a></p>
     </div>
   </footer>
+
+  <script>
+  (function () {
+    'use strict';
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Nav background on scroll ─────────────────────
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scrollY > 40);
+    }, { passive: true });
+
+    // ── Cursor glow in hero ──────────────────────────
+    const hero = document.querySelector('.hero');
+    const glow = document.getElementById('glow');
+    hero.addEventListener('pointermove', e => {
+      const r = hero.getBoundingClientRect();
+      glow.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      glow.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+
+    // ── Scroll reveals ───────────────────────────────
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+    }
+
+    // ── Animated counters ────────────────────────────
+    const cio = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        cio.unobserve(en.target);
+        const el = en.target;
+        const target = +el.dataset.count;
+        if (reduced) { el.textContent = target; return; }
+        const t0 = performance.now(), dur = 1300;
+        (function tick(t) {
+          const p = Math.min((t - t0) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * ease);
+          if (p < 1) requestAnimationFrame(tick);
+        })(t0);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+    // ── Live board: Fried Liver Attack ───────────────
+    const board   = document.getElementById('board');
+    const hlFrom  = document.getElementById('hlFrom');
+    const hlTo    = document.getElementById('hlTo');
+    const caption = document.getElementById('caption');
+
+    const START = [];
+    'abcdefgh'.split('').forEach((f, i) => {
+      START.push(['wP', f + '2'], ['bP', f + '7']);
+    });
+    [['a','R'],['b','N'],['c','B'],['d','Q'],['e','K'],['f','B'],['g','N'],['h','R']]
+      .forEach(([f, t]) => { START.push(['w' + t, f + '1'], ['b' + t, f + '8']); });
+
+    // [from, to, caption]
+    const MOVES = [
+      ['e2','e4','<span class="num">1.</span> e4'],
+      ['e7','e5','<span class="num">1...</span> e5'],
+      ['g1','f3','<span class="num">2.</span> Nf3'],
+      ['b8','c6','<span class="num">2...</span> Nc6'],
+      ['f1','c4','<span class="num">3.</span> Bc4 — the Italian Game'],
+      ['g8','f6','<span class="num">3...</span> Nf6'],
+      ['f3','g5','<span class="num">4.</span> Ng5 — eyeing f7'],
+      ['d7','d5','<span class="num">4...</span> d5'],
+      ['e4','d5','<span class="num">5.</span> exd5'],
+      ['f6','d5','<span class="num">5...</span> Nxd5?'],
+      ['g5','f7','<span class="num">6.</span> Nxf7! — the Fried Liver'],
+      ['e8','f7','<span class="num">6...</span> Kxf7'],
+      ['d1','f3','<span class="num">7.</span> Qf3+ — the king is dragged out']
+    ];
+
+    function xy(sq) {
+      return { x: sq.charCodeAt(0) - 97, y: 8 - +sq[1] };
+    }
+    function place(el, sq) {
+      const p = xy(sq);
+      el.style.transform = `translate(${p.x * 100}%, ${p.y * 100}%)`;
+    }
+
+    let pieces = []; // { el, square }
+
+    function setup() {
+      pieces.forEach(p => p.el.remove());
+      pieces = [];
+      START.forEach(([type, sq]) => {
+        const el = document.createElement('div');
+        el.className = 'piece';
+        el.innerHTML = `<img src="pieces/${type}.png" alt="">`;
+        place(el, sq);
+        board.appendChild(el);
+        pieces.push({ el, square: sq });
+      });
+      hlFrom.style.opacity = 0;
+      hlTo.style.opacity = 0;
+    }
+
+    function at(sq) { return pieces.find(p => p.square === sq); }
+
+    function playMove(i) {
+      const [from, to, label] = MOVES[i];
+      const victim = at(to);
+      if (victim) {
+        victim.el.classList.add('captured');
+        victim.square = null;
+        setTimeout(() => victim.el.remove(), 400);
+        pieces = pieces.filter(p => p !== victim);
+      }
+      const mover = at(from);
+      if (mover) { place(mover.el, to); mover.square = to; }
+      place(hlFrom, from); place(hlTo, to);
+      hlFrom.style.opacity = 1; hlTo.style.opacity = 1;
+      caption.style.opacity = 0;
+      setTimeout(() => { caption.innerHTML = label; caption.style.opacity = 1; }, 130);
+    }
+
+    function runLoop() {
+      let i = 0;
+      const step = () => {
+        if (i < MOVES.length) {
+          playMove(i++);
+          setTimeout(step, i === MOVES.length ? 3200 : 1150);
+        } else {
+          board.classList.add('resetting');
+          setTimeout(() => {
+            setup();
+            board.classList.remove('resetting');
+            caption.innerHTML = '&nbsp;';
+            i = 0;
+            setTimeout(step, 900);
+          }, 600);
+        }
+      };
+      setTimeout(step, 1400);
+    }
+
+    setup();
+    if (reduced) {
+      // Show the final tactical position statically
+      MOVES.forEach((m, i) => playMove(i));
+    } else {
+      runLoop();
+    }
+  })();
+  </script>
 
 </body>
 </html>
