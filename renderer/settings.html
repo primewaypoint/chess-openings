@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChessOpenings — Settings</title>
+  <link rel="stylesheet" href="../assets/chessboard.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <a class="header-logo" href="index.html">
+      <svg class="logo-crown" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="logo-text"><span>Chess</span>Openings</span>
+    </a>
+
+    <div></div>
+
+    <div class="header-right">
+      <button class="theme-toggle" id="themeToggle">
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" style="display:none">
+          <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="settings-layout">
+
+      <div class="settings-page-title">Settings</div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Progress</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Reset all progress</div>
+              <div class="settings-row-desc">Clear all completed openings and lines. This cannot be undone.</div>
+            </div>
+            <button class="settings-danger-btn" id="resetAllBtn">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Sound</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Sound effects</div>
+              <div class="settings-row-desc">Play subtle sounds for moves, captures, mistakes and completed lines.</div>
+            </div>
+            <button class="toggle-switch" id="soundToggle" role="switch" aria-checked="true"><span class="toggle-knob"></span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">About</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">ChessOpenings</div>
+              <div class="settings-row-desc">Free, offline, open source chess opening trainer. Learn and practice openings across Beginner, Intermediate, Advanced and Fun categories.</div>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">Created by</div>
+            <div class="settings-row-value">David Carvalho</div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">Purpose</div>
+            <div class="settings-row-value" style="max-width:260px;text-align:right">Study chess openings offline, free, at your own pace</div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">Version</div>
+            <div class="settings-row-value">1.1.0</div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">License</div>
+            <div class="settings-row-value">Open source</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="sounds.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

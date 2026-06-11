@@ -1,0 +1,326 @@
+// Main page logic
+
+(function () {
+  'use strict';
+
+  // ── Side mapping ────────────────────────────────────────────────
+  const SIDE = {
+    // White-initiated openings
+    'italian-game':'white','london-system':'white','vienna-game':'white',
+    'kings-gambit':'white','kings-gambit-accepted':'white','giuoco-piano-full':'white',
+    'fried-liver-attack':'white','evans-gambit':'white','danish-gambit':'white',
+    'bishops-opening':'white','three-knights-game':'white','center-game':'white',
+    'ponziani-opening':'white','bird-opening':'white','nimzowitsch-larsen-attack':'white',
+    'ruy-lopez':'white','sicilian-alapin':'white','sicilian-smith-morra':'white',
+    'french-advance':'white','french-tarrasch':'white','caro-kann-advance':'white',
+    'trompowsky-attack':'white','colle-system':'white','english-opening':'white',
+    'reti-opening':'white','catalan-opening':'white','catalan-open':'white',
+    'kid-samisch':'white','kid-four-pawns':'white','sicilian-richter-rauzer':'white',
+    'the-cow':'white','bongcloud-attack':'white','polish-opening':'white',
+    'grob-attack':'white','wayward-queen':'white','halloween-gambit':'white',
+    'hillbilly-attack':'white','monkeys-bum':'white','coca-cola-gambit':'white',
+    'hammerschlag':'white',
+    // Black-initiated defenses
+    'scandinavian-defense':'black','philidor-defense':'black','hungarian-defense':'black',
+    'ruy-lopez-berlin':'black','sicilian-defense':'black','sicilian-najdorf':'black',
+    'sicilian-dragon':'black','sicilian-scheveningen':'black','french-defense':'black',
+    'french-winawer':'black','caro-kann':'black','pirc-defense':'black',
+    'modern-defense':'black','alekhines-defense':'black','petroff-defense':'black',
+    'two-knights':'black','slav-defense':'black','semi-slav':'black',
+    'dutch-defense':'black','benoni-defense':'black','budapest-gambit':'black',
+    'benko-gambit':'black','kings-indian-defense':'black','grunfeld-defense':'black',
+    'nimzo-indian':'black','queens-indian':'black','sicilian-sveshnikov':'black',
+    'sicilian-poisoned-pawn':'black','sicilian-accelerated-dragon':'black',
+    'ruy-lopez-marshall':'black','semi-slav-meran':'black','bogo-indian':'black',
+    'cornstalk-defense':'black','lemming-defense':'black','carrs-defense':'black',
+    'st-george-defense':'black','frankenstein-dracula':'black','hippopotamus-defense':'black',
+    // Symmetric / both
+    'four-knights-game':'both','ruy-lopez-closed':'both','queens-gambit':'both',
+    'queens-gambit-accepted':'both','double-bongcloud':'both','botez-gambit':'both',
+  };
+
+  // ── Theme ────────────────────────────────────────────────────────
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  if (savedTheme === 'light') document.body.classList.add('light');
+  syncThemeIcon();
+
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    document.body.classList.toggle('light');
+    localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    syncThemeIcon();
+    renderGrid();
+  });
+
+  function syncThemeIcon() {
+    const light = document.body.classList.contains('light');
+    document.getElementById('iconMoon').style.display = light ? 'none' : '';
+    document.getElementById('iconSun').style.display  = light ? ''     : 'none';
+  }
+
+  // ── Streak ───────────────────────────────────────────────────────
+  function getStreakData() {
+    try { return JSON.parse(localStorage.getItem('streakData') || '{"count":0,"lastDate":null}'); }
+    catch { return { count: 0, lastDate: null }; }
+  }
+
+  function renderStreak() {
+    const count = getEffectiveStreak(getStreakData());
+    const el = document.getElementById('streakCount');
+    const widget = document.getElementById('streakWidget');
+    if (el) el.textContent = count;
+    if (widget) widget.classList.toggle('zero', count === 0);
+  }
+
+  renderStreak();
+
+  // ── Filter state ─────────────────────────────────────────────────
+  let activeDifficulty = 'all';
+  let activeSide = 'both';
+  let favoritesOnly = false;
+  let searchQuery = '';
+
+  // ── Favorites ────────────────────────────────────────────────────
+  function getFavorites() {
+    try { return new Set(JSON.parse(localStorage.getItem('favorites') || '[]')); }
+    catch { return new Set(); }
+  }
+
+  function toggleFavorite(id) {
+    const favs = getFavorites();
+    if (favs.has(id)) favs.delete(id); else favs.add(id);
+    localStorage.setItem('favorites', JSON.stringify([...favs]));
+  }
+
+  // ── Dropdown logic ───────────────────────────────────────────────
+  const filtersBtn = document.getElementById('filtersBtn');
+  const filtersDropdown = document.getElementById('filtersDropdown');
+
+  filtersBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    filtersDropdown.classList.toggle('open');
+    filtersBtn.classList.toggle('active', filtersDropdown.classList.contains('open'));
+  });
+
+  document.addEventListener('click', () => {
+    filtersDropdown.classList.remove('open');
+    filtersBtn.classList.remove('active');
+  });
+
+  filtersDropdown.addEventListener('click', e => e.stopPropagation());
+
+  // Filter option clicks
+  filtersDropdown.querySelectorAll('.filter-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const type  = opt.dataset.type;
+      const value = opt.dataset.value;
+
+      // Deselect siblings
+      opt.closest('div[id]').querySelectorAll('.filter-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+
+      if (type === 'difficulty') activeDifficulty = value;
+      if (type === 'side') activeSide = value;
+      if (type === 'show') favoritesOnly = value === 'favorites';
+
+      updateFilterBadge();
+      updateActiveChips();
+      renderGrid();
+    });
+  });
+
+  function updateFilterBadge() {
+    const count = (activeDifficulty !== 'all' ? 1 : 0) + (activeSide !== 'both' ? 1 : 0) + (favoritesOnly ? 1 : 0);
+    const badge = document.getElementById('filtersBadge');
+    badge.textContent = count;
+    badge.classList.toggle('visible', count > 0);
+  }
+
+  function updateActiveChips() {
+    const container = document.getElementById('activeFilters');
+    container.innerHTML = '';
+
+    if (activeDifficulty !== 'all') {
+      container.appendChild(makeChip(
+        activeDifficulty.charAt(0).toUpperCase() + activeDifficulty.slice(1),
+        () => { resetFilter('difficulty'); }
+      ));
+    }
+    if (activeSide !== 'both') {
+      container.appendChild(makeChip(
+        activeSide === 'white' ? 'White pieces' : 'Black pieces',
+        () => { resetFilter('side'); }
+      ));
+    }
+    if (favoritesOnly) {
+      container.appendChild(makeChip('Favorites', () => { resetFilter('show'); }));
+    }
+  }
+
+  function makeChip(label, onRemove) {
+    const chip = document.createElement('div');
+    chip.className = 'active-chip';
+    chip.innerHTML = `${label}<button>×</button>`;
+    chip.querySelector('button').addEventListener('click', onRemove);
+    return chip;
+  }
+
+  function resetFilter(type) {
+    if (type === 'difficulty') {
+      activeDifficulty = 'all';
+      document.querySelectorAll('[data-type="difficulty"]').forEach(o => o.classList.remove('selected'));
+      document.querySelector('[data-type="difficulty"][data-value="all"]').classList.add('selected');
+    }
+    if (type === 'side') {
+      activeSide = 'both';
+      document.querySelectorAll('[data-type="side"]').forEach(o => o.classList.remove('selected'));
+      document.querySelector('[data-type="side"][data-value="both"]').classList.add('selected');
+    }
+    if (type === 'show') {
+      favoritesOnly = false;
+      document.querySelectorAll('[data-type="show"]').forEach(o => o.classList.remove('selected'));
+      document.querySelector('[data-type="show"][data-value="all"]')?.classList.add('selected');
+    }
+    updateFilterBadge();
+    updateActiveChips();
+    renderGrid();
+  }
+
+  // ── Search (debounced so the grid isn't rebuilt on every keystroke) ──
+  let searchTimer;
+  document.getElementById('searchInput').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderGrid();
+    }, 120);
+  });
+
+  // ── Helpers ──────────────────────────────────────────────────────
+  function getCompleted() {
+    try { return new Set(JSON.parse(localStorage.getItem('completed') || '[]')); }
+    catch { return new Set(); }
+  }
+
+  function getCompletedLines(openingId) {
+    try { return new Set(JSON.parse(localStorage.getItem('completedLines_' + openingId) || '[]')); }
+    catch { return new Set(); }
+  }
+
+  // Thumbnail FENs are computed once and cached
+  const fenCache = {};
+  function thumbFen(opening) {
+    if (!(opening.id in fenCache)) {
+      fenCache[opening.id] = positionFromMoves(opening.lines?.[0]?.moves || []);
+    }
+    return fenCache[opening.id];
+  }
+
+  function positionFromMoves(moves) {
+    try {
+      const game = new Chess();
+      moves.forEach(m => game.move(m));
+      return game.fen();
+    } catch { return 'start'; }
+  }
+
+  // ── Render grid ──────────────────────────────────────────────────
+  // Thumbnails are only built when the card scrolls into view —
+  // rendering 265 boards at once would create ~17k DOM nodes.
+  let thumbObserver = null;
+
+  function renderGrid() {
+    const grid = document.getElementById('openingsGrid');
+    const completed = getCompleted();
+    const favorites = getFavorites();
+
+    const filtered = OPENINGS.filter(o => {
+      const matchDiff = activeDifficulty === 'all' || o.difficulty === activeDifficulty;
+      const openingSide = SIDE[o.id] || 'both';
+      const matchSide = activeSide === 'both' || openingSide === activeSide || openingSide === 'both';
+      const matchFav = !favoritesOnly || favorites.has(o.id);
+      const matchSearch = !searchQuery ||
+        o.name.toLowerCase().includes(searchQuery) ||
+        o.description.toLowerCase().includes(searchQuery) ||
+        (o.eco && o.eco.toLowerCase().includes(searchQuery));
+      return matchDiff && matchSide && matchFav && matchSearch;
+    });
+
+    grid.innerHTML = '';
+
+    if (thumbObserver) thumbObserver.disconnect();
+    thumbObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        thumbObserver.unobserve(entry.target);
+        const opening = OPENINGS.find(o => o.id === entry.target.dataset.openingId);
+        if (!opening) return;
+        Chessboard(entry.target.id, {
+          position: thumbFen(opening),
+          pieceTheme: '../assets/pieces/{piece}.png',
+          showNotation: false,
+          orientation: (SIDE[opening.id] || 'both') === 'black' ? 'black' : 'white'
+        });
+      });
+    }, { rootMargin: '300px' });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="empty-state">No openings match your filters.</div>';
+      return;
+    }
+
+    filtered.forEach(opening => {
+      const boardId = 'thumb-' + opening.id;
+      const totalLines = opening.lines ? opening.lines.length : 1;
+      const completedLines = getCompletedLines(opening.id);
+      const progressPct = totalLines > 0 ? Math.round((completedLines.size / totalLines) * 100) : 0;
+      const isDone = completed.has(opening.id);
+      const isFav = favorites.has(opening.id);
+
+      const card = document.createElement('div');
+      card.className = 'opening-card';
+      card.innerHTML = `
+        <button class="fav-btn${isFav ? ' active' : ''}" title="${isFav ? 'Remove from favorites' : 'Add to favorites'}">
+          <svg viewBox="0 0 24 24"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>
+        </button>
+        <div class="card-board" id="${boardId}"></div>
+        <div class="card-content">
+          <div class="card-name">${opening.name}</div>
+          <div class="card-desc">${opening.description}</div>
+          <div class="card-footer">
+            <span class="badge badge-${opening.difficulty}">${opening.difficulty}</span>
+            <span style="font-size:11.5px;color:var(--text-muted)">${totalLines} line${totalLines !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="card-progress-bar">
+            <div class="card-progress-fill ${opening.difficulty}" style="width:${progressPct}%"></div>
+          </div>
+          <div class="card-play-link">
+            ${isDone ? '✓ Completed' : '→ Play first line'}
+          </div>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        const side = SIDE[opening.id] || 'both';
+        window.location.href = `study.html?id=${opening.id}&side=${side}`;
+      });
+
+      card.querySelector('.fav-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        toggleFavorite(opening.id);
+        const nowFav = getFavorites().has(opening.id);
+        e.currentTarget.classList.toggle('active', nowFav);
+        e.currentTarget.title = nowFav ? 'Remove from favorites' : 'Add to favorites';
+        if (favoritesOnly && !nowFav) renderGrid();
+      });
+
+      grid.appendChild(card);
+
+      const boardEl = card.querySelector('.card-board');
+      boardEl.dataset.openingId = opening.id;
+      thumbObserver.observe(boardEl);
+    });
+  }
+
+  renderGrid();
+
+})();
