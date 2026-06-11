@@ -147,6 +147,7 @@ const Study = (function () {
       onSnapEnd: onSnapEnd
     });
     highlightLastMove();
+    clearSelection(); // squares were recreated — drop any stale click selection
   }
 
   // Update board + last-move highlight in one place
@@ -326,6 +327,7 @@ const Study = (function () {
       autoPlayTimer = null;
       // State may have changed while waiting (tab switch, nav buttons, reset)
       if (activeTab !== 'practice' || practiceIdx !== scheduledIdx) return;
+      clearSelection();
       const move = game.move(line.moves[practiceIdx]);
       if (!move) return;
       practiceIdx++;
@@ -346,6 +348,11 @@ const Study = (function () {
   }
 
   function onDrop(source, target) {
+    return tryUserMove(source, target, false);
+  }
+
+  function tryUserMove(source, target, viaClick) {
+    clearSelection();
     if (activeTab !== 'practice') return 'snapback';
     if (!isUserTurn()) return 'snapback';
 
@@ -361,6 +368,8 @@ const Study = (function () {
 
     if (moved.san === expected) {
       const played = game.move({ from: source, to: target, promotion: 'q' });
+      // Clicked moves need the board updated now; dragged pieces are already there
+      if (viaClick) setBoardPosition(true);
       if (played.captured) SoundFX.capture(); else SoundFX.move();
       flashSquare(target, 'correct');
       showCheckBadge(target);
@@ -390,6 +399,47 @@ const Study = (function () {
   function onSnapEnd() {
     setBoardPosition(true);
   }
+
+  // ── Click-to-move ────────────────────────────────────────────────
+  let selectedSquare = null;
+
+  function clearSelection() {
+    selectedSquare = null;
+    document.querySelectorAll('#studyBoard .square-selected, #studyBoard .square-dest, #studyBoard .square-dest-capture')
+      .forEach(el => el.classList.remove('square-selected', 'square-dest', 'square-dest-capture'));
+  }
+
+  function selectSquare(sq) {
+    clearSelection();
+    selectedSquare = sq;
+    document.querySelector(`#studyBoard .square-${sq}`)?.classList.add('square-selected');
+    // Dot on every legal destination, ring on captures
+    game.moves({ square: sq, verbose: true }).forEach(m => {
+      const el = document.querySelector(`#studyBoard .square-${m.to}`);
+      if (el) el.classList.add(m.captured ? 'square-dest-capture' : 'square-dest');
+    });
+  }
+
+  document.getElementById('studyBoard').addEventListener('click', e => {
+    if (activeTab !== 'practice') return;
+    const sqEl = e.target.closest('[class*="square-"]');
+    if (!sqEl) return;
+    const match = sqEl.className.match(/square-([a-h][1-8])/);
+    if (!match) return;
+    const sq = match[1];
+    const piece = game.get(sq);
+    const canSelect = piece && piece.color === game.turn() && isUserTurn();
+
+    if (selectedSquare) {
+      if (sq === selectedSquare) { clearSelection(); return; }
+      if (canSelect) { selectSquare(sq); return; }
+      const from = selectedSquare;
+      clearSelection();
+      tryUserMove(from, sq, true);
+      return;
+    }
+    if (canSelect) selectSquare(sq);
+  });
 
   let practiceComplete = false;
 
@@ -439,6 +489,7 @@ const Study = (function () {
   function practicePrev() {
     if (practiceIdx <= 0) return;
     cancelAutoPlay();
+    clearSelection();
     practiceIdx--;
     // Step past the opponent's move so Back always lands on the user's turn
     if (openingSide !== 'both' && !isUserTurn() && practiceIdx > 0) practiceIdx--;
@@ -454,6 +505,7 @@ const Study = (function () {
 
   function practiceFirst() {
     cancelAutoPlay();
+    clearSelection();
     practiceIdx = 0;
     game = new Chess();
     setBoardPosition();
@@ -467,6 +519,7 @@ const Study = (function () {
     const line = currentLine();
     if (!line || practiceIdx >= line.moves.length) return;
     cancelAutoPlay();
+    clearSelection();
     const moved = game.move(line.moves[practiceIdx]);
     practiceIdx++;
     if (moved) { if (moved.captured) SoundFX.capture(); else SoundFX.move(); }
