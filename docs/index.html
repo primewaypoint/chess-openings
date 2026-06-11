@@ -720,24 +720,37 @@
       setTimeout(() => { caption.innerHTML = label; caption.style.opacity = 1; }, 130);
     }
 
+    let loopTimer = null;
+    function later(fn, ms) { clearTimeout(loopTimer); loopTimer = setTimeout(fn, ms); }
+
     function runLoop() {
       let i = 0;
       const step = () => {
+        // Browsers throttle timers in hidden tabs — idle until visible again
+        if (document.hidden) { later(step, 600); return; }
         if (i < MOVES.length) {
           playMove(i++);
-          setTimeout(step, i === MOVES.length ? 3200 : 1150);
+          later(step, i === MOVES.length ? 3200 : 1150);
         } else {
           board.classList.add('resetting');
-          setTimeout(() => {
+          later(() => {
             setup();
             board.classList.remove('resetting');
             caption.innerHTML = '&nbsp;';
             i = 0;
-            setTimeout(step, 900);
+            later(step, 900);
           }, 600);
         }
       };
-      setTimeout(step, 1400);
+      later(step, 1400);
+    }
+
+    function restart() {
+      clearTimeout(loopTimer);
+      board.classList.remove('resetting');
+      caption.innerHTML = '&nbsp;';
+      setup();
+      runLoop();
     }
 
     setup();
@@ -746,7 +759,18 @@
       MOVES.forEach((m, i) => playMove(i));
     } else {
       runLoop();
+      // Recover from back/forward-cache restores and tab switches,
+      // where timers die or the board froze mid-reset
+      window.addEventListener('pageshow', e => { if (e.persisted) restart(); });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) restart(); });
     }
+
+    // Failsafe: if the CSS entrance animation ever fails to run,
+    // force the board visible once its delay has passed
+    setTimeout(() => {
+      const stage = document.querySelector('.board-stage');
+      if (stage) stage.style.opacity = '1';
+    }, 1700);
   })();
   </script>
 
