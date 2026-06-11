@@ -188,12 +188,10 @@
       margin: 0 auto;
       border-radius: 12px;
       overflow: hidden;
-      background-image: conic-gradient(
-        var(--sq-dark) 90deg,
-        var(--sq-light) 90deg 180deg,
-        var(--sq-dark) 180deg 270deg,
-        var(--sq-light) 270deg
-      );
+      /* Checkerboard as an inline SVG image — Safari fails to repaint
+         conic-gradients under 3D transforms after a reload */
+      background-color: #ecd9b9;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2' shape-rendering='crispEdges'%3E%3Crect width='2' height='2' fill='%23ecd9b9'/%3E%3Crect x='1' width='1' height='1' fill='%23ae8a68'/%3E%3Crect y='1' width='1' height='1' fill='%23ae8a68'/%3E%3C/svg%3E");
       background-size: 25% 25%;
       box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.55),
