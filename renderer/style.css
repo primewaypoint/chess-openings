@@ -89,7 +89,6 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 0;
   padding-right: 16px;
 }
 
