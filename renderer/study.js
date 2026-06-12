@@ -78,6 +78,22 @@ const Study = (function () {
   let board = null;
   let game = new Chess();
 
+  // Lines completed in this visit — lets a mastered opening be practiced
+  // again from scratch without resetting saved progress
+  const sessionDone = new Set();
+
+  function getPersistedDone() {
+    try { return new Set(JSON.parse(localStorage.getItem('completedLines_' + opening.id) || '[]')); }
+    catch { return new Set(); }
+  }
+
+  function isFullyDone(doneSet) {
+    const lines = opening.lines || [];
+    return lines.length > 0 && lines.every((l, i) => doneSet.has(l.id || i));
+  }
+
+  let masteredAtLoad = isFullyDone(getPersistedDone());
+
   // ── Init panel UI ────────────────────────────────────────────────
   document.getElementById('panelTitle').textContent = opening.name;
   document.getElementById('panelBadge').innerHTML =
@@ -488,13 +504,13 @@ const Study = (function () {
       }
       markLineComplete(currentLineIdx);
       updateStreak();
+      sessionDone.add(line?.id || currentLineIdx);
       if (nextBtn) {
-        // When every line is done, offer the way out instead of looping forever
-        const lines = opening.lines || [];
-        let done;
-        try { done = new Set(JSON.parse(localStorage.getItem('completedLines_' + opening.id) || '[]')); }
-        catch { done = new Set(); }
-        const allDone = lines.length > 0 && lines.every((l, i) => done.has(l.id || i));
+        // Offer the way out when every line is saved as complete — but when
+        // retraining an already-mastered opening, only after every line has
+        // been replayed this session
+        const allSaved = isFullyDone(getPersistedDone());
+        const allDone = allSaved && (!masteredAtLoad || isFullyDone(sessionDone));
         if (allDone) {
           nextBtn.textContent = '✓ All lines done — Back to openings';
           nextBtn.dataset.mode = 'home';
@@ -502,7 +518,7 @@ const Study = (function () {
         } else {
           nextBtn.textContent = 'Next line ►';
           nextBtn.dataset.mode = 'next';
-          nextBtn.style.display = lines.length > 1 ? '' : 'none';
+          nextBtn.style.display = (opening.lines?.length || 0) > 1 ? '' : 'none';
         }
       }
     } else {
@@ -579,13 +595,16 @@ const Study = (function () {
   function nextLineIdx() {
     const total = opening.lines?.length || 0;
     if (total <= 1) return -1;
-    let done;
-    try { done = new Set(JSON.parse(localStorage.getItem('completedLines_' + opening.id) || '[]')); }
-    catch { done = new Set(); }
-    // Prefer the next line not yet completed, wrapping around
+    const done = getPersistedDone();
+    // Prefer the next line never completed, wrapping around
     for (let i = 1; i <= total; i++) {
       const idx = (currentLineIdx + i) % total;
       if (!done.has(opening.lines[idx].id || idx)) return idx;
+    }
+    // Everything saved as complete — prefer lines not replayed this session
+    for (let i = 1; i <= total; i++) {
+      const idx = (currentLineIdx + i) % total;
+      if (!sessionDone.has(opening.lines[idx].id || idx)) return idx;
     }
     return (currentLineIdx + 1) % total;
   }
@@ -725,6 +744,8 @@ const Study = (function () {
       localStorage.setItem('completed', JSON.stringify([...completed]));
     } catch {}
 
+    sessionDone.clear();
+    masteredAtLoad = false;
     document.getElementById('progressBar').style.width = '0%';
   }
 

@@ -78,7 +78,9 @@ body {
   background: var(--bg-header);
   border-bottom: 1px solid var(--border-subtle);
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  /* Middle (search) shrinks down to 140px before anything can touch */
+  grid-template-columns: 1fr minmax(140px, 320px) 1fr;
+  column-gap: 14px;
   align-items: center;
   padding: 0 20px;
   z-index: 200;
@@ -139,7 +141,7 @@ body {
 }
 
 .header-search {
-  width: 320px;
+  width: 100%;
   position: relative;
 }
 
