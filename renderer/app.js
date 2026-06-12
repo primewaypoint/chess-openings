@@ -208,6 +208,12 @@
     if (pool === 0) { el.style.display = 'none'; return; }
 
     const today = new Date().toISOString().split('T')[0];
+    // Dismissed banners stay hidden for the rest of the day only
+    if (localStorage.getItem('reviewBannerHidden') === today) {
+      el.style.display = 'none';
+      return;
+    }
+
     const doneToday = localStorage.getItem('dailyReviewDate') === today;
     el.style.display = '';
     el.classList.toggle('done', doneToday);
@@ -227,10 +233,18 @@
             : "Test your memory on lines you've already learned"}</div>
         </div>
       </div>
-      <button class="review-banner-btn">${doneToday ? '✓ Review again' : 'Start review →'}</button>`;
+      <div class="review-banner-right">
+        <button class="review-banner-btn">${doneToday ? '✓ Review again' : 'Start review →'}</button>
+        <button class="review-banner-close" title="Hide for today">×</button>
+      </div>`;
 
     el.querySelector('.review-banner-btn').addEventListener('click', () => {
       window.location.href = 'review.html';
+    });
+
+    el.querySelector('.review-banner-close').addEventListener('click', () => {
+      localStorage.setItem('reviewBannerHidden', today);
+      el.style.display = 'none';
     });
   }
 

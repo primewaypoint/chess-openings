@@ -481,7 +481,6 @@ const Study = (function () {
     if (practiceIdx >= total) {
       status.textContent = '✓ Line complete!';
       status.className = 'practice-status complete';
-      if (nextBtn) nextBtn.style.display = (opening.lines?.length || 0) > 1 ? '' : 'none';
       if (!practiceComplete) {
         practiceComplete = true;
         SoundFX.complete();
@@ -489,6 +488,23 @@ const Study = (function () {
       }
       markLineComplete(currentLineIdx);
       updateStreak();
+      if (nextBtn) {
+        // When every line is done, offer the way out instead of looping forever
+        const lines = opening.lines || [];
+        let done;
+        try { done = new Set(JSON.parse(localStorage.getItem('completedLines_' + opening.id) || '[]')); }
+        catch { done = new Set(); }
+        const allDone = lines.length > 0 && lines.every((l, i) => done.has(l.id || i));
+        if (allDone) {
+          nextBtn.textContent = '✓ All lines done — Back to openings';
+          nextBtn.dataset.mode = 'home';
+          nextBtn.style.display = '';
+        } else {
+          nextBtn.textContent = 'Next line ►';
+          nextBtn.dataset.mode = 'next';
+          nextBtn.style.display = lines.length > 1 ? '' : 'none';
+        }
+      }
     } else {
       practiceComplete = false;
       if (nextBtn) nextBtn.style.display = 'none';
@@ -575,6 +591,11 @@ const Study = (function () {
   }
 
   function goToNextLine() {
+    const btn = document.getElementById('nextLineBtn');
+    if (btn && btn.dataset.mode === 'home') {
+      window.location.href = 'index.html';
+      return;
+    }
     const idx = nextLineIdx();
     if (idx >= 0) selectVariant(idx);
   }
