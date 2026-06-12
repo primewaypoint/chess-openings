@@ -294,7 +294,7 @@
             <div class="card-progress-fill ${opening.difficulty}" style="width:${progressPct}%"></div>
           </div>
           <div class="card-play-link">
-            ${isDone ? '✓ Completed' : '→ Play first line'}
+            ${isDone ? '✓ Completed' : '→ Start training'}
           </div>
         </div>
       `;
