@@ -8,6 +8,8 @@ Learn and practice 80+ chess openings — from beginner classics like the Italia
 
 - **Learn mode** — step through every move of an opening with plain-language explanations
 - **Practice mode** — play the moves yourself on the board; the opponent replies automatically, wrong moves show you which piece punishes them
+- **Daily Review** — a 5-question daily quiz on openings you've already learned, with accuracy tracking
+- **Statistics page** — activity heatmap, accuracy over time, most-trained openings and progress by difficulty
 - **80+ openings** across Beginner, Intermediate, Advanced and Fun categories, each with multiple lines
 - **Progress tracking** — completed lines and openings are saved per opening
 - **Daily streak** — keep your training habit alive, with a weekly calendar view
@@ -52,6 +54,14 @@ npm run build:win    # Windows only (x64 installer)
 ## Tech
 
 Plain HTML/CSS/JavaScript in an [Electron](https://www.electronjs.org) shell, with [chess.js](https://github.com/jhlywa/chess.js) for move validation and [chessboard.js](https://chessboardjs.com) for the board. No frameworks, no build step for the UI.
+
+## Found a bug? Have an idea?
+
+All feedback is welcome — from crashes and visual glitches to new openings or feature requests.
+
+👉 **[Open an issue](https://github.com/primewaypoint/chess-openings/issues/new/choose)** — takes 30 seconds, no account needed beyond a free GitHub login.
+
+Not sure if something is a bug or intentional? Open an issue anyway — there are no silly questions.
 
 ## License
 
