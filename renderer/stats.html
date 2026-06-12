@@ -69,13 +69,16 @@
       </div>
 
       <!-- Activity heatmap -->
-      <div class="stats-section-title">Activity — last 16 weeks</div>
+      <div class="stats-section-title" id="activityTitle">Activity</div>
       <div class="stats-card-box">
         <div class="heatmap-wrap">
           <div class="heatmap-daylabels">
             <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
           </div>
-          <div class="heatmap" id="heatmap"></div>
+          <div class="heatmap-main">
+            <div class="heatmap-months" id="heatmapMonths"></div>
+            <div class="heatmap" id="heatmap"></div>
+          </div>
         </div>
         <div class="heatmap-legend">
           <span>Less</span>

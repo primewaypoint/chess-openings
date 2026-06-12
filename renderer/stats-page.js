@@ -46,12 +46,20 @@
   document.getElementById('statMastered').textContent =
     `${completed.size}/${OPENINGS.length}`;
 
-  // ── Heatmap (16 weeks, GitHub style: columns = weeks, rows = Sun–Sat) ──
+  // ── Heatmap (GitHub style: columns = weeks, rows = Sun–Sat) ──────
   function renderHeatmap() {
     const container = document.getElementById('heatmap');
-    const WEEKS = 16;
+    const monthsEl = document.getElementById('heatmapMonths');
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
+
+    // Fit as many full weeks as the card width allows (17px per column)
+    const wrap = document.querySelector('.heatmap-wrap');
+    const labels = document.querySelector('.heatmap-daylabels');
+    const avail = (wrap ? wrap.clientWidth : 600) - (labels ? labels.offsetWidth : 26) - 14;
+    const WEEKS = Math.max(16, Math.min(52, Math.floor(avail / 17)));
+    document.getElementById('activityTitle').textContent =
+      `Activity — last ${WEEKS} weeks`;
 
     // Start on the Sunday WEEKS-1 weeks back
     const start = new Date(today);
@@ -65,8 +73,29 @@
       return 4;
     }
 
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Month of each week's first day, so partial first months can be skipped
+    const weekMonth = [];
+    for (let week = 0; week < WEEKS; week++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + week * 7);
+      weekMonth.push(d.getMonth());
+    }
+
     let cellIdx = 0;
     for (let week = 0; week < WEEKS; week++) {
+      // Month label above the first column of each new month — skipped for
+      // partial months at either edge so labels never overlap or overflow
+      const label = document.createElement('span');
+      const isNewMonth = week === 0 || weekMonth[week] !== weekMonth[week - 1];
+      const tooShortStart = week === 0 && WEEKS > 1 && weekMonth[1] !== weekMonth[0];
+      const tooCloseToEnd = week >= WEEKS - 2;
+      if (isNewMonth && !tooShortStart && !tooCloseToEnd)
+        label.textContent = MONTHS[weekMonth[week]];
+      monthsEl.appendChild(label);
+
       const col = document.createElement('div');
       col.className = 'heatmap-col';
       for (let day = 0; day < 7; day++) {
