@@ -27,25 +27,13 @@ const Study = (function () {
   }
 
   function updateStreak() {
-    const today = new Date().toISOString().split('T')[0];
-    const data = getStreakData();
-    if (data.lastDate === today) return data.count; // already done today
-
-    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-    const newCount = data.lastDate === yesterday ? data.count + 1 : 1;
-    const completedDates = new Set(data.completedDates || []);
-    // Backfill all days in the streak so no date is ever missing
-    for (let i = 0; i < newCount; i++) {
-      const d = new Date(Date.now() - i * 86400000);
-      completedDates.add(d.toISOString().split('T')[0]);
-    }
-    const sortedDates = [...completedDates].sort().slice(-60);
-    const newData = { count: newCount, lastDate: today, completedDates: sortedDates };
-    localStorage.setItem('streakData', JSON.stringify(newData));
-
-    renderStreakDisplay(newCount);
-    showStreakToast(newCount);
-    return newCount;
+    const res = recordStreakDay(); // shared with review mode — see streak.js
+    if (!res.isNew) return res.count;
+    renderStreakDisplay(res.count);
+    bumpStreakWidget();
+    SoundFX.streak();
+    showStreakToast(res.count);
+    return res.count;
   }
 
   function renderStreakDisplay(count) {
@@ -264,6 +252,15 @@ const Study = (function () {
   }
 
   document.addEventListener('keydown', e => {
+    if (e.target instanceof Element && e.target.matches('input, textarea')) return;
+    const key = e.key.toLowerCase();
+
+    if (e.key === '?')  { toggleShortcutsOverlay(); return; }
+    if (e.key === 'Escape') { toggleShortcutsOverlay(false); return; }
+    if (key === 'l') { switchTab('learn');    return; }
+    if (key === 'p') { switchTab('practice'); return; }
+    if (key === 'r') { activeTab === 'learn' ? reset() : resetPractice(); return; }
+
     if (activeTab === 'learn') {
       if (e.key === 'ArrowRight') goNext();
       else if (e.key === 'ArrowLeft') goPrev();
@@ -273,9 +270,20 @@ const Study = (function () {
       if (e.key === 'ArrowRight') practiceNext();
       else if (e.key === 'ArrowLeft') practicePrev();
       else if (e.key === 'Home') practiceFirst();
-      else if (e.key === 'h' || e.key === 'H') showHint();
+      else if (key === 'h') showHint();
     }
   });
+
+  // ── Shortcuts overlay ────────────────────────────────────────────
+  function toggleShortcutsOverlay(force) {
+    const ov = document.getElementById('shortcutsOverlay');
+    if (!ov) return;
+    if (force === undefined) ov.classList.toggle('open');
+    else ov.classList.toggle('open', force);
+  }
+
+  document.getElementById('shortcutsOverlay')
+    ?.addEventListener('click', () => toggleShortcutsOverlay(false));
 
   // ── Tab switch ───────────────────────────────────────────────────
   function switchTab(tab) {
@@ -391,6 +399,7 @@ const Study = (function () {
 
     if (moved.san === expected) {
       const played = game.move({ from: source, to: target, promotion: 'q' });
+      Stats.recordMove(true);
       // Clicked moves need the board updated now; dragged pieces are already there
       if (viaClick) setBoardPosition(true);
       if (played.captured) SoundFX.capture(); else SoundFX.move();
@@ -407,6 +416,7 @@ const Study = (function () {
       }, 280);
       return;
     } else {
+      Stats.recordMove(false);
       SoundFX.wrong();
       flashSquare(target, 'wrong');
       const attacker = findAttackerAfterMove(source, target);
@@ -475,6 +485,7 @@ const Study = (function () {
       if (!practiceComplete) {
         practiceComplete = true;
         SoundFX.complete();
+        Stats.recordLine(opening.id);
       }
       markLineComplete(currentLineIdx);
       updateStreak();
@@ -727,17 +738,23 @@ const Study = (function () {
   // ── Celebration ──────────────────────────────────────────────────
   function celebrateOpeningComplete() {
     if (document.querySelector('.celebration-overlay')) return;
+    SoundFX.fanfare();
     const overlay = document.createElement('div');
     overlay.className = 'celebration-overlay';
 
     const colors = ['#e8b54d', '#4caf6e', '#5a9fd4', '#d46a5a', '#b07cc6'];
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 80; i++) {
       const piece = document.createElement('div');
       piece.className = 'confetti-piece';
       piece.style.left = Math.random() * 100 + '%';
       piece.style.background = colors[i % colors.length];
       piece.style.animationDelay = (Math.random() * 0.8) + 's';
       piece.style.animationDuration = (2.4 + Math.random() * 1.6) + 's';
+      piece.style.setProperty('--drift', (Math.random() * 160 - 80) + 'px');
+      if (i % 3 === 0) {
+        piece.style.borderRadius = '50%';
+        piece.style.width = piece.style.height = '9px';
+      }
       overlay.appendChild(piece);
     }
 

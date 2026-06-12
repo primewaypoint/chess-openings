@@ -3,41 +3,8 @@
 (function () {
   'use strict';
 
-  // ── Side mapping ────────────────────────────────────────────────
-  const SIDE = {
-    // White-initiated openings
-    'italian-game':'white','london-system':'white','vienna-game':'white',
-    'kings-gambit':'white','kings-gambit-accepted':'white','giuoco-piano-full':'white',
-    'fried-liver-attack':'white','evans-gambit':'white','danish-gambit':'white',
-    'bishops-opening':'white','three-knights-game':'white','center-game':'white',
-    'ponziani-opening':'white','bird-opening':'white','nimzowitsch-larsen-attack':'white',
-    'ruy-lopez':'white','sicilian-alapin':'white','sicilian-smith-morra':'white',
-    'french-advance':'white','french-tarrasch':'white','caro-kann-advance':'white',
-    'trompowsky-attack':'white','colle-system':'white','english-opening':'white',
-    'reti-opening':'white','catalan-opening':'white','catalan-open':'white',
-    'kid-samisch':'white','kid-four-pawns':'white','sicilian-richter-rauzer':'white',
-    'the-cow':'white','bongcloud-attack':'white','polish-opening':'white',
-    'grob-attack':'white','wayward-queen':'white','halloween-gambit':'white',
-    'hillbilly-attack':'white','monkeys-bum':'white','coca-cola-gambit':'white',
-    'hammerschlag':'white',
-    // Black-initiated defenses
-    'scandinavian-defense':'black','philidor-defense':'black','hungarian-defense':'black',
-    'ruy-lopez-berlin':'black','sicilian-defense':'black','sicilian-najdorf':'black',
-    'sicilian-dragon':'black','sicilian-scheveningen':'black','french-defense':'black',
-    'french-winawer':'black','caro-kann':'black','pirc-defense':'black',
-    'modern-defense':'black','alekhines-defense':'black','petroff-defense':'black',
-    'two-knights':'black','slav-defense':'black','semi-slav':'black',
-    'dutch-defense':'black','benoni-defense':'black','budapest-gambit':'black',
-    'benko-gambit':'black','kings-indian-defense':'black','grunfeld-defense':'black',
-    'nimzo-indian':'black','queens-indian':'black','sicilian-sveshnikov':'black',
-    'sicilian-poisoned-pawn':'black','sicilian-accelerated-dragon':'black',
-    'ruy-lopez-marshall':'black','semi-slav-meran':'black','bogo-indian':'black',
-    'cornstalk-defense':'black','lemming-defense':'black','carrs-defense':'black',
-    'st-george-defense':'black','frankenstein-dracula':'black','hippopotamus-defense':'black',
-    // Symmetric / both
-    'four-knights-game':'both','ruy-lopez-closed':'both','queens-gambit':'both',
-    'queens-gambit-accepted':'both','double-bongcloud':'both','botez-gambit':'both',
-  };
+  // ── Side mapping (shared with review mode — see sides.js) ───────
+  const SIDE = OPENING_SIDES;
 
   // ── Theme ────────────────────────────────────────────────────────
   const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -223,6 +190,52 @@
     } catch { return 'start'; }
   }
 
+  // ── Daily Review banner ──────────────────────────────────────────
+  function reviewPoolSize() {
+    let n = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith('completedLines_')) continue;
+      try { n += JSON.parse(localStorage.getItem(key) || '[]').length; } catch {}
+    }
+    return n;
+  }
+
+  function renderReviewBanner() {
+    const el = document.getElementById('reviewBanner');
+    if (!el) return;
+    const pool = reviewPoolSize();
+    if (pool === 0) { el.style.display = 'none'; return; }
+
+    const today = new Date().toISOString().split('T')[0];
+    const doneToday = localStorage.getItem('dailyReviewDate') === today;
+    el.style.display = '';
+    el.classList.toggle('done', doneToday);
+    el.innerHTML = `
+      <div class="review-banner-left">
+        <div class="review-banner-icon">
+          <svg viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="4.5" width="10" height="11" rx="1.6" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M5.5 2.5h9A1.5 1.5 0 0116 4v9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M4.8 10l1.7 1.7 2.9-3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="review-banner-title">Daily Review</div>
+          <div class="review-banner-sub">${doneToday
+            ? 'Done for today — come back tomorrow or review again'
+            : "Test your memory on lines you've already learned"}</div>
+        </div>
+      </div>
+      <button class="review-banner-btn">${doneToday ? '✓ Review again' : 'Start review →'}</button>`;
+
+    el.querySelector('.review-banner-btn').addEventListener('click', () => {
+      window.location.href = 'review.html';
+    });
+  }
+
+  renderReviewBanner();
+
   // ── Render grid ──────────────────────────────────────────────────
   // Thumbnails are only built when the card scrolls into view —
   // rendering 265 boards at once would create ~17k DOM nodes.
@@ -268,7 +281,7 @@
       return;
     }
 
-    filtered.forEach(opening => {
+    filtered.forEach((opening, cardIdx) => {
       const boardId = 'thumb-' + opening.id;
       const totalLines = opening.lines ? opening.lines.length : 1;
       const completedLines = getCompletedLines(opening.id);
@@ -278,6 +291,8 @@
 
       const card = document.createElement('div');
       card.className = 'opening-card';
+      // Staggered entrance, capped so deep cards don't wait
+      card.style.animationDelay = Math.min(cardIdx, 12) * 28 + 'ms';
       card.innerHTML = `
         <button class="fav-btn${isFav ? ' active' : ''}" title="${isFav ? 'Remove from favorites' : 'Add to favorites'}">
           <svg viewBox="0 0 24 24"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>

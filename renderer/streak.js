@@ -19,6 +19,37 @@ function getEffectiveStreak(data) {
   return (data.lastDate === today || data.lastDate === yesterday) ? data.count : 0;
 }
 
+// Marks today as completed (extends or restarts the streak).
+// Returns { count, isNew } — isNew is false when today was already recorded.
+function recordStreakDay() {
+  const today = new Date().toISOString().split('T')[0];
+  const data = getStreakDataGlobal();
+  if (data.lastDate === today) return { count: data.count, isNew: false };
+
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  const newCount = data.lastDate === yesterday ? data.count + 1 : 1;
+  const completedDates = new Set(data.completedDates || []);
+  // Backfill all days in the streak so no date is ever missing
+  for (let i = 0; i < newCount; i++) {
+    const d = new Date(Date.now() - i * 86400000);
+    completedDates.add(d.toISOString().split('T')[0]);
+  }
+  const sortedDates = [...completedDates].sort().slice(-60);
+  localStorage.setItem('streakData',
+    JSON.stringify({ count: newCount, lastDate: today, completedDates: sortedDates }));
+  return { count: newCount, isNew: true };
+}
+
+// Pop animation on the header flame when the streak goes up
+function bumpStreakWidget() {
+  const widget = document.getElementById('streakWidget');
+  if (!widget) return;
+  widget.classList.remove('bump');
+  void widget.offsetWidth; // restart the animation
+  widget.classList.add('bump');
+  setTimeout(() => widget.classList.remove('bump'), 700);
+}
+
 function initStreakModal() {
   const widget  = document.getElementById('streakWidget');
   const overlay = document.getElementById('streakModal');

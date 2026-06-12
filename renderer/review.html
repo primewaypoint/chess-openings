@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChessOpenings — Daily Review</title>
+  <link rel="stylesheet" href="../assets/chessboard.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Progress bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <a class="header-logo" href="index.html">
+        <svg class="logo-crown" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="logo-text"><span>Chess</span>Openings</span>
+      </a>
+      <span class="header-badge">Free · Offline · Open source</span>
+    </div>
+
+    <div></div>
+
+    <div class="header-right">
+      <div class="streak-widget" id="streakWidget">
+        <svg class="streak-icon" viewBox="0 0 14 18" fill="none">
+          <path d="M7 17c3.5 0 6-2.5 6-5.5 0-2-1-3.5-2-4.5 0 1.5-.8 2.5-1.8 2.8C9.5 8 8.5 5.5 7 3c0 2.5-1.5 4-1.5 5.5C4.5 8.2 4 7.5 4 6.5 2.5 8 1 10 1 11.5 1 14.5 3.5 17 7 17z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <span class="streak-count" id="streakCount">0</span>
+      </div>
+
+      <button class="theme-toggle" id="themeToggle">
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" style="display:none">
+          <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="study-layout">
+
+      <!-- Board area -->
+      <div class="study-board-area">
+        <button class="back-btn" id="backBtn">← Back</button>
+        <div id="studyBoard"></div>
+      </div>
+
+      <!-- Side panel -->
+      <div class="study-panel">
+
+        <div class="panel-header">
+          <div class="review-tag">
+            <svg viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="4.5" width="10" height="11" rx="1.6" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M5.5 2.5h9A1.5 1.5 0 0116 4v9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path d="M4.8 10l1.7 1.7 2.9-3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Daily Review
+          </div>
+          <div class="panel-title" id="panelTitle">Loading…</div>
+          <div class="panel-meta">
+            <span id="panelBadge"></span>
+            <span class="eco-tag" id="panelLine"></span>
+          </div>
+        </div>
+
+        <div class="panel-divider"></div>
+
+        <!-- Session progress dots -->
+        <div class="review-session" id="reviewSession"></div>
+
+        <div class="practice-instruction">Play the correct move from memory</div>
+        <div class="practice-status" id="practiceStatus">Your turn</div>
+
+        <div class="review-mistakes" id="reviewMistakes" style="display:none"></div>
+
+        <button class="hint-btn" onclick="Review.showHint()">Show hint</button>
+        <button class="reset-btn" onclick="Review.skipLine()">Skip this line ►</button>
+
+        <div class="kbd-hint" style="margin-top:auto">Hint: <kbd>H</kbd></div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Empty state -->
+  <div class="review-empty" id="reviewEmpty" style="display:none">
+    <div class="review-empty-box">
+      <svg viewBox="0 0 18 18" fill="none">
+        <rect x="2" y="4.5" width="10" height="11" rx="1.6" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M5.5 2.5h9A1.5 1.5 0 0116 4v9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <div class="review-empty-title">Nothing to review yet</div>
+      <div class="review-empty-msg">Complete a few lines in Practice mode first — then come back to test your memory.</div>
+      <button class="review-summary-btn" onclick="window.location.href='index.html'">Browse openings</button>
+    </div>
+  </div>
+
+  <!-- Summary overlay -->
+  <div class="review-summary-overlay" id="reviewSummary">
+    <div class="review-summary-box">
+      <div class="review-summary-pct" id="summaryPct">100%</div>
+      <div class="review-summary-title" id="summaryTitle">Review complete!</div>
+      <div class="review-summary-stats">
+        <div><span id="summaryLines">0</span><label>lines</label></div>
+        <div><span id="summaryCorrect">0</span><label>correct</label></div>
+        <div><span id="summaryMistakes">0</span><label>mistakes</label></div>
+      </div>
+      <button class="review-summary-btn" onclick="window.location.href='index.html'">Back to openings</button>
+    </div>
+  </div>
+
+  <!-- Streak toast -->
+  <div class="streak-toast" id="streakToast">
+    <svg width="16" height="18" viewBox="0 0 14 18" fill="none" style="color:var(--streak-color)">
+      <path d="M7 17c3.5 0 6-2.5 6-5.5 0-2-1-3.5-2-4.5 0 1.5-.8 2.5-1.8 2.8C9.5 8 8.5 5.5 7 3c0 2.5-1.5 4-1.5 5.5C4.5 8.2 4 7.5 4 6.5 2.5 8 1 10 1 11.5 1 14.5 3.5 17 7 17z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+    </svg>
+    <span id="streakToastMsg"></span>
+  </div>
+
+  <!-- Streak modal -->
+  <div class="streak-modal-overlay" id="streakModal">
+    <div class="streak-modal-box">
+      <svg id="streakModalFlame" class="streak-modal-flame" viewBox="0 0 14 18" fill="none">
+        <path d="M7 17c3.5 0 6-2.5 6-5.5 0-2-1-3.5-2-4.5 0 1.5-.8 2.5-1.8 2.8C9.5 8 8.5 5.5 7 3c0 2.5-1.5 4-1.5 5.5C4.5 8.2 4 7.5 4 6.5 2.5 8 1 10 1 11.5 1 14.5 3.5 17 7 17z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="currentColor"/>
+      </svg>
+      <div class="streak-modal-count" id="streakModalCount">0 day streak</div>
+      <div class="streak-modal-msg" id="streakModalMsg">Start a streak by completing a line today!</div>
+      <div class="streak-week" id="streakWeek"></div>
+    </div>
+  </div>
+
+  <script src="../assets/jquery.min.js"></script>
+  <script src="../assets/chess.js"></script>
+  <script src="../assets/chessboard.js"></script>
+  <script src="openings.js"></script>
+  <script src="sides.js"></script>
+  <script src="streak.js"></script>
+  <script src="stats.js"></script>
+  <script src="sounds.js"></script>
+  <script src="review.js"></script>
+</body>
+</html>

@@ -53,6 +53,12 @@
         </svg>
       </button>
 
+      <button class="theme-toggle" onclick="window.location.href='stats.html'" title="Statistics">
+        <svg viewBox="0 0 16 16" fill="none">
+          <path d="M2.5 13.5v-4M8 13.5V5M13.5 13.5V2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+
       <button class="theme-toggle" onclick="window.location.href='settings.html'" title="Settings">
         <svg viewBox="0 0 16 16" fill="none">
           <path d="M2 4.5h12M2 11.5h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
@@ -127,6 +133,8 @@
 
         <button class="progress-reset-btn" id="resetProgressBtn" onclick="Study.resetOpeningProgress()" style="margin-top:auto">↺ Reset opening progress</button>
 
+        <div class="kbd-hint">Press <kbd>?</kbd> for keyboard shortcuts</div>
+
       </div>
     </div>
   </main>
@@ -151,11 +159,26 @@
     </div>
   </div>
 
+  <!-- Shortcuts overlay -->
+  <div class="shortcuts-overlay" id="shortcutsOverlay">
+    <div class="shortcuts-box">
+      <div class="shortcuts-title">Keyboard shortcuts</div>
+      <div class="shortcut-row"><span>Next / previous move</span><span class="keys"><kbd>→</kbd><kbd>←</kbd></span></div>
+      <div class="shortcut-row"><span>First / last move</span><span class="keys"><kbd>Home</kbd><kbd>End</kbd></span></div>
+      <div class="shortcut-row"><span>Learn / Practice tab</span><span class="keys"><kbd>L</kbd><kbd>P</kbd></span></div>
+      <div class="shortcut-row"><span>Show hint <em>(Practice)</em></span><span class="keys"><kbd>H</kbd></span></div>
+      <div class="shortcut-row"><span>Restart line</span><span class="keys"><kbd>R</kbd></span></div>
+      <div class="shortcut-row"><span>Show this panel</span><span class="keys"><kbd>?</kbd></span></div>
+      <div class="shortcuts-close">Press <kbd>Esc</kbd> or click anywhere to close</div>
+    </div>
+  </div>
+
   <script src="../assets/jquery.min.js"></script>
   <script src="../assets/chess.js"></script>
   <script src="../assets/chessboard.js"></script>
   <script src="openings.js"></script>
   <script src="streak.js"></script>
+  <script src="stats.js"></script>
   <script src="sounds.js"></script>
   <script src="study.js"></script>
 </body>

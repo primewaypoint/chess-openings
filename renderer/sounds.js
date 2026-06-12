@@ -56,6 +56,21 @@ const SoundFX = (function () {
       tone({ freq: 523, time: 0,    dur: 0.14, type: 'sine', vol: 0.16 });
       tone({ freq: 659, time: 0.09, dur: 0.14, type: 'sine', vol: 0.16 });
       tone({ freq: 784, time: 0.18, dur: 0.22, type: 'sine', vol: 0.16 });
+    },
+    streak() {
+      // Rising sparkle when the daily streak goes up
+      if (!enabled()) return;
+      tone({ freq: 660,  time: 0,    dur: 0.09, type: 'sine', vol: 0.13 });
+      tone({ freq: 880,  time: 0.07, dur: 0.09, type: 'sine', vol: 0.13 });
+      tone({ freq: 1175, time: 0.14, dur: 0.18, type: 'sine', vol: 0.12 });
+    },
+    fanfare() {
+      // Richer chord for mastering a whole opening
+      if (!enabled()) return;
+      tone({ freq: 523,  time: 0,    dur: 0.30, type: 'sine', vol: 0.13 });
+      tone({ freq: 659,  time: 0,    dur: 0.30, type: 'sine', vol: 0.11 });
+      tone({ freq: 784,  time: 0.12, dur: 0.34, type: 'sine', vol: 0.13 });
+      tone({ freq: 1047, time: 0.24, dur: 0.44, type: 'sine', vol: 0.14 });
     }
   };
 })();

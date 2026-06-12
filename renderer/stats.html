@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChessOpenings — Statistics</title>
+  <link rel="stylesheet" href="../assets/chessboard.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-left">
+      <a class="header-logo" href="index.html">
+        <svg class="logo-crown" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="logo-text"><span>Chess</span>Openings</span>
+      </a>
+      <span class="header-badge">Free · Offline · Open source</span>
+    </div>
+
+    <div></div>
+
+    <div class="header-right">
+      <button class="theme-toggle" id="themeToggle">
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" style="display:none">
+          <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <button class="theme-toggle" onclick="window.location.href='settings.html'" title="Settings">
+        <svg viewBox="0 0 16 16" fill="none">
+          <path d="M2 4.5h12M2 11.5h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="5.5" cy="4.5" r="2" fill="var(--bg-header)" stroke="currentColor" stroke-width="1.3"/>
+          <circle cx="10.5" cy="11.5" r="2" fill="var(--bg-header)" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="stats-layout">
+
+      <div class="stats-page-title">Statistics</div>
+
+      <!-- Hero cards -->
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-card-value streak" id="statStreak">0</div>
+          <div class="stat-card-label">Day streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-value" id="statLines">0</div>
+          <div class="stat-card-label">Lines trained</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-value" id="statAccuracy">—</div>
+          <div class="stat-card-label">Practice accuracy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-value" id="statMastered">0</div>
+          <div class="stat-card-label">Openings mastered</div>
+        </div>
+      </div>
+
+      <!-- Activity heatmap -->
+      <div class="stats-section-title">Activity — last 16 weeks</div>
+      <div class="stats-card-box">
+        <div class="heatmap-wrap">
+          <div class="heatmap-daylabels">
+            <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
+          </div>
+          <div class="heatmap" id="heatmap"></div>
+        </div>
+        <div class="heatmap-legend">
+          <span>Less</span>
+          <span class="heat-cell l0"></span>
+          <span class="heat-cell l1"></span>
+          <span class="heat-cell l2"></span>
+          <span class="heat-cell l3"></span>
+          <span class="heat-cell l4"></span>
+          <span>More</span>
+        </div>
+      </div>
+
+      <div class="stats-columns">
+        <!-- Most trained -->
+        <div>
+          <div class="stats-section-title">Most trained openings</div>
+          <div class="stats-card-box" id="topOpenings">
+            <div class="stats-empty">Complete some lines in Practice mode to see your top openings.</div>
+          </div>
+        </div>
+
+        <!-- Progress by difficulty -->
+        <div>
+          <div class="stats-section-title">Progress by difficulty</div>
+          <div class="stats-card-box" id="difficultyProgress"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="openings.js"></script>
+  <script src="sides.js"></script>
+  <script src="streak.js"></script>
+  <script src="stats.js"></script>
+  <script src="stats-page.js"></script>
+</body>
+</html>
