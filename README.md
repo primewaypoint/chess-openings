@@ -35,7 +35,7 @@ Grab the installer for your system from the [Releases](../../releases) page:
 Requires [Node.js](https://nodejs.org) 18+.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/chess-openings.git
+git clone https://github.com/PrimeWaypoint/chess-openings.git
 cd chess-openings
 npm install
 npm start
@@ -57,4 +57,4 @@ Plain HTML/CSS/JavaScript in an [Electron](https://www.electronjs.org) shell, wi
 
 [GPL-3.0](LICENSE) — free to use, study, modify and share. Any derivative work must remain open source under the same license.
 
-Created by **David Carvalho**.
+Created by **PrimeWaypoint**.
