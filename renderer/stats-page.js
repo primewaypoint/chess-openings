@@ -50,13 +50,21 @@
   function renderHeatmap() {
     const container = document.getElementById('heatmap');
     const monthsEl = document.getElementById('heatmapMonths');
+    const wrap = document.querySelector('.heatmap-wrap');
+    const labels = document.querySelector('.heatmap-daylabels');
+
+    // While the window reports zero width (hidden/minimised), keep the
+    // current grid instead of collapsing to the 16-week minimum
+    const wrapWidth = wrap ? wrap.clientWidth : 0;
+    if (wrapWidth === 0 && container.childElementCount > 0) return;
+
+    container.innerHTML = '';
+    monthsEl.innerHTML = '';
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
 
     // Fit as many full weeks as the card width allows (17px per column)
-    const wrap = document.querySelector('.heatmap-wrap');
-    const labels = document.querySelector('.heatmap-daylabels');
-    const avail = (wrap ? wrap.clientWidth : 600) - (labels ? labels.offsetWidth : 26) - 14;
+    const avail = (wrapWidth || 600) - (labels ? labels.offsetWidth : 26) - 14;
     const WEEKS = Math.max(16, Math.min(52, Math.floor(avail / 17)));
     document.getElementById('activityTitle').textContent =
       `Activity — last ${WEEKS} weeks`;
@@ -121,6 +129,13 @@
     }
   }
   renderHeatmap();
+
+  // Re-render on window resize so the grid always fills the card
+  let heatmapResizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(heatmapResizeTimer);
+    heatmapResizeTimer = setTimeout(renderHeatmap, 150);
+  });
 
   // ── Most trained openings ────────────────────────────────────────
   function renderTopOpenings() {

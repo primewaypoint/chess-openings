@@ -1787,7 +1787,8 @@ kbd {
   to   { opacity: 1; transform: scale(1); }
 }
 .heat-cell.future { opacity: 0.25; animation: none; }
-.heat-cell.today  { box-shadow: 0 0 0 1.5px var(--text-secondary); }
+/* Inset ring so the marker never bleeds outside the grid */
+.heat-cell.today  { box-shadow: inset 0 0 0 1.5px var(--text-secondary); }
 .heat-cell.l1 { background: rgba(76, 175, 110, 0.30); border-color: transparent; }
 .heat-cell.l2 { background: rgba(76, 175, 110, 0.55); border-color: transparent; }
 .heat-cell.l3 { background: rgba(76, 175, 110, 0.78); border-color: transparent; }
