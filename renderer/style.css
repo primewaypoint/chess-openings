@@ -576,6 +576,9 @@ body {
 
 #studyBoard {
   width: 100%;
+  /* Anchor for the attack-arrow SVG overlay — without this the arrow
+     positions itself against the page and lands outside the board */
+  position: relative;
 }
 
 .back-btn {

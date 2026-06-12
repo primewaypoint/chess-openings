@@ -143,6 +143,7 @@ const Study = (function () {
       snapbackSpeed: 180,
       appearSpeed: 150,
       draggable: activeTab === 'practice',
+      onDragStart: onDragStart,
       onDrop: onDrop,
       onSnapEnd: onSnapEnd
     });
@@ -347,7 +348,25 @@ const Study = (function () {
     el.style.display = text ? '' : 'none';
   }
 
+  function onDragStart(source, piece) {
+    // Only the user's pieces, on the user's turn — blocked pieces fall
+    // through to the click handler so they can be capture targets
+    if (activeTab !== 'practice') return false;
+    if (!isUserTurn()) return false;
+    if (piece.charAt(0) !== game.turn()) return false;
+    const line = currentLine();
+    if (!line || practiceIdx >= line.moves.length) return false;
+  }
+
   function onDrop(source, target) {
+    // Press-and-release on one square is a click, not a drag:
+    // toggle the selection (the real click event is swallowed by the
+    // drag clone, so it never reaches the board's click listener)
+    if (source === target) {
+      if (selectedSquare === source) clearSelection();
+      else selectSquare(source);
+      return 'snapback';
+    }
     return tryUserMove(source, target, false);
   }
 
@@ -420,6 +439,8 @@ const Study = (function () {
     });
   }
 
+  // Handles clicks on squares chessboard.js does NOT drag (empty squares
+  // and opponent pieces) — selecting own pieces happens in onDrop above
   document.getElementById('studyBoard').addEventListener('click', e => {
     if (activeTab !== 'practice') return;
     const sqEl = e.target.closest('[class*="square-"]');
@@ -428,17 +449,11 @@ const Study = (function () {
     if (!match) return;
     const sq = match[1];
     const piece = game.get(sq);
-    const canSelect = piece && piece.color === game.turn() && isUserTurn();
-
-    if (selectedSquare) {
-      if (sq === selectedSquare) { clearSelection(); return; }
-      if (canSelect) { selectSquare(sq); return; }
-      const from = selectedSquare;
-      clearSelection();
-      tryUserMove(from, sq, true);
-      return;
-    }
-    if (canSelect) selectSquare(sq);
+    if (piece && piece.color === game.turn() && isUserTurn()) return; // drag path owns this
+    if (!selectedSquare) return;
+    const from = selectedSquare;
+    clearSelection();
+    tryUserMove(from, sq, true);
   });
 
   let practiceComplete = false;
