@@ -60,7 +60,16 @@ function renderStreakModal() {
     msgEl.textContent = msg;
   }
 
-  renderWeekDots(data.completedDates || []);
+  // Reconstruct any missing dates from count+lastDate (handles old data without completedDates)
+  const completedDates = new Set(data.completedDates || []);
+  if (count > 0 && data.lastDate) {
+    const base = new Date(data.lastDate + 'T12:00:00');
+    for (let i = 0; i < count; i++) {
+      const d = new Date(base.getTime() - i * 86400000);
+      completedDates.add(d.toISOString().split('T')[0]);
+    }
+  }
+  renderWeekDots([...completedDates]);
 }
 
 function renderWeekDots(completedDates) {

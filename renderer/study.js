@@ -34,7 +34,11 @@ const Study = (function () {
     const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
     const newCount = data.lastDate === yesterday ? data.count + 1 : 1;
     const completedDates = new Set(data.completedDates || []);
-    completedDates.add(today);
+    // Backfill all days in the streak so no date is ever missing
+    for (let i = 0; i < newCount; i++) {
+      const d = new Date(Date.now() - i * 86400000);
+      completedDates.add(d.toISOString().split('T')[0]);
+    }
     const sortedDates = [...completedDates].sort().slice(-60);
     const newData = { count: newCount, lastDate: today, completedDates: sortedDates };
     localStorage.setItem('streakData', JSON.stringify(newData));
