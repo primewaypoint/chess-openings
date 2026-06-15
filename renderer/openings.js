@@ -13,41 +13,94 @@ const OPENINGS = [
     description: "One of the oldest openings. White develops quickly to control the centre and targets the vulnerable f7 pawn.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","e5","Nf3","Nc6","Bc4"],
+        id: "giuoco-pianissimo",
+        name: "Giuoco Pianissimo",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Bc5","c3","Nf6","d3","d6"],
         explanations: [
-          "White controls the centre with the e-pawn.",
-          "Black mirrors with e5, contesting the centre.",
-          "The knight develops and attacks the e5 pawn.",
-          "Black defends e5 with the knight.",
-          "The bishop eyes the f7 square — the Italian setup."
-        ]
-      },
-      {
-        id: "giuoco-piano",
-        name: "Giuoco Piano",
-        moves: ["e4","e5","Nf3","Nc6","Bc4","Bc5"],
-        explanations: [
-          "White occupies the centre.",
-          "Black responds symmetrically.",
-          "Knight develops, pressuring e5.",
+          "White takes the centre.",
+          "Black mirrors with e5.",
+          "Knight attacks e5.",
           "Knight defends e5.",
-          "Bishop attacks f7.",
-          "Black mirrors with Bc5 — the 'quiet game'."
+          "The Italian bishop eyes f7.",
+          "Black mirrors — the Giuoco Piano.",
+          "c3 prepares a future d4.",
+          "Black develops the knight.",
+          "d3 keeps it quiet — the Giuoco Pianissimo.",
+          "Both sides build slowly and safely."
         ]
       },
       {
-        id: "two-knights",
-        name: "Two Knights Variation",
-        moves: ["e4","e5","Nf3","Nc6","Bc4","Nf6"],
+        id: "giuoco-d4",
+        name: "Giuoco Piano — d4 Break",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Bc5","c3","Nf6","d4","exd4","cxd4","Bb4+","Bd2"],
         explanations: [
-          "White controls the centre.",
-          "Black fights for the centre.",
-          "Knight develops with tempo.",
-          "Knight defends.",
+          "White takes the centre.",
+          "Black answers in the centre.",
+          "Knight hits e5.",
+          "Knight guards e5.",
           "Bishop targets f7.",
-          "Black develops aggressively, counter-attacking e4."
+          "Black copies with Bc5.",
+          "c3 prepares the big central push.",
+          "Black develops.",
+          "d4 strikes the centre open.",
+          "Black captures.",
+          "White recaptures, building a strong centre.",
+          "Black checks to win a tempo.",
+          "Bd2 blocks the check safely — White stands well."
+        ]
+      },
+      {
+        id: "two-knights-quiet",
+        name: "Two Knights — Quiet d3",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Nf6","d3","Be7","O-O","O-O"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bishop to c4.",
+          "Black develops actively — the Two Knights.",
+          "d3 keeps things solid, sidestepping sharp lines.",
+          "Black develops the bishop.",
+          "White castles to safety.",
+          "Black castles too — a calm, healthy position."
+        ]
+      },
+      {
+        id: "two-knights-ng5",
+        name: "Two Knights — Ng5 Attack",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","d5","exd5","Na5","Bb5+","c6","dxc6","bxc6"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight hits e5.",
+          "Knight defends.",
+          "Bishop to c4, eyeing f7.",
+          "Black develops, daring White to attack.",
+          "Ng5 pounces on f7!",
+          "Black hits back in the centre with d5.",
+          "White captures the pawn.",
+          "Na5 chases the strong bishop.",
+          "Bb5+ keeps the extra pawn for now.",
+          "Black blocks the check.",
+          "White grabs another pawn.",
+          "Black recaptures, with active piece play for the pawn."
+        ]
+      },
+      {
+        id: "hungarian",
+        name: "Hungarian Defense (...Be7)",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Be7","d4","exd4","Nxd4"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bishop to c4.",
+          "Black plays the solid, modest Be7 — the Hungarian Defense.",
+          "White grabs the centre with d4.",
+          "Black captures.",
+          "White recaptures, with a comfortable space edge."
         ]
       }
     ]
@@ -63,27 +116,87 @@ const OPENINGS = [
       {
         id: "main",
         name: "Main Line",
-        moves: ["d4","d5","Nf3","Nf6","Bf4"],
+        moves: ["d4","d5","Nf3","Nf6","Bf4","e6","e3","c5","c3","Nc6","Bd3"],
         explanations: [
-          "White controls the centre with d4.",
-          "Black challenges with d5.",
-          "Knight develops to its best square.",
+          "White claims the centre with the d-pawn.",
+          "Black mirrors in the centre.",
+          "The knight takes its natural square.",
+          "Black develops the knight too.",
+          "The signature London move — the bishop comes out before ...e6 can lock it in.",
+          "Black opens a path for the dark-squared bishop.",
+          "White supports d4 and frees the f1-bishop.",
+          "Black strikes at the centre.",
+          "White calmly props up d4 — no need to capture.",
+          "Black piles pressure on d4.",
+          "The London setup is complete: a solid pyramid aimed at Black's king."
+        ]
+      },
+      {
+        id: "vs-c5",
+        name: "vs Early ...c5",
+        moves: ["d4","d5","Nf3","Nf6","Bf4","c5","e3","Nc6","c3"],
+        explanations: [
+          "White takes the centre with d4.",
+          "Black answers in the centre.",
+          "Knight to its best square.",
+          "Black develops.",
+          "The London bishop comes out to f4.",
+          "Black challenges the centre early with ...c5.",
+          "White stays calm and supports d4 with e3.",
+          "Black adds a second attacker on d4.",
+          "c3 holds everything together — the centre won't fall. This is the London way: solid, not flashy."
+        ]
+      },
+      {
+        id: "vs-qb6",
+        name: "vs ...Qb6 (the b2 grab)",
+        moves: ["d4","d5","Nf3","Nf6","Bf4","c5","e3","Qb6","Qc1"],
+        explanations: [
+          "White grabs the centre.",
+          "Black replies in the centre.",
+          "Knight develops.",
           "Black develops the knight.",
-          "The London bishop heads to f4 — the signature move."
+          "Bishop to f4 — the London signature.",
+          "Black plays ...c5 to pressure d4.",
+          "White supports with e3.",
+          "Black swings the queen to b6, eyeing the b2-pawn.",
+          "The simplest answer: Qc1 quietly defends b2 and keeps White rock-solid. No panic needed."
         ]
       },
       {
         id: "vs-king-indian",
         name: "vs King's Indian Setup",
-        moves: ["d4","Nf6","Nf3","g6","Bf4","Bg7","e3"],
+        moves: ["d4","Nf6","Nf3","g6","Bf4","Bg7","e3","d6","Be2","O-O","O-O"],
         explanations: [
           "White starts with d4.",
-          "Black plays Nf6, aiming for a King's Indian setup.",
+          "Black goes for a King's Indian setup with ...Nf6.",
           "Knight to f3.",
-          "Black fianchettoes.",
-          "London bishop to f4.",
-          "Bishop fianchettoes to g7.",
-          "White solidifies the centre with e3."
+          "Black prepares to fianchetto.",
+          "The London bishop reaches f4.",
+          "Black completes the fianchetto.",
+          "White builds the solid e3 pawn chain.",
+          "Black supports the centre.",
+          "The bishop develops to e2, ready to castle.",
+          "Black castles to safety.",
+          "White castles too — the same London setup works against almost anything."
+        ]
+      },
+      {
+        id: "vs-bf5",
+        name: "vs ...Bf5 (bishop out early)",
+        moves: ["d4","d5","Nf3","Nf6","Bf4","Bf5","e3","e6","Bd3","Bxd3","Qxd3"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors with ...d5.",
+          "Knight to f3.",
+          "Black develops the knight.",
+          "Bishop to f4 — out before the pawns lock it in.",
+          "Black copies the idea, developing the bishop outside the chain.",
+          "White prepares to challenge that bishop.",
+          "Black solidifies.",
+          "Bd3 offers to trade the active light-squared bishops.",
+          "Black takes the trade.",
+          "White recaptures with the queen, eyeing Black's kingside. Comfortable and easy to play."
         ]
       }
     ]
@@ -97,27 +210,85 @@ const OPENINGS = [
     description: "Black immediately challenges White's e4 pawn on move one. One of the oldest recorded openings in chess history.",
     lines: [
       {
-        id: "main",
-        name: "Classical — Queen to a5",
-        moves: ["e4","d5","exd5","Qxd5","Nc3","Qa5"],
+        id: "classical",
+        name: "Classical (3...Qa5)",
+        moves: ["e4","d5","exd5","Qxd5","Nc3","Qa5","d4","Nf6","Nf3","c6"],
         explanations: [
-          "White opens with e4.",
-          "Black immediately strikes the centre with d5.",
-          "White captures the d5 pawn.",
-          "Black recaptures with the queen, gaining material.",
-          "White attacks the queen with the knight.",
-          "Queen retreats to a5, maintaining pressure on c3."
+          "White opens e4.",
+          "Black strikes with d5 — the Scandinavian!",
+          "White captures.",
+          "Black recaptures with the queen.",
+          "Nc3 hits the queen with tempo.",
+          "Qa5 — the Classical retreat.",
+          "d4 builds the centre.",
+          "Black develops.",
+          "Nf3 develops.",
+          "c6 gives the queen a safe retreat — solid and sound."
         ]
       },
       {
-        id: "modern",
-        name: "Modern — Nf6",
-        moves: ["e4","d5","exd5","Nf6"],
+        id: "qd6",
+        name: "Modern Queen (3...Qd6)",
+        moves: ["e4","d5","exd5","Qxd5","Nc3","Qd6","d4","Nf6","Nf3","a6"],
         explanations: [
-          "White opens with e4.",
-          "Black strikes with d5.",
+          "White opens e4.",
+          "Black plays the Scandinavian.",
           "White captures.",
-          "Black recaptures with the knight, avoiding early queen development."
+          "Black recaptures.",
+          "Nc3 hits the queen.",
+          "Qd6 — the modern, flexible retreat.",
+          "d4 builds the centre.",
+          "Black develops.",
+          "Nf3 develops.",
+          "a6 prepares ...b5 and ...Bb7 — a resilient set-up."
+        ]
+      },
+      {
+        id: "qd8",
+        name: "Banker's (3...Qd8)",
+        moves: ["e4","d5","exd5","Qxd5","Nc3","Qd8","d4","Nf6","Nf3","Bf5"],
+        explanations: [
+          "White opens e4.",
+          "Black plays the Scandinavian.",
+          "White captures.",
+          "Black recaptures.",
+          "Nc3 hits the queen.",
+          "Qd8 — the modest 'Banker's' retreat.",
+          "d4 grabs the centre.",
+          "Black develops.",
+          "Nf3 develops.",
+          "Bf5 develops the bishop actively — passive but very solid for Black."
+        ]
+      },
+      {
+        id: "modern-nf6",
+        name: "Modern (2...Nf6)",
+        moves: ["e4","d5","exd5","Nf6","d4","Nxd5","c4","Nb6","Nf3"],
+        explanations: [
+          "White opens e4.",
+          "Black plays the Scandinavian.",
+          "White captures.",
+          "Black delays recapture — the Modern 2...Nf6.",
+          "d4 holds the extra pawn for now.",
+          "Black regains it with the knight.",
+          "c4 kicks the knight.",
+          "Nb6 retreats.",
+          "Nf3 develops — White has more space."
+        ]
+      },
+      {
+        id: "portuguese",
+        name: "Portuguese Gambit",
+        moves: ["e4","d5","exd5","Nf6","d4","Bg4","f3","Bf5"],
+        explanations: [
+          "White opens e4.",
+          "Black plays the Scandinavian.",
+          "White captures.",
+          "Black plays 2...Nf6.",
+          "d4 defends the pawn.",
+          "Bg4!? the Portuguese Gambit — eyeing quick development.",
+          "f3 questions the bishop.",
+          "Bf5 keeps the bishop active for the pawn."
         ]
       }
     ]
@@ -131,30 +302,94 @@ const OPENINGS = [
     description: "Both sides develop all four knights early. A very symmetrical, classical opening.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","e5","Nf3","Nc6","Nc3","Nf6"],
+        id: "spanish",
+        name: "Spanish Four Knights",
+        moves: ["e4","e5","Nf3","Nc6","Nc3","Nf6","Bb5","Bb4","O-O","O-O","d3","d6","Bg5"],
         explanations: [
-          "White opens e4.",
-          "Black responds e5.",
-          "White's kingside knight develops.",
-          "Black's queenside knight develops.",
-          "White's queenside knight joins.",
-          "All four knights are out — the Four Knights Game."
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Nc3 develops — the Four Knights.",
+          "Black develops symmetrically.",
+          "Bb5 pins the c6 knight — the Spanish Four Knights.",
+          "Black mirrors the pin.",
+          "White castles.",
+          "Black castles.",
+          "d3 supports e4.",
+          "Black supports e5.",
+          "Bg5 pins — a balanced, classical battle."
         ]
       },
       {
-        id: "spanish",
-        name: "Spanish Variation",
-        moves: ["e4","e5","Nf3","Nc6","Nc3","Nf6","Bb5"],
+        id: "scotch-four-knights",
+        name: "Scotch Four Knights",
+        moves: ["e4","e5","Nf3","Nc6","Nc3","Nf6","d4","exd4","Nxd4","Bb4","Nxc6","bxc6","Bd3"],
         explanations: [
-          "White opens e4.",
-          "Black e5.",
-          "Knight to f3.",
-          "Knight to c6.",
-          "Knight to c3.",
-          "Knight to f6.",
-          "White pins the c6 knight — the Spanish Four Knights."
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Nc3 develops.",
+          "Black develops.",
+          "d4 strikes — the Scotch Four Knights.",
+          "Black captures.",
+          "White recaptures.",
+          "Black pins the knight.",
+          "White trades on c6.",
+          "Black recaptures.",
+          "Bd3 develops, eyeing the kingside."
+        ]
+      },
+      {
+        id: "italian-four-knights",
+        name: "Italian Four Knights",
+        moves: ["e4","e5","Nf3","Nc6","Nc3","Nf6","Bc4","Bc5","d3","d6"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Nc3 develops.",
+          "Black develops.",
+          "Bc4 eyes f7 — the Italian Four Knights.",
+          "Black mirrors with Bc5.",
+          "d3 keeps it solid.",
+          "Black mirrors — a quiet, even game."
+        ]
+      },
+      {
+        id: "belgrade-gambit",
+        name: "Belgrade Gambit",
+        moves: ["e4","e5","Nf3","Nc6","Nc3","Nf6","d4","exd4","Nd5"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Nc3 develops.",
+          "Black develops.",
+          "d4 strikes.",
+          "Black captures.",
+          "Nd5!? the Belgrade Gambit — offering a pawn for a lead in development."
+        ]
+      },
+      {
+        id: "glek-system",
+        name: "Glek System (4.g3)",
+        moves: ["e4","e5","Nf3","Nc6","Nc3","Nf6","g3","Bc5","Bg2","d6","d3"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Nc3 develops.",
+          "Black develops.",
+          "g3 prepares a fianchetto — the modern Glek System.",
+          "Black develops the bishop.",
+          "Bishop to g2.",
+          "Black plays d6.",
+          "d3 completes a flexible, harmonious set-up."
         ]
       }
     ]
@@ -168,37 +403,86 @@ const OPENINGS = [
     description: "White develops the queenside knight before Nf3. Flexible and leads to rich middlegames.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","e5","Nc3"],
+        id: "vienna-gambit",
+        name: "Vienna Gambit (3.f4 d5)",
+        moves: ["e4","e5","Nc3","Nf6","f4","d5","fxe5","Nxe4","Nf3"],
         explanations: [
-          "White opens e4.",
-          "Black responds e5.",
-          "White develops the queenside knight — a flexible approach."
+          "White takes the centre.",
+          "Black answers e5.",
+          "Nc3 develops — the Vienna Game.",
+          "Black develops.",
+          "f4 strikes — the Vienna Gambit!",
+          "Black hits back in the centre with d5.",
+          "White captures on e5.",
+          "Black grabs e4.",
+          "Nf3 develops, fighting for the centre."
         ]
       },
       {
-        id: "vienna-gambit",
-        name: "Vienna Gambit",
-        moves: ["e4","e5","Nc3","Nf6","f4"],
+        id: "gambit-accepted",
+        name: "Vienna Gambit Accepted",
+        moves: ["e4","e5","Nc3","Nf6","f4","exf4","e5","Qe7","Qe2"],
         explanations: [
-          "White opens e4.",
-          "Black e5.",
-          "White plays Nc3.",
-          "Black develops with Nf6.",
-          "White pushes f4, offering a gambit pawn for centre control."
+          "White takes the centre.",
+          "Black answers e5.",
+          "Nc3 develops.",
+          "Black develops.",
+          "f4 — the Vienna Gambit.",
+          "Black grabs the pawn.",
+          "e5 kicks the knight and gains space.",
+          "Qe7 hits the e5 pawn.",
+          "Qe2 defends — sharp, open play ahead."
         ]
       },
       {
         id: "bishop-variation",
         name: "Bishop's Variation",
-        moves: ["e4","e5","Nc3","Bc5","Bc4"],
+        moves: ["e4","e5","Nc3","Nf6","Bc4","Nc6","d3","Bb4"],
         explanations: [
-          "White opens e4.",
-          "Black e5.",
-          "Knight to c3.",
-          "Black develops the bishop to c5.",
-          "White mirrors with Bc4 — a double-bishop setup."
+          "White takes the centre.",
+          "Black answers e5.",
+          "Nc3 develops.",
+          "Black develops.",
+          "Bc4 eyes f7 — the Bishop's Variation.",
+          "Black develops.",
+          "d3 supports e4.",
+          "Black pins the knight — a calm, classical game."
+        ]
+      },
+      {
+        id: "mieses",
+        name: "Mieses (3.g3)",
+        moves: ["e4","e5","Nc3","Nf6","g3","d5","exd5","Nxd5","Bg2","Nxc3","bxc3"],
+        explanations: [
+          "White takes the centre.",
+          "Black answers e5.",
+          "Nc3 develops.",
+          "Black develops.",
+          "g3 prepares a fianchetto — the Mieses Variation.",
+          "Black strikes with d5.",
+          "White captures.",
+          "Black recaptures.",
+          "Bishop to g2, raking the long diagonal.",
+          "Black trades knights.",
+          "White recaptures, with a broad centre."
+        ]
+      },
+      {
+        id: "fork-trick",
+        name: "Fork Trick (3.Bc4 Nxe4)",
+        moves: ["e4","e5","Nc3","Nf6","Bc4","Nxe4","Nxe4","d5","Bd3","dxe4","Bxe4"],
+        explanations: [
+          "White takes the centre.",
+          "Black answers e5.",
+          "Nc3 develops.",
+          "Black develops.",
+          "Bc4 eyes f7.",
+          "Black plays the fork trick — Nxe4!",
+          "White recaptures.",
+          "Black forks bishop and knight with d5.",
+          "The bishop steps back.",
+          "Black regains the piece.",
+          "White recaptures — equal, a useful trick to know."
         ]
       }
     ]
@@ -212,35 +496,80 @@ const OPENINGS = [
     description: "White sacrifices the f-pawn to open the f-file and seize the centre. The most romanticly aggressive opening in chess.",
     lines: [
       {
-        id: "main",
-        name: "King's Gambit",
-        moves: ["e4","e5","f4"],
+        id: "kieseritzky",
+        name: "Kieseritzky Gambit",
+        moves: ["e4","e5","f4","exf4","Nf3","g5","h4","g4","Ne5"],
         explanations: [
-          "White opens with e4.",
-          "Black responds e5.",
-          "White offers the f-pawn — the King's Gambit!"
+          "White takes the centre.",
+          "Black answers e5.",
+          "f4 — the King's Gambit!",
+          "Black grabs the pawn.",
+          "Nf3 stops ...Qh4+ and develops.",
+          "Black holds the pawn with g5.",
+          "h4 strikes at the pawn chain.",
+          "Black pushes on, kicking the knight.",
+          "Ne5 — the Kieseritzky, leaping into the centre."
         ]
       },
       {
-        id: "accepted",
-        name: "King's Gambit Accepted",
-        moves: ["e4","e5","f4","exf4"],
+        id: "modern-defense",
+        name: "Modern Defense (3...d5)",
+        moves: ["e4","e5","f4","exf4","Nf3","d5","exd5","Nf6"],
         explanations: [
-          "White opens e4.",
-          "Black e5.",
-          "White offers the f-pawn.",
-          "Black accepts! Now White aims for rapid development."
+          "White takes the centre.",
+          "Black answers e5.",
+          "f4 — the King's Gambit.",
+          "Black accepts.",
+          "Nf3 develops.",
+          "Black hits back with d5 — the Modern Defense.",
+          "White captures.",
+          "Black develops, regaining the pawn smoothly."
         ]
       },
       {
         id: "declined",
         name: "King's Gambit Declined",
-        moves: ["e4","e5","f4","Bc5"],
+        moves: ["e4","e5","f4","Bc5","Nf3","d6","Nc3","Nf6"],
         explanations: [
-          "White opens e4.",
-          "Black e5.",
-          "White offers the gambit.",
-          "Black declines and develops the bishop — counterattacking f4."
+          "White takes the centre.",
+          "Black answers e5.",
+          "f4 — the King's Gambit.",
+          "Black declines with Bc5, eyeing f2.",
+          "Nf3 develops.",
+          "Black supports e5.",
+          "Nc3 develops.",
+          "Black develops — a solid, classical refusal."
+        ]
+      },
+      {
+        id: "falkbeer",
+        name: "Falkbeer Counter-Gambit",
+        moves: ["e4","e5","f4","d5","exd5","e4","d3","Nf6"],
+        explanations: [
+          "White takes the centre.",
+          "Black answers e5.",
+          "f4 — the King's Gambit.",
+          "Black strikes back — the Falkbeer Counter-Gambit!",
+          "White captures.",
+          "Black clamps with e4, gaining space.",
+          "d3 challenges the advanced pawn.",
+          "Black develops — counterattack for the pawn."
+        ]
+      },
+      {
+        id: "cunningham",
+        name: "Cunningham Defense",
+        moves: ["e4","e5","f4","exf4","Nf3","Be7","Bc4","Bh4+","Kf1"],
+        explanations: [
+          "White takes the centre.",
+          "Black answers e5.",
+          "f4 — the King's Gambit.",
+          "Black accepts.",
+          "Nf3 develops.",
+          "Be7 prepares an annoying check — the Cunningham.",
+          "Bc4 eyes f7.",
+          "Bh4+! a check to disrupt White's castling.",
+          "Kf1 — White keeps the extra pawn but loses castling rights."
         ]
       }
     ]
@@ -408,46 +737,95 @@ const OPENINGS = [
     description: "White immediately challenges the centre with d4 on move 3. Open, active and direct play.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","e5","Nf3","Nc6","d4","exd4","Nxd4"],
+        id: "classical",
+        name: "Classical (4...Bc5)",
+        moves: ["e4","e5","Nf3","Nc6","d4","exd4","Nxd4","Bc5","Be3","Qf6","c3","Nge7"],
         explanations: [
-          "White opens e4.",
-          "Black e5.",
-          "Knight to f3.",
-          "Knight to c6.",
-          "White immediately challenges with d4.",
-          "Black captures the d4 pawn.",
-          "White recaptures with the knight."
+          "White opens the centre.",
+          "Black answers with e5.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "d4 challenges at once — the Scotch.",
+          "Black captures.",
+          "White recaptures with the knight.",
+          "Black hits the knight with Bc5.",
+          "Be3 supports the knight.",
+          "Qf6 keeps the pressure on d4.",
+          "c3 reinforces.",
+          "Nge7 develops — the Classical Scotch main line."
+        ]
+      },
+      {
+        id: "mieses",
+        name: "Mieses Main (4...Nf6)",
+        moves: ["e4","e5","Nf3","Nc6","d4","exd4","Nxd4","Nf6","Nxc6","bxc6","e5","Qe7","Qe2","Nd5"],
+        explanations: [
+          "White opens the centre.",
+          "Black plays e5.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "d4 strikes.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops, hitting e4.",
+          "White trades on c6.",
+          "Black recaptures, opening the b-file.",
+          "e5 kicks the knight and grabs space.",
+          "Qe7 pressures the e5 pawn.",
+          "Qe2 defends and unpins.",
+          "Nd5 centralises — the main Mieses Variation."
+        ]
+      },
+      {
+        id: "four-knights",
+        name: "Scotch Four Knights",
+        moves: ["e4","e5","Nf3","Nc6","d4","exd4","Nxd4","Nf6","Nc3","Bb4","Nxc6","bxc6","Bd3"],
+        explanations: [
+          "White opens the centre.",
+          "Black plays e5.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "d4 challenges.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops, hitting e4.",
+          "Nc3 defends e4 — the Scotch Four Knights.",
+          "Black pins the knight.",
+          "White trades on c6.",
+          "Black recaptures.",
+          "Bd3 develops, eyeing the kingside."
         ]
       },
       {
         id: "scotch-gambit",
-        name: "Scotch Gambit",
-        moves: ["e4","e5","Nf3","Nc6","d4","exd4","Bc4"],
+        name: "Scotch Gambit (4.Bc4)",
+        moves: ["e4","e5","Nf3","Nc6","d4","exd4","Bc4","Bc5","c3"],
         explanations: [
-          "White e4.",
-          "Black e5.",
-          "Knight to f3.",
-          "Knight to c6.",
-          "White plays d4.",
+          "White opens the centre.",
+          "Black plays e5.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "d4 challenges.",
           "Black captures.",
-          "White gambits — Bc4 instead of recapturing, eyeing f7."
+          "Bc4 gambits the pawn for fast development — the Scotch Gambit.",
+          "Black develops the bishop.",
+          "c3 offers to open lines and regain d4."
         ]
       },
       {
-        id: "classical",
-        name: "Classical — Nf6",
-        moves: ["e4","e5","Nf3","Nc6","d4","exd4","Nxd4","Nf6"],
+        id: "goring-gambit",
+        name: "Göring Gambit (4.c3)",
+        moves: ["e4","e5","Nf3","Nc6","d4","exd4","c3","dxc3","Nxc3"],
         explanations: [
-          "White e4.",
-          "Black e5.",
-          "Knight out.",
-          "Knight out.",
-          "d4 challenge.",
+          "White opens the centre.",
+          "Black plays e5.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "d4 challenges.",
           "Black captures.",
-          "White recaptures.",
-          "Black develops with Nf6 — the Classical Scotch."
+          "c3 offers a second pawn — the Göring Gambit.",
+          "Black grabs it.",
+          "Nxc3 gives White a big lead in development for the pawn."
         ]
       }
     ]
@@ -801,43 +1179,88 @@ const OPENINGS = [
     description: "The most classical of all chess openings. White pins the c6 knight, putting long-term pressure on the e5 pawn.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","e5","Nf3","Nc6","Bb5"],
+        id: "morphy-closed",
+        name: "Morphy Defense — Closed",
+        moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Ba4","Nf6","O-O","Be7","Re1"],
         explanations: [
-          "White opens e4.",
-          "Black e5.",
-          "Knight to f3, attacking e5.",
-          "Knight to c6, defending e5.",
-          "Bishop to b5 — the Ruy Lopez, pinning the knight."
-        ]
-      },
-      {
-        id: "morphy-defense",
-        name: "Morphy Defense",
-        moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Ba4"],
-        explanations: [
-          "White e4.",
-          "Black e5.",
-          "Knight to f3.",
-          "Knight to c6.",
-          "Bishop to b5.",
-          "Black challenges the bishop with a6.",
-          "Bishop retreats to a4, maintaining the pin."
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bb5 pins the knight — the Ruy Lopez.",
+          "Black challenges the bishop.",
+          "Ba4 keeps the pin.",
+          "Black develops, hitting e4.",
+          "White castles.",
+          "Black develops the bishop.",
+          "Re1 defends e4 — the Closed Ruy main line."
         ]
       },
       {
         id: "exchange",
         name: "Exchange Variation",
-        moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Bxc6"],
+        moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Bxc6","dxc6","O-O"],
         explanations: [
-          "White e4.",
-          "Black e5.",
-          "Knight to f3.",
-          "Knight to c6.",
-          "Bishop to b5.",
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bb5 pins the knight.",
           "Black plays a6.",
-          "White captures — the Exchange Lopez, creating a structural imbalance."
+          "White trades — the Exchange Variation, damaging Black's pawns.",
+          "Black recaptures, gaining the bishop pair.",
+          "White castles, aiming for a better endgame structure."
+        ]
+      },
+      {
+        id: "berlin",
+        name: "Berlin Defense (...Nf6)",
+        moves: ["e4","e5","Nf3","Nc6","Bb5","Nf6","O-O","Nxe4","d4"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bb5 pins the knight.",
+          "Black plays Nf6 — the rock-solid Berlin Defense.",
+          "White castles, ignoring e4 for now.",
+          "Black grabs the e4 pawn.",
+          "d4 opens the centre to regain the pawn."
+        ]
+      },
+      {
+        id: "steinitz",
+        name: "Steinitz Defense (...d6)",
+        moves: ["e4","e5","Nf3","Nc6","Bb5","d6","d4","Bd7","Nc3","Nf6","O-O","Be7"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bb5 pins the knight.",
+          "Black props up e5 with d6 — the solid Steinitz Defense.",
+          "White expands with d4.",
+          "Black unpins with Bd7.",
+          "Nc3 develops.",
+          "Black develops the knight.",
+          "White castles.",
+          "Black develops — a sturdy, if passive, set-up."
+        ]
+      },
+      {
+        id: "classical",
+        name: "Classical Defense (...Bc5)",
+        moves: ["e4","e5","Nf3","Nc6","Bb5","Bc5","c3","Nf6","O-O"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bb5 pins the knight.",
+          "Black develops actively — the Classical Defense.",
+          "c3 prepares d4.",
+          "Black develops, hitting e4.",
+          "White castles into a rich middlegame."
         ]
       }
     ]
@@ -951,19 +1374,20 @@ const OPENINGS = [
     description: "The most popular response to 1.e4. Black creates an imbalanced position and fights for the initiative.",
     lines: [
       {
-        id: "main",
+        id: "open",
         name: "Open Sicilian",
-        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3"],
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6"],
         explanations: [
-          "White opens e4.",
+          "White takes the centre.",
           "Black plays c5 — the Sicilian!",
-          "Knight to f3.",
-          "Black plays d6.",
-          "White strikes the centre with d4.",
+          "Knight develops.",
+          "Black supports the centre with d6.",
+          "d4 opens the position — the Open Sicilian.",
           "Black captures.",
           "White recaptures with the knight.",
-          "Black develops with Nf6.",
-          "Knight to c3 — the Open Sicilian."
+          "Black develops, hitting e4.",
+          "Nc3 defends e4.",
+          "a6 prepares ...e5/...b5 — heading for the Najdorf."
         ]
       },
       {
@@ -971,14 +1395,59 @@ const OPENINGS = [
         name: "Closed Sicilian",
         moves: ["e4","c5","Nc3","g6","g3","Bg7","Bg2","Nc6"],
         explanations: [
-          "White e4.",
-          "Black c5.",
-          "White plays Nc3 — the Closed Sicilian.",
-          "Black fianchettoes with g6.",
-          "White fianchettoes.",
-          "Black bishop to g7.",
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Nc3 keeps it closed — the Closed Sicilian.",
+          "Black fianchettoes.",
+          "White prepares to fianchetto too.",
+          "Bishop to g7.",
           "White completes the fianchetto.",
-          "Black develops with Nc6."
+          "Black develops, a manoeuvring battle ahead."
+        ]
+      },
+      {
+        id: "alapin",
+        name: "Alapin (2.c3)",
+        moves: ["e4","c5","c3","d5","exd5","Qxd5","d4","Nc6","Nf3"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays c5.",
+          "c3 prepares d4 — the Alapin, sidestepping the Open Sicilian.",
+          "Black strikes with d5.",
+          "White captures.",
+          "Black recaptures with the queen.",
+          "d4 builds a strong centre.",
+          "Black develops.",
+          "Nf3 develops and supports the centre."
+        ]
+      },
+      {
+        id: "smith-morra",
+        name: "Smith-Morra Gambit",
+        moves: ["e4","c5","d4","cxd4","c3","dxc3","Nxc3"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays c5.",
+          "d4 offers a pawn — the Smith-Morra Gambit.",
+          "Black captures.",
+          "c3 offers it back.",
+          "Black grabs the pawn.",
+          "Nxc3 gives White fast development and open lines for the pawn."
+        ]
+      },
+      {
+        id: "grand-prix",
+        name: "Grand Prix Attack",
+        moves: ["e4","c5","Nc3","Nc6","f4","g6","Nf3","Bg7"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays c5.",
+          "Nc3 develops.",
+          "Black develops.",
+          "f4 signals a kingside attack — the Grand Prix Attack.",
+          "Black fianchettoes for safety.",
+          "Nf3 develops.",
+          "Bishop to g7, bracing for the coming storm."
         ]
       }
     ]
@@ -992,58 +1461,108 @@ const OPENINGS = [
     description: "Black's most ambitious reply. Fischer and Kasparov's favourite — aggressive, complex, and rich in theory.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6"],
+        id: "main-bg5",
+        name: "6.Bg5 Main Line",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6","Bg5","e6","f4","Be7"],
         explanations: [
-          "White e4.",
-          "Black c5.",
-          "Knight to f3.",
-          "Black d6.",
-          "White d4.",
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black supports with d6.",
+          "d4 opens the position.",
           "Black captures.",
           "White recaptures.",
-          "Black Nf6.",
-          "Knight to c3.",
-          "Black plays a6 — the Najdorf, preventing Nb5."
+          "Black develops, hitting e4.",
+          "Nc3 defends e4.",
+          "a6 — the Najdorf!",
+          "Bg5 pins the knight — the main line.",
+          "Black plays e6.",
+          "f4 builds a kingside pawn storm.",
+          "Be7 develops — razor-sharp play ahead."
+        ]
+      },
+      {
+        id: "classical-be2",
+        name: "6.Be2 Classical",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6","Be2","e5","Nb3","Be7"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops.",
+          "Nc3 defends e4.",
+          "a6 — the Najdorf.",
+          "Be2 — the calm Classical set-up.",
+          "Black grabs space with e5.",
+          "The knight retreats to b3.",
+          "Be7 develops — a positional struggle."
         ]
       },
       {
         id: "english-attack",
-        name: "English Attack",
-        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6","Be3","e5","Nb3"],
+        name: "6.Be3 English Attack",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6","Be3","e5","Nb3","Be6"],
         explanations: [
-          "White e4.",
-          "Black c5.",
-          "Knight to f3.",
-          "Black d6.",
-          "White d4.",
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens.",
           "Black captures.",
           "White recaptures.",
-          "Nf6.",
-          "Nc3.",
-          "Najdorf a6.",
-          "White plays Be3 — the English Attack.",
+          "Black develops.",
+          "Nc3 defends e4.",
+          "a6 — the Najdorf.",
+          "Be3 — the aggressive English Attack.",
           "Black plays e5.",
-          "Knight retreats to b3."
+          "The knight retreats to b3.",
+          "Be6 develops — White aims for f3, Qd2 and a pawn storm."
         ]
       },
       {
-        id: "bg5",
-        name: "Classical Variation — Bg5",
-        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6","Bg5"],
+        id: "fischer-sozin",
+        name: "6.Bc4 Fischer-Sozin",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6","Bc4","e6","Bb3","Be7"],
         explanations: [
-          "White e4.",
-          "Black c5.",
-          "Nf3.",
-          "d6.",
-          "d4.",
-          "Captures.",
-          "Recaptures.",
-          "Nf6.",
-          "Nc3.",
-          "a6.",
-          "White pins the knight — the Classical Najdorf with Bg5."
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops.",
+          "Nc3 defends e4.",
+          "a6 — the Najdorf.",
+          "Bc4 — the Fischer-Sozin, aiming the bishop at f7.",
+          "Black plays e6.",
+          "The bishop tucks back to b3.",
+          "Be7 develops — sharp attacking chances."
+        ]
+      },
+      {
+        id: "fianchetto",
+        name: "6.g3 Fianchetto",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6","g3","e5","Nde2","Be7"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops.",
+          "Nc3 defends e4.",
+          "a6 — the Najdorf.",
+          "g3 — the quiet Fianchetto Variation.",
+          "Black grabs space with e5.",
+          "The knight reroutes to e2.",
+          "Be7 develops — a slower, positional approach."
         ]
       }
     ]
@@ -1057,35 +1576,110 @@ const OPENINGS = [
     description: "Black fianchettoes the bishop on g7, creating a powerful 'dragon' diagonal. White often attacks on the kingside.",
     lines: [
       {
-        id: "main",
-        name: "Dragon Setup",
-        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6"],
+        id: "yugoslav",
+        name: "Yugoslav Attack",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6","Be3","Bg7","f3","Nc6","Qd2","O-O"],
         explanations: [
-          "White e4.",
-          "Black c5.",
-          "Knight to f3.",
-          "Black d6.",
-          "White d4.",
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens the position.",
           "Black captures.",
           "White recaptures.",
-          "Nf6.",
-          "Nc3.",
-          "Black plays g6 — the Dragon!"
+          "Black develops.",
+          "Nc3 defends e4.",
+          "g6 — the Dragon!",
+          "Be3 develops.",
+          "Bishop to g7, the Dragon bishop.",
+          "f3 braces e4 — the Yugoslav Attack.",
+          "Black develops.",
+          "Qd2 prepares O-O-O.",
+          "Black castles — opposite-side attacks, very sharp!"
         ]
       },
       {
-        id: "yugoslav",
-        name: "Yugoslav Attack",
-        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6","Be3","Bg7","f3","O-O","Qd2","Nc6","Bc4"],
+        id: "classical",
+        name: "Classical (Be2)",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6","Be2","Bg7","O-O","O-O","Be3","Nc6"],
         explanations: [
-          "e4.", "c5.", "Nf3.", "d6.", "d4.", "cxd4.", "Nxd4.", "Nf6.", "Nc3.", "g6.",
-          "White plays Be3.",
-          "Black fianchettoes.",
-          "White plays f3 — preparing g4 advance.",
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops.",
+          "Nc3 defends e4.",
+          "g6 — the Dragon.",
+          "Be2 — the calm Classical set-up.",
+          "Bishop to g7.",
+          "White castles short.",
           "Black castles.",
-          "Qd2 — preparing 0-0-0.",
-          "Black develops Nc6.",
-          "Bishop to c4 — the Yugoslav Attack, a race of attacks."
+          "Be3 develops.",
+          "Black develops — a quieter, positional Dragon."
+        ]
+      },
+      {
+        id: "levenfish",
+        name: "Levenfish Attack (6.f4)",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6","f4","Nc6"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops.",
+          "Nc3 defends e4.",
+          "g6 — the Dragon.",
+          "f4! the aggressive Levenfish — note 6...Bg7?? 7.e5 is a trap.",
+          "Black develops carefully with Nc6 instead."
+        ]
+      },
+      {
+        id: "fianchetto",
+        name: "Fianchetto (6.g3)",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6","g3","Bg7","Bg2","Nc6"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops.",
+          "Nc3 defends e4.",
+          "g6 — the Dragon.",
+          "g3 — White fianchettoes too, a calm approach.",
+          "Bishop to g7.",
+          "Bishop to g2.",
+          "Black develops — both bishops eye the long diagonals."
+        ]
+      },
+      {
+        id: "bc4-line",
+        name: "6.Bc4 Setup",
+        moves: ["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6","Bc4","Bg7","Bb3","O-O"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Sicilian.",
+          "Knight develops.",
+          "Black plays d6.",
+          "d4 opens.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops.",
+          "Nc3 defends e4.",
+          "g6 — the Dragon.",
+          "Bc4 aims the bishop at f7.",
+          "Bishop to g7.",
+          "Bb3 tucks the bishop safely.",
+          "Black castles — White eyes a kingside attack."
         ]
       }
     ]
@@ -1195,32 +1789,88 @@ const OPENINGS = [
     description: "A solid, classical defense. Black accepts a cramped position but builds a strong pawn chain.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","e6","d4","d5"],
-        explanations: [
-          "White opens e4.",
-          "Black plays e6 — the French Defense.",
-          "White pushes d4.",
-          "Black challenges with d5."
-        ]
-      },
-      {
         id: "advance",
         name: "Advance Variation",
-        moves: ["e4","e6","d4","d5","e5"],
+        moves: ["e4","e6","d4","d5","e5","c5","c3","Nc6","Nf3","Qb6"],
         explanations: [
-          "White e4.", "Black e6.", "White d4.", "Black d5.",
-          "White plays e5 — the Advance, gaining space and closing the centre."
+          "White takes the centre.",
+          "Black plays e6 — the French Defense.",
+          "White builds with d4.",
+          "Black challenges with d5.",
+          "e5 grabs space — the Advance Variation.",
+          "Black strikes at the base with c5.",
+          "c3 defends d4.",
+          "Black piles up on d4.",
+          "Nf3 defends d4.",
+          "Qb6 pressures d4 and b2 — the main Advance French."
         ]
       },
       {
         id: "exchange",
         name: "Exchange Variation",
-        moves: ["e4","e6","d4","d5","exd5","exd5"],
+        moves: ["e4","e6","d4","d5","exd5","exd5","Nf3","Nf6","Bd3"],
         explanations: [
-          "White e4.", "Black e6.", "White d4.", "Black d5.",
-          "White captures.", "Black recaptures — symmetrical positions."
+          "White takes the centre.",
+          "Black plays e6.",
+          "White plays d4.",
+          "Black plays d5.",
+          "White trades — the Exchange Variation.",
+          "Black recaptures, a symmetrical structure.",
+          "White develops.",
+          "Black develops.",
+          "Bd3 eyes the kingside — equal but playable."
+        ]
+      },
+      {
+        id: "tarrasch",
+        name: "Tarrasch (3.Nd2)",
+        moves: ["e4","e6","d4","d5","Nd2","Nf6","e5","Nfd7","Bd3","c5"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays e6.",
+          "White plays d4.",
+          "Black plays d5.",
+          "Nd2 avoids the pin — the Tarrasch Variation.",
+          "Black develops, hitting e4.",
+          "e5 gains space and kicks the knight.",
+          "The knight retreats to d7.",
+          "Bd3 develops aggressively.",
+          "Black counters the centre with c5."
+        ]
+      },
+      {
+        id: "winawer",
+        name: "Winawer (3.Nc3 Bb4)",
+        moves: ["e4","e6","d4","d5","Nc3","Bb4","e5","c5","a3","Bxc3+","bxc3"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays e6.",
+          "White plays d4.",
+          "Black plays d5.",
+          "Nc3 defends e4.",
+          "Black pins the knight — the sharp Winawer.",
+          "e5 closes the centre and grabs space.",
+          "Black hits back with c5.",
+          "a3 questions the bishop.",
+          "Black takes the knight.",
+          "White recaptures, gaining the bishop pair and a big centre."
+        ]
+      },
+      {
+        id: "classical",
+        name: "Classical (3.Nc3 Nf6)",
+        moves: ["e4","e6","d4","d5","Nc3","Nf6","Bg5","Be7","e5","Nfd7"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays e6.",
+          "White plays d4.",
+          "Black plays d5.",
+          "Nc3 defends e4.",
+          "Black develops, hitting e4 — the Classical French.",
+          "Bg5 pins the knight.",
+          "Black breaks the pin with Be7.",
+          "e5 gains space and kicks the knight.",
+          "The knight drops back to d7, ready to challenge the centre."
         ]
       }
     ]
@@ -1272,7 +1922,10 @@ const OPENINGS = [
         name: "Main Line",
         moves: ["e4","e6","d4","d5","e5","c5","c3","Nc6","Nf3"],
         explanations: [
-          "White e4.", "Black e6.", "White d4.", "Black d5.",
+          "White e4.",
+          "Black e6.",
+          "White d4.",
+          "Black d5.",
           "White advances with e5.",
           "Black attacks the base of the chain with c5.",
           "White supports with c3.",
@@ -1283,15 +1936,27 @@ const OPENINGS = [
       {
         id: "milner-barry",
         name: "Milner-Barry Gambit",
-        moves: ["e4","e6","d4","d5","e5","c5","c3","Nc6","Nf3","Nge7","Bd3","cxd4","cxd4","Nxd4","Nxd4","Qxd4","Nb5"],
+        moves: ["e4","e6","d4","d5","e5","c5","c3","Nc6","Nf3","Qb6","Bd3","cxd4","cxd4","Bd7","O-O","Nxd4","Nxd4","Qxd4","Nc3"],
         explanations: [
-          "e4.","e6.","d4.","d5.","e5.","c5.","c3.","Nc6.","Nf3.","Nge7.","Bd3.",
+          "White takes the centre.",
+          "Black plays e6 — the French.",
+          "White builds with d4.",
+          "Black challenges with d5.",
+          "e5 grabs space — the Advance.",
+          "Black hits the base with c5.",
+          "c3 defends d4.",
+          "Black piles on d4.",
+          "Nf3 defends d4.",
+          "Qb6 adds pressure on d4 and b2.",
+          "Bd3 offers the d4 pawn — the Milner-Barry Gambit!",
           "Black captures on d4.",
-          "White recaptures.",
-          "Black knight captures.",
-          "White recaptures.",
-          "Black captures the d4 pawn.",
-          "Knight to b5 — the Milner-Barry Gambit."
+          "White recaptures, keeping the gambit idea.",
+          "Black develops the bishop.",
+          "White castles, ready to attack.",
+          "Black grabs the d4 pawn.",
+          "White recaptures with the knight.",
+          "Black snatches the pawn with the queen.",
+          "Nc3! White gambits the pawn for a fierce attack on the black king."
         ]
       }
     ]
@@ -1337,35 +2002,89 @@ const OPENINGS = [
     description: "A solid response to 1.e4. Black plays c6 to support d5, avoiding the weaknesses of the French.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","c6","d4","d5"],
+        id: "classical",
+        name: "Classical (4...Bf5)",
+        moves: ["e4","c6","d4","d5","Nc3","dxe4","Nxe4","Bf5","Ng3","Bg6","h4","h6"],
         explanations: [
-          "White opens e4.",
-          "Black plays c6 — the Caro-Kann!",
+          "White takes the centre.",
+          "Black plays c6 — the Caro-Kann.",
+          "White builds with d4.",
+          "Black challenges with d5.",
+          "Nc3 defends e4.",
+          "Black captures.",
+          "White recaptures.",
+          "Black develops the bishop first — the Classical Caro.",
+          "Ng3 kicks the bishop.",
+          "Bishop to g6.",
+          "h4 gains space and threatens to trap the bishop.",
+          "h6 makes luft for the bishop — a solid, sound structure."
+        ]
+      },
+      {
+        id: "karpov",
+        name: "Karpov Variation (4...Nd7)",
+        moves: ["e4","c6","d4","d5","Nc3","dxe4","Nxe4","Nd7","Ng5","Ngf6","Bd3"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays c6.",
           "White plays d4.",
-          "Black challenges with d5."
+          "Black plays d5.",
+          "Nc3 defends e4.",
+          "Black captures.",
+          "White recaptures.",
+          "Black plays the flexible Nd7 — the Karpov Variation.",
+          "Ng5 eyes f7.",
+          "Black develops, covering f7.",
+          "Bd3 develops, a rich, solid middlegame."
         ]
       },
       {
         id: "advance",
         name: "Advance Variation",
-        moves: ["e4","c6","d4","d5","e5","Bf5"],
+        moves: ["e4","c6","d4","d5","e5","Bf5","Nf3","e6","Be2","c5"],
         explanations: [
-          "White e4.", "Black c6.", "White d4.", "Black d5.",
-          "White plays e5.",
-          "Black develops the bishop before closing in — the Advance Caro-Kann."
+          "White takes the centre.",
+          "Black plays c6.",
+          "White plays d4.",
+          "Black plays d5.",
+          "e5 grabs space — the Advance Variation.",
+          "Black develops the bishop OUTSIDE the chain — the Caro's big point.",
+          "Nf3 develops.",
+          "Black supports the centre.",
+          "Be2 develops modestly.",
+          "Black strikes at the base with c5."
         ]
       },
       {
-        id: "classical",
-        name: "Classical Variation",
-        moves: ["e4","c6","d4","d5","Nc3","dxe4","Nxe4","Bf5"],
+        id: "exchange",
+        name: "Exchange Variation",
+        moves: ["e4","c6","d4","d5","exd5","cxd5","Bd3","Nc6","c3"],
         explanations: [
-          "e4.","c6.","d4.","d5.","Nc3.",
-          "Black captures.",
-          "White recaptures.",
-          "Black develops bishop to f5 — the Classical Caro-Kann."
+          "White takes the centre.",
+          "Black plays c6.",
+          "White plays d4.",
+          "Black plays d5.",
+          "White trades — the Exchange Variation.",
+          "Black recaptures.",
+          "Bd3 develops to the active diagonal.",
+          "Black develops.",
+          "c3 makes a solid little triangle — easy, equal play."
+        ]
+      },
+      {
+        id: "panov",
+        name: "Panov-Botvinnik Attack",
+        moves: ["e4","c6","d4","d5","exd5","cxd5","c4","Nf6","Nc3"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays c6.",
+          "White plays d4.",
+          "Black plays d5.",
+          "White trades.",
+          "Black recaptures.",
+          "c4 strikes — the aggressive Panov-Botvinnik Attack.",
+          "Black develops, hitting the centre.",
+          "Nc3 develops, leading to lively, open play."
         ]
       }
     ]
@@ -1411,26 +2130,92 @@ const OPENINGS = [
     description: "Black allows White to build a big centre, then attacks it from the flanks. A hypermodern approach.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
+        id: "classical",
+        name: "Classical (Nf3)",
         moves: ["e4","d6","d4","Nf6","Nc3","g6","Nf3","Bg7","Be2","O-O"],
         explanations: [
-          "White e4.", "Black d6 — the Pirc.",
-          "White d4.", "Black Nf6.",
-          "White Nc3.", "Black fianchettoes with g6.",
-          "White Nf3.", "Black bishop to g7.",
-          "Bishop to e2.", "Black castles — classic Pirc setup."
+          "White takes the centre.",
+          "Black plays ...d6 — the Pirc.",
+          "White builds the big centre with d4.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black fianchettoes.",
+          "Nf3 develops — the calm Classical.",
+          "Bishop to g7.",
+          "Be2 develops.",
+          "Black castles — flexible counterattack to come."
         ]
       },
       {
         id: "austrian-attack",
-        name: "Austrian Attack",
-        moves: ["e4","d6","d4","Nf6","Nc3","g6","f4","Bg7","Nf3"],
+        name: "Austrian Attack (f4)",
+        moves: ["e4","d6","d4","Nf6","Nc3","g6","f4","Bg7","Nf3","O-O"],
         explanations: [
-          "e4.","d6.","d4.","Nf6.","Nc3.","g6.",
-          "White plays f4 — the aggressive Austrian Attack!",
+          "White takes the centre.",
+          "Black plays the Pirc.",
+          "White builds the centre.",
+          "Black develops.",
+          "Nc3 develops.",
           "Black fianchettoes.",
-          "Knight to f3."
+          "f4! the aggressive Austrian Attack.",
+          "Bishop to g7.",
+          "Nf3 develops.",
+          "Black castles — White eyes a pawn storm."
+        ]
+      },
+      {
+        id: "150-attack",
+        name: "150 Attack (Be3, Qd2)",
+        moves: ["e4","d6","d4","Nf6","Nc3","g6","Be3","Bg7","Qd2","O-O","O-O-O"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Pirc.",
+          "White builds the centre.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black fianchettoes.",
+          "Be3 — the club-crusher 150 Attack.",
+          "Bishop to g7.",
+          "Qd2 prepares Bh6 and O-O-O.",
+          "Black castles.",
+          "O-O-O — opposite-side castling, attack incoming!"
+        ]
+      },
+      {
+        id: "byrne",
+        name: "Byrne Variation (Bg5)",
+        moves: ["e4","d6","d4","Nf6","Nc3","g6","Bg5","Bg7","Qd2","h6","Bh4","g5"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Pirc.",
+          "White builds the centre.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black fianchettoes.",
+          "Bg5 — the Byrne, pinning the knight.",
+          "Bishop to g7.",
+          "Qd2 supports the bishop.",
+          "Black questions it with h6.",
+          "Bh4 keeps the pin.",
+          "Black lunges with g5 — double-edged."
+        ]
+      },
+      {
+        id: "fianchetto",
+        name: "Fianchetto (g3)",
+        moves: ["e4","d6","d4","Nf6","Nc3","g6","g3","Bg7","Bg2","O-O","Nge2"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Pirc.",
+          "White builds the centre.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black fianchettoes.",
+          "g3 — White fianchettoes too, a quiet set-up.",
+          "Bishop to g7.",
+          "Bishop to g2.",
+          "Black castles.",
+          "Nge2 completes development — a slow squeeze."
         ]
       }
     ]
@@ -1472,25 +2257,84 @@ const OPENINGS = [
     description: "Black plays Nf6, inviting White to chase it with pawns. A provocative hypermodern opening.",
     lines: [
       {
-        id: "main",
-        name: "Main Line — Four Pawns Attack",
-        moves: ["e4","Nf6","e5","Nd5","d4","d6","c4","Nb6","f4"],
+        id: "modern-main",
+        name: "Modern Main Line",
+        moves: ["e4","Nf6","e5","Nd5","d4","d6","Nf3","Bg4","Be2","e6"],
         explanations: [
-          "White e4.", "Alekhine's! Knight to f6.",
-          "White chases with e5.", "Knight retreats to d5.",
-          "White d4.", "Black d6, undermining e5.",
-          "White c4, chasing again.", "Knight to b6.",
-          "White f4 — the Four Pawns Attack."
+          "White opens e4.",
+          "Black taunts the pawn — Alekhine's Defense!",
+          "e5 chases the knight.",
+          "Knight to d5.",
+          "d4 builds a big centre.",
+          "Black undermines with d6.",
+          "Nf3 develops — the Modern Variation.",
+          "Bg4 pins the knight.",
+          "Be2 breaks the pin.",
+          "Black plays ...e6 — counterattack vs the centre."
         ]
       },
       {
-        id: "modern",
-        name: "Modern Variation",
-        moves: ["e4","Nf6","e5","Nd5","Nf3","d6","Bc4"],
+        id: "four-pawns",
+        name: "Four Pawns Attack",
+        moves: ["e4","Nf6","e5","Nd5","d4","d6","c4","Nb6","f4","dxe5","fxe5"],
         explanations: [
-          "White e4.", "Nf6.", "White e5.", "Nd5.",
-          "White plays Nf3.", "Black d6.",
-          "Bishop to c4 — the Modern Variation."
+          "White opens e4.",
+          "Black plays Alekhine's.",
+          "e5 chases the knight.",
+          "Knight to d5.",
+          "d4 builds the centre.",
+          "Black hits it with d6.",
+          "c4 kicks the knight.",
+          "Nb6 retreats.",
+          "f4! the massive Four Pawns Attack.",
+          "Black strikes the centre.",
+          "White recaptures — huge space vs counterplay."
+        ]
+      },
+      {
+        id: "exchange",
+        name: "Exchange Variation",
+        moves: ["e4","Nf6","e5","Nd5","d4","d6","c4","Nb6","exd6","cxd6"],
+        explanations: [
+          "White opens e4.",
+          "Black plays Alekhine's.",
+          "e5 chases the knight.",
+          "Knight to d5.",
+          "d4 builds the centre.",
+          "Black hits it with d6.",
+          "c4 kicks the knight.",
+          "Nb6 retreats.",
+          "White trades — the safe Exchange Variation.",
+          "Black recaptures, with a sound, solid game."
+        ]
+      },
+      {
+        id: "chase",
+        name: "Chase Variation",
+        moves: ["e4","Nf6","e5","Nd5","c4","Nb6","c5","Nd5","Nc3"],
+        explanations: [
+          "White opens e4.",
+          "Black plays Alekhine's.",
+          "e5 chases the knight.",
+          "Knight to d5.",
+          "c4 kicks it early.",
+          "Nb6 retreats.",
+          "c5! the over-eager Chase Variation.",
+          "The knight hops back to d5.",
+          "Nc3 challenges — White's pawns may become overextended."
+        ]
+      },
+      {
+        id: "two-knights",
+        name: "Two Knights (2.Nc3)",
+        moves: ["e4","Nf6","Nc3","d5","exd5","Nxd5"],
+        explanations: [
+          "White opens e4.",
+          "Black plays Alekhine's.",
+          "Nc3 declines the chase, developing.",
+          "Black strikes with d5.",
+          "White captures.",
+          "Black recaptures — a calm, Vienna-like game."
         ]
       }
     ]
@@ -1504,23 +2348,82 @@ const OPENINGS = [
     description: "Black immediately counter-attacks e4 with Nf6. Solid and symmetrical — a favourite for drawing with Black.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["e4","e5","Nf3","Nf6","Nxe5","d6","Nf3","Nxe4","d4"],
+        id: "classical",
+        name: "Classical (3.Nxe5)",
+        moves: ["e4","e5","Nf3","Nf6","Nxe5","d6","Nf3","Nxe4","d4","d5"],
         explanations: [
-          "White e4.", "Black e5.", "Knight to f3.",
-          "Black plays Nf6 — the Petrov!",
-          "White captures on e5.", "Black plays d6.",
-          "White retreats.", "Black captures e4.", "White plays d4."
+          "White opens e4.",
+          "Black answers e5.",
+          "Nf3 attacks e5.",
+          "Black counterattacks e4 — the Petroff!",
+          "White grabs e5.",
+          "Black kicks the knight (not 3...Nxe4?? 4.Qe2).",
+          "The knight retreats.",
+          "Now Black safely takes e4.",
+          "d4 opens the centre.",
+          "Black supports the knight with d5 — solid equality."
         ]
       },
       {
-        id: "classical",
-        name: "Classical Attack",
-        moves: ["e4","e5","Nf3","Nf6","Nxe5","d6","Nf3","Nxe4","Nc3"],
+        id: "steinitz",
+        name: "Steinitz Attack (3.d4)",
+        moves: ["e4","e5","Nf3","Nf6","d4","exd4","e5","Ne4"],
         explanations: [
-          "e4.","e5.","Nf3.","Nf6.","Nxe5.","d6.","Nf3.","Nxe4.",
-          "White plays Nc3 — the Classical Attack."
+          "White opens e4.",
+          "Black answers e5.",
+          "Nf3 attacks e5.",
+          "Black plays the Petroff.",
+          "d4! the Steinitz Attack.",
+          "Black captures.",
+          "e5 gains space and kicks the knight.",
+          "Black hops to e4 — lively, open play."
+        ]
+      },
+      {
+        id: "cochrane-gambit",
+        name: "Cochrane Gambit",
+        moves: ["e4","e5","Nf3","Nf6","Nxe5","d6","Nxf7","Kxf7"],
+        explanations: [
+          "White opens e4.",
+          "Black answers e5.",
+          "Nf3 attacks e5.",
+          "Black plays the Petroff.",
+          "White grabs e5.",
+          "Black kicks the knight.",
+          "Nxf7!? the Cochrane Gambit — sacrificing the knight!",
+          "Black must take — White gets two pawns and a king hunt."
+        ]
+      },
+      {
+        id: "nimzowitsch",
+        name: "Nimzowitsch (5.Nc3)",
+        moves: ["e4","e5","Nf3","Nf6","Nxe5","d6","Nf3","Nxe4","Nc3","Nxc3","dxc3"],
+        explanations: [
+          "White opens e4.",
+          "Black answers e5.",
+          "Nf3 attacks e5.",
+          "Black plays the Petroff.",
+          "White grabs e5.",
+          "Black kicks the knight.",
+          "The knight retreats.",
+          "Black takes e4.",
+          "Nc3 offers a trade — the Nimzowitsch.",
+          "Black trades.",
+          "White recaptures, opening lines for quick development."
+        ]
+      },
+      {
+        id: "boden-kieseritzky",
+        name: "Boden-Kieseritzky Gambit",
+        moves: ["e4","e5","Nf3","Nf6","Bc4","Nxe4","Nc3"],
+        explanations: [
+          "White opens e4.",
+          "Black answers e5.",
+          "Nf3 attacks e5.",
+          "Black plays the Petroff.",
+          "Bc4 ignores e5 — the Boden-Kieseritzky Gambit.",
+          "Black grabs the pawn.",
+          "Nc3! offering more, for a raging attack."
         ]
       }
     ]
@@ -1563,31 +2466,90 @@ const OPENINGS = [
     description: "White offers a pawn on c4 to seize the centre. One of the most popular openings at every level.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["d4","d5","c4"],
+        id: "declined",
+        name: "Queen's Gambit Declined",
+        moves: ["d4","d5","c4","e6","Nc3","Nf6","Bg5","Be7","e3","O-O","Nf3"],
         explanations: [
-          "White controls the centre with d4.",
-          "Black responds symmetrically with d5.",
-          "White offers c4 — the Queen's Gambit!"
+          "White takes the centre.",
+          "Black mirrors with d5.",
+          "c4 offers the Queen's Gambit.",
+          "Black declines solidly with e6 — the QGD.",
+          "Nc3 develops, pressuring d5.",
+          "Black develops.",
+          "Bg5 pins the knight.",
+          "Black breaks the pin.",
+          "e3 opens a path for the bishop.",
+          "Black castles.",
+          "Nf3 completes a harmonious set-up."
         ]
       },
       {
         id: "accepted",
         name: "Queen's Gambit Accepted",
-        moves: ["d4","d5","c4","dxc4"],
+        moves: ["d4","d5","c4","dxc4","Nf3","Nf6","e3","e6","Bxc4","c5"],
         explanations: [
-          "White d4.", "Black d5.", "White c4.",
-          "Black accepts — dxc4. White will regain the pawn."
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black accepts — the QGA.",
+          "Nf3 stops ...e5 and develops.",
+          "Black develops.",
+          "e3 prepares to regain the pawn.",
+          "Black supports a future ...c5.",
+          "White recaptures the pawn.",
+          "Black strikes the centre with c5 — active, equal play."
         ]
       },
       {
-        id: "declined",
-        name: "Queen's Gambit Declined",
-        moves: ["d4","d5","c4","e6"],
+        id: "slav",
+        name: "Slav Defense (...c6)",
+        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","dxc4","a4","Bf5"],
         explanations: [
-          "White d4.", "Black d5.", "White c4.",
-          "Black declines with e6 — a solid central defence."
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black supports d5 with c6 — the Slav.",
+          "Nf3 develops.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black grabs the pawn.",
+          "a4 stops ...b5 from holding it.",
+          "Black develops the bishop freely — the Slav's main point."
+        ]
+      },
+      {
+        id: "tarrasch",
+        name: "Tarrasch Defense (...c5)",
+        moves: ["d4","d5","c4","e6","Nc3","c5","cxd5","exd5","Nf3","Nc6"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays e6.",
+          "Nc3 develops.",
+          "Black strikes with c5 — the Tarrasch Defense.",
+          "White trades.",
+          "Black recaptures.",
+          "Nf3 develops.",
+          "Black accepts an isolated d-pawn for free, active pieces."
+        ]
+      },
+      {
+        id: "exchange",
+        name: "Exchange QGD",
+        moves: ["d4","d5","c4","e6","Nc3","Nf6","cxd5","exd5","Bg5","Be7","e3"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays e6.",
+          "Nc3 develops.",
+          "Black develops.",
+          "White trades — the Exchange QGD.",
+          "Black recaptures, the Carlsbad structure.",
+          "Bg5 pins the knight.",
+          "Black unpins.",
+          "e3 prepares the classic minority attack plan."
         ]
       }
     ]
@@ -1602,20 +2564,83 @@ const OPENINGS = [
     lines: [
       {
         id: "main",
-        name: "Main Line",
-        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3"],
+        name: "Main Line (...dxc4, ...Bf5)",
+        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","dxc4","a4","Bf5"],
         explanations: [
-          "White d4.", "Black d5.", "White c4.",
-          "Black plays c6 — the Slav, supporting d5.", "Knight to f3.", "Nf6.", "Nc3."
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black supports d5 with c6 — the Slav.",
+          "Nf3 develops.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black grabs the pawn.",
+          "a4 stops ...b5 from holding it.",
+          "Black develops the bishop freely — the Slav's whole point."
         ]
       },
       {
         id: "exchange",
-        name: "Exchange Variation",
-        moves: ["d4","d5","c4","c6","cxd5","cxd5","Nc3","Nf6"],
+        name: "Exchange Slav",
+        moves: ["d4","d5","c4","c6","cxd5","cxd5","Nc3","Nf6","Nf3","Nc6"],
         explanations: [
-          "d4.","d5.","c4.","c6.",
-          "White captures on d5.", "Black recaptures.", "White Nc3.", "Black Nf6."
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays the Slav.",
+          "White trades — the symmetrical Exchange Slav.",
+          "Black recaptures.",
+          "Nc3 develops.",
+          "Black develops.",
+          "Nf3 develops.",
+          "Black develops — a drawish but instructive structure."
+        ]
+      },
+      {
+        id: "quiet",
+        name: "Quiet System (e3)",
+        moves: ["d4","d5","c4","c6","Nf3","Nf6","e3","Bf5"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays the Slav.",
+          "Nf3 develops.",
+          "Black develops.",
+          "e3 keeps it solid.",
+          "Black develops the bishop outside the chain — the Slav idea."
+        ]
+      },
+      {
+        id: "chebanenko",
+        name: "Chebanenko (...a6)",
+        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","a6"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays the Slav.",
+          "Nf3 develops.",
+          "Black develops.",
+          "Nc3 develops.",
+          "a6 — the flexible Chebanenko, preparing ...b5 or ...dxc4."
+        ]
+      },
+      {
+        id: "geller-gambit",
+        name: "Geller Gambit (e4)",
+        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","dxc4","e4","b5"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays the Slav.",
+          "Nf3 develops.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black grabs c4.",
+          "e4! the Geller Gambit — a big centre for the pawn.",
+          "Black clings to the pawn with b5 — sharp play."
         ]
       }
     ]
@@ -1629,22 +2654,96 @@ const OPENINGS = [
     description: "Black combines elements of the Slav and QGD with c6 and e6. Rich, complex middlegames.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","e6"],
+        id: "meran",
+        name: "Meran Variation",
+        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","e6","e3","Nbd7","Bd3","dxc4","Bxc4","b5"],
         explanations: [
-          "d4.","d5.","c4.","c6.","Nf3.","Nf6.","Nc3.",
-          "Black plays e6 — the Semi-Slav."
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays ...c6.",
+          "Nf3 develops.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black plays ...e6 — the Semi-Slav.",
+          "e3 frees the bishop.",
+          "Black develops.",
+          "Bd3 develops.",
+          "Black captures.",
+          "White recaptures.",
+          "Black expands with b5 — the dynamic Meran."
         ]
       },
       {
         id: "botvinnik",
-        name: "Botvinnik Variation",
+        name: "Botvinnik System",
         moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","e6","Bg5","dxc4","e4","b5"],
         explanations: [
-          "d4.","d5.","c4.","c6.","Nf3.","Nf6.","Nc3.","e6.",
-          "White plays Bg5.", "Black captures on c4.",
-          "White plays e4!", "Black defends with b5 — the wild Botvinnik."
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays ...c6.",
+          "Nf3 develops.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black plays ...e6.",
+          "Bg5 pins the knight.",
+          "Black grabs c4.",
+          "e4! the wild Botvinnik System.",
+          "Black holds on with b5 — fearsome complications."
+        ]
+      },
+      {
+        id: "moscow",
+        name: "Moscow Variation",
+        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","e6","Bg5","h6","Bxf6","Qxf6"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays ...c6.",
+          "Nf3 develops.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black plays ...e6.",
+          "Bg5 pins the knight.",
+          "Black questions it — the Moscow Variation.",
+          "White trades on f6.",
+          "Black recaptures with the queen — the bishop pair vs activity."
+        ]
+      },
+      {
+        id: "stoltz",
+        name: "Stoltz (...Bd6)",
+        moves: ["d4","d5","c4","c6","Nf3","Nf6","Nc3","e6","e3","Bd6"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays ...c6.",
+          "Nf3 develops.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black plays ...e6.",
+          "e3 frees the bishop.",
+          "Bd6 develops actively, aiming at h2."
+        ]
+      },
+      {
+        id: "marshall-gambit",
+        name: "Marshall Gambit",
+        moves: ["d4","d5","c4","e6","Nc3","c6","e4","dxe4","Nxe4","Bb4+"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "c4 offers the gambit.",
+          "Black plays ...e6.",
+          "Nc3 develops.",
+          "Black plays ...c6 — heading for the Semi-Slav.",
+          "e4! the Marshall Gambit, blasting the centre open.",
+          "Black captures.",
+          "White recaptures.",
+          "Bb4+ develops with check — sharp, forcing play."
         ]
       }
     ]
@@ -1714,22 +2813,84 @@ const OPENINGS = [
     description: "Black plays f5 to fight for e4. An aggressive, fighting defense that unbalances the game.",
     lines: [
       {
-        id: "main",
+        id: "leningrad",
         name: "Leningrad Variation",
-        moves: ["d4","f5","g3","Nf6","Bg2","g6","Nf3","Bg7","O-O","O-O"],
+        moves: ["d4","f5","g3","Nf6","Bg2","g6","Nf3","Bg7","O-O","O-O","c4","d6"],
         explanations: [
-          "White d4.", "Black f5 — the Dutch!",
-          "White fianchettoes.", "Nf6.", "Bishop to g2.", "Black fianchettoes.",
-          "Nf3.", "Black bishop to g7.", "White castles.", "Black castles."
+          "White takes the centre.",
+          "Black grabs kingside space — the Dutch!",
+          "g3 prepares a fianchetto.",
+          "Black develops.",
+          "Bishop to g2.",
+          "Black fianchettoes — the Leningrad Dutch.",
+          "Nf3 develops.",
+          "Bishop to g7.",
+          "White castles.",
+          "Black castles.",
+          "c4 grabs space.",
+          "Black plays d6, eyeing ...e5."
         ]
       },
       {
         id: "stonewall",
         name: "Stonewall Variation",
-        moves: ["d4","f5","Nf3","Nf6","e3","e6","Bd3","d5","c3"],
+        moves: ["d4","f5","g3","Nf6","Bg2","e6","Nf3","d5","O-O","Bd6"],
         explanations: [
-          "d4.","f5.","Nf3.","Nf6.","e3.","e6.","Bd3.","d5.",
-          "White plays c3 — Black will build the Stonewall with c6."
+          "White takes the centre.",
+          "Black plays the Dutch.",
+          "g3 prepares the fianchetto.",
+          "Black develops.",
+          "Bishop to g2.",
+          "Black plays ...e6.",
+          "Nf3 develops.",
+          "Black builds the Stonewall with d5.",
+          "White castles.",
+          "Bd6 eyes the kingside — a rigid, attacking wall."
+        ]
+      },
+      {
+        id: "classical",
+        name: "Classical Variation",
+        moves: ["d4","f5","g3","Nf6","Bg2","e6","Nf3","Be7","O-O","O-O"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Dutch.",
+          "g3 prepares the fianchetto.",
+          "Black develops.",
+          "Bishop to g2.",
+          "Black plays ...e6.",
+          "Nf3 develops.",
+          "Black develops the bishop.",
+          "White castles.",
+          "Black castles — the flexible Classical Dutch."
+        ]
+      },
+      {
+        id: "staunton-gambit",
+        name: "Staunton Gambit",
+        moves: ["d4","f5","e4","fxe4","Nc3","Nf6","Bg5"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Dutch.",
+          "e4! the Staunton Gambit, offering a pawn.",
+          "Black accepts.",
+          "Nc3 develops, eyeing the e4 pawn.",
+          "Black defends with Nf6.",
+          "Bg5 pins — fast development for the pawn."
+        ]
+      },
+      {
+        id: "hopton-attack",
+        name: "Hopton Attack (2.Bg5)",
+        moves: ["d4","f5","Bg5","Nf6","Bxf6","exf6","e3"],
+        explanations: [
+          "White takes the centre.",
+          "Black plays the Dutch.",
+          "Bg5 — the tricky Hopton Attack.",
+          "Black develops.",
+          "White trades on f6.",
+          "Black recaptures, doubling pawns but opening the e-file.",
+          "e3 keeps a small, safe edge."
         ]
       }
     ]
@@ -1805,18 +2966,32 @@ const OPENINGS = [
         name: "Accepted",
         moves: ["d4","Nf6","c4","c5","d5","b5","cxb5","a6","bxa6","Bxa6"],
         explanations: [
-          "White d4.", "Nf6.", "c4.", "c5.", "d5.",
-          "Black plays b5 — the Benko Gambit!", "White captures.", "Black a6.", "White captures again.",
+          "White d4.",
+          "Nf6.",
+          "c4.",
+          "c5.",
+          "d5.",
+          "Black plays b5 — the Benko Gambit!",
+          "White captures.",
+          "Black a6.",
+          "White captures again.",
           "Black recaptures — excellent queenside compensation."
         ]
       },
       {
         id: "declined",
         name: "Declined",
-        moves: ["d4","Nf6","c4","c5","d5","b5","b6"],
+        moves: ["d4","Nf6","c4","c5","d5","b5","Nd2","bxc4","Nxc4"],
         explanations: [
-          "d4.","Nf6.","c4.","c5.","d5.","b5.",
-          "White declines with b6 — avoiding the gambit."
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black challenges with c5.",
+          "d5 gains space.",
+          "Black offers the Benko Gambit with b5.",
+          "Nd2 declines — rerouting to recapture on c4.",
+          "Black takes c4.",
+          "Nxc4 regains the pawn — material stays level, the Benko Declined."
         ]
       }
     ]
@@ -1830,21 +3005,85 @@ const OPENINGS = [
     description: "White opens with c4, fighting for the centre from the flank. Flexible and deep.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["c4","e5","Nc3","Nf6","Nf3","Nc6","g3"],
+        id: "symmetrical",
+        name: "Symmetrical English",
+        moves: ["c4","c5","Nc3","Nc6","g3","g6","Bg2","Bg7","Nf3","Nf6"],
         explanations: [
-          "White plays c4 — the English!", "Black plays e5.", "Knight to c3.",
-          "Black Nf6.", "Nf3.", "Nc6.", "White fianchettoes."
+          "White starts flank-first with c4 — the English.",
+          "Black mirrors with c5.",
+          "Nc3 develops.",
+          "Black mirrors.",
+          "g3 prepares a fianchetto.",
+          "Black mirrors.",
+          "Bishop to g2.",
+          "Black mirrors — the Symmetrical English.",
+          "Nf3 develops.",
+          "Black mirrors — a slow, strategic battle."
         ]
       },
       {
-        id: "symmetrical",
-        name: "Symmetrical Variation",
-        moves: ["c4","c5","Nf3","Nf6","Nc3","Nc6","g3","g6"],
+        id: "reversed-sicilian",
+        name: "Reversed Sicilian",
+        moves: ["c4","e5","Nc3","Nf6","Nf3","Nc6","g3","d5","cxd5","Nxd5"],
         explanations: [
-          "c4.", "Black mirrors with c5!", "Nf3.", "Nf6.", "Nc3.", "Nc6.",
-          "White fianchettoes.", "Black mirrors — the Symmetrical English."
+          "White plays the English.",
+          "Black grabs the centre with e5.",
+          "Nc3 develops.",
+          "Black develops.",
+          "Nf3 attacks e5.",
+          "Black defends.",
+          "g3 prepares the fianchetto — a Sicilian a tempo up!",
+          "Black strikes with d5.",
+          "White captures.",
+          "Black recaptures — the Reversed Sicilian."
+        ]
+      },
+      {
+        id: "botvinnik",
+        name: "Botvinnik System",
+        moves: ["c4","e5","Nc3","Nc6","g3","g6","Bg2","Bg7","e4"],
+        explanations: [
+          "White plays the English.",
+          "Black plays e5.",
+          "Nc3 develops.",
+          "Black develops.",
+          "g3 prepares the fianchetto.",
+          "Black fianchettoes.",
+          "Bishop to g2.",
+          "Black mirrors.",
+          "e4! the Botvinnik System — a broad, locked centre."
+        ]
+      },
+      {
+        id: "anglo-indian",
+        name: "Anglo-Indian",
+        moves: ["c4","Nf6","Nc3","d5","cxd5","Nxd5","g3","g6","Bg2"],
+        explanations: [
+          "White plays the English.",
+          "Black develops — the Anglo-Indian.",
+          "Nc3 develops.",
+          "Black strikes with d5.",
+          "White captures.",
+          "Black recaptures with the knight.",
+          "g3 prepares the fianchetto.",
+          "Black fianchettoes too.",
+          "Bishop to g2 — a flexible, double-fianchetto fight."
+        ]
+      },
+      {
+        id: "mikenas-carls",
+        name: "Mikenas-Carls Attack",
+        moves: ["c4","Nf6","Nc3","e6","e4","c5","e5","Ng8","Nf3"],
+        explanations: [
+          "White plays the English.",
+          "Black develops.",
+          "Nc3 develops.",
+          "Black plays e6.",
+          "e4! the aggressive Mikenas-Carls Attack.",
+          "Black challenges with c5.",
+          "e5 kicks the knight and grabs space.",
+          "The knight drops back to g8.",
+          "Nf3 develops — White enjoys a big space edge."
         ]
       }
     ]
@@ -1859,20 +3098,79 @@ const OPENINGS = [
     lines: [
       {
         id: "main",
-        name: "Main Line",
-        moves: ["Nf3","d5","c4","c6","g3","Nf6","Bg2"],
+        name: "Main Line (g3 setup)",
+        moves: ["Nf3","d5","c4","e6","g3","Nf6","Bg2","Be7","O-O","O-O"],
         explanations: [
-          "White plays Nf3 — the Réti!", "Black d5.", "White c4.",
-          "Black c6.", "White fianchettoes.", "Nf6.", "Bishop to g2."
+          "White develops flexibly — the Réti.",
+          "Black takes the centre.",
+          "c4 strikes at d5 from the flank.",
+          "Black supports with e6.",
+          "g3 prepares a fianchetto.",
+          "Black develops.",
+          "Bishop to g2, pressuring d5.",
+          "Bishop to e7.",
+          "White castles.",
+          "Black castles — a hypermodern squeeze."
         ]
       },
       {
-        id: "double-fianchetto",
-        name: "Double Fianchetto",
-        moves: ["Nf3","d5","g3","Nf6","Bg2","g6","O-O","Bg7","b3","O-O","Bb2"],
+        id: "advance",
+        name: "2...d4 Advance",
+        moves: ["Nf3","d5","c4","d4","e3","Nc6","exd4","Nxd4"],
         explanations: [
-          "Nf3.", "d5.", "g3.", "Nf6.", "Bg2.", "Black fianchettoes.", "White castles.",
-          "Black bishop out.", "White b3.", "Black castles.", "Bishop to b2 — double fianchetto."
+          "White plays the Réti.",
+          "Black takes the centre.",
+          "c4 hits d5.",
+          "Black pushes past with d4.",
+          "e3 challenges the advanced pawn.",
+          "Black defends with Nc6.",
+          "White captures.",
+          "Black recaptures — open, lively play."
+        ]
+      },
+      {
+        id: "capture",
+        name: "2...dxc4",
+        moves: ["Nf3","d5","c4","dxc4","e3","Nf6","Bxc4"],
+        explanations: [
+          "White plays the Réti.",
+          "Black takes the centre.",
+          "c4 hits d5.",
+          "Black grabs the pawn.",
+          "e3 prepares to regain it.",
+          "Black develops.",
+          "Bxc4 recovers the pawn with easy development."
+        ]
+      },
+      {
+        id: "slav-like",
+        name: "2...c6 (Slav-like)",
+        moves: ["Nf3","d5","c4","c6","b3","Nf6","g3","Bf5"],
+        explanations: [
+          "White plays the Réti.",
+          "Black takes the centre.",
+          "c4 hits d5.",
+          "Black supports with c6.",
+          "b3 prepares a double fianchetto.",
+          "Black develops.",
+          "g3 continues the plan.",
+          "Bf5 develops the bishop actively."
+        ]
+      },
+      {
+        id: "kia",
+        name: "King's Indian Attack",
+        moves: ["Nf3","d5","g3","Nf6","Bg2","e6","O-O","Be7","d3"],
+        explanations: [
+          "White plays the Réti.",
+          "Black takes the centre.",
+          "g3 — heading for the King's Indian Attack.",
+          "Black develops.",
+          "Bishop to g2.",
+          "Black plays ...e6.",
+          "White castles.",
+          "Bishop to e7.",
+          "d3 prepares e4 and a kingside plan."
         ]
       }
     ]
@@ -1886,20 +3184,95 @@ const OPENINGS = [
     description: "White combines the Queen's Gambit with a kingside fianchetto. Pressure on the long diagonal.",
     lines: [
       {
-        id: "main",
-        name: "Closed Catalan",
-        moves: ["d4","Nf6","c4","e6","g3","d5","Bg2","Be7","Nf3","O-O","O-O"],
+        id: "open",
+        name: "Open Catalan",
+        moves: ["d4","Nf6","c4","e6","g3","d5","Bg2","dxc4","Nf3","Be7","O-O","O-O"],
         explanations: [
-          "d4.","Nf6.","c4.","e6.","White fianchettoes.","d5.","Bg2.","Be7.","Nf3.","Black castles.","White castles — Closed Catalan."
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "g3 — the Catalan fianchetto.",
+          "Black challenges with d5.",
+          "Bishop to g2, raking the long diagonal.",
+          "Black grabs the pawn — the Open Catalan.",
+          "Nf3 develops.",
+          "Bishop to e7.",
+          "White castles.",
+          "Black castles — White has lasting pressure for the pawn."
         ]
       },
       {
-        id: "open",
-        name: "Open Catalan",
-        moves: ["d4","Nf6","c4","e6","g3","d5","Bg2","dxc4","Nf3"],
+        id: "closed",
+        name: "Closed Catalan",
+        moves: ["d4","Nf6","c4","e6","g3","d5","Bg2","Be7","Nf3","O-O","O-O","Nbd7"],
         explanations: [
-          "d4.","Nf6.","c4.","e6.","g3.","d5.","Bg2.",
-          "Black captures on c4 — the Open Catalan.", "Nf3 — White regains the pawn."
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "g3 — the Catalan.",
+          "Black plays d5.",
+          "Bishop to g2.",
+          "Black holds the centre — the Closed Catalan.",
+          "Nf3 develops.",
+          "Black castles.",
+          "White castles.",
+          "Black develops — a slow, strategic bind."
+        ]
+      },
+      {
+        id: "bb4-check",
+        name: "Open with ...Bb4+",
+        moves: ["d4","Nf6","c4","e6","g3","d5","Bg2","dxc4","Nf3","Bb4+","Bd2","Be7"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "g3 — the Catalan.",
+          "Black plays d5.",
+          "Bishop to g2.",
+          "Black grabs c4.",
+          "Nf3 develops.",
+          "Bb4+ disrupts with a check.",
+          "Bd2 blocks.",
+          "Black retreats the bishop — a key Open Catalan tabiya."
+        ]
+      },
+      {
+        id: "qa4-recovery",
+        name: "Qa4+ Pawn Recovery",
+        moves: ["d4","Nf6","c4","e6","g3","d5","Bg2","dxc4","Qa4+","Nbd7","Qxc4"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "g3 — the Catalan.",
+          "Black plays d5.",
+          "Bishop to g2.",
+          "Black grabs c4.",
+          "Qa4+ — White checks to win the pawn straight back.",
+          "Black blocks.",
+          "White recaptures the pawn cleanly."
+        ]
+      },
+      {
+        id: "a6-hold",
+        name: "...a6 Pawn Grab",
+        moves: ["d4","Nf6","c4","e6","g3","d5","Bg2","dxc4","Nf3","a6"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "g3 — the Catalan.",
+          "Black plays d5.",
+          "Bishop to g2.",
+          "Black grabs c4.",
+          "Nf3 develops.",
+          "a6 prepares ...b5 to cling to the pawn — sharp, materialistic play."
         ]
       }
     ]
@@ -1917,29 +3290,102 @@ const OPENINGS = [
     description: "Black allows White to build a big centre, then counterattacks with e5 or c5. A favourite of Fischer and Kasparov.",
     lines: [
       {
-        id: "main",
-        name: "KID Setup",
-        moves: ["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","Nf3","O-O"],
+        id: "classical",
+        name: "Classical (Mar del Plata)",
+        moves: ["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","Nf3","O-O","Be2","e5","O-O","Nc6","d5","Ne7"],
         explanations: [
-          "d4.","Nf6.","c4.","Black fianchettoes — the KID!","Nc3.","Bishop to g7.","e4.","d6.","Nf3.","Black castles — the King's Indian setup."
+          "White builds a big centre.",
+          "Black develops the knight.",
+          "White grabs more space with c4.",
+          "Black fianchettoes — the King's Indian!",
+          "Nc3 develops.",
+          "Bishop to g7, eyeing the long diagonal.",
+          "e4 builds a huge centre.",
+          "Black bides time with d6.",
+          "Nf3 develops.",
+          "Black castles.",
+          "Be2 develops.",
+          "Black strikes the centre with e5 — the Classical KID.",
+          "White castles.",
+          "Black develops, adding pressure on d4.",
+          "d5 locks the centre and gains space.",
+          "Ne7 reroutes — both sides attack on opposite wings."
         ]
       },
       {
-        id: "classical",
-        name: "Classical Variation",
-        moves: ["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","Nf3","O-O","Be2","e5"],
+        id: "samisch",
+        name: "Sämisch (5.f3)",
+        moves: ["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","f3","O-O","Be3","e5"],
         explanations: [
-          "d4.","Nf6.","c4.","g6.","Nc3.","Bg7.","e4.","d6.","Nf3.","O-O.",
-          "White plays Be2.", "Black strikes with e5 — the Classical KID."
+          "White builds the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "Nc3 develops.",
+          "Bishop to g7.",
+          "e4 builds a big centre.",
+          "Black plays d6.",
+          "f3 braces the centre — the Sämisch Variation.",
+          "Black castles.",
+          "Be3 develops.",
+          "Black hits back with e5."
+        ]
+      },
+      {
+        id: "fianchetto",
+        name: "Fianchetto Variation",
+        moves: ["d4","Nf6","c4","g6","Nf3","Bg7","g3","O-O","Bg2","d6","O-O","Nc6"],
+        explanations: [
+          "White builds the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "Nf3 develops.",
+          "Bishop to g7.",
+          "g3 prepares White's own fianchetto — the calm Fianchetto KID.",
+          "Black castles.",
+          "Bishop to g2.",
+          "Black plays d6.",
+          "White castles.",
+          "Black develops, ready for ...e5 — a positional struggle."
+        ]
+      },
+      {
+        id: "four-pawns",
+        name: "Four Pawns Attack",
+        moves: ["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","f4","O-O","Nf3","c5"],
+        explanations: [
+          "White builds the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "Nc3 develops.",
+          "Bishop to g7.",
+          "e4 builds the centre.",
+          "Black plays d6.",
+          "f4 builds a massive pawn front — the Four Pawns Attack.",
+          "Black castles.",
+          "Nf3 develops.",
+          "Black hits the centre with c5 — sharp play."
         ]
       },
       {
         id: "averbakh",
-        name: "Averbakh Variation",
-        moves: ["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","Be2","O-O","Bg5"],
+        name: "Averbakh (Bg5)",
+        moves: ["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","Be2","O-O","Bg5","c5"],
         explanations: [
-          "d4.","Nf6.","c4.","g6.","Nc3.","Bg7.","e4.","d6.","Be2.","O-O.",
-          "White plays Bg5 — the Averbakh, preventing e5."
+          "White builds the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "Nc3 develops.",
+          "Bishop to g7.",
+          "e4 builds the centre.",
+          "Black plays d6.",
+          "Be2 develops.",
+          "Black castles.",
+          "Bg5 prevents ...e5 — the Averbakh Variation.",
+          "Black switches plans, striking with c5."
         ]
       }
     ]
@@ -2009,30 +3455,93 @@ const OPENINGS = [
     description: "Black allows White to build a huge centre, then systematically destroys it. A sharp, principled defense.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["d4","Nf6","c4","g6","Nc3","d5"],
-        explanations: [
-          "d4.","Nf6.","c4.","Black fianchettoes.","Nc3.",
-          "Black plays d5 — the Grünfeld, challenging the centre directly!"
-        ]
-      },
-      {
         id: "exchange",
         name: "Exchange Variation",
-        moves: ["d4","Nf6","c4","g6","Nc3","d5","cxd5","Nxd5","e4","Nxc3","bxc3","Bg7","Bc4","c5"],
+        moves: ["d4","Nf6","c4","g6","Nc3","d5","cxd5","Nxd5","e4","Nxc3","bxc3","Bg7"],
         explanations: [
-          "d4.","Nf6.","c4.","g6.","Nc3.","d5.",
-          "White captures on d5.","Black recaptures.","White plays e4!","Black captures on c3.","White recaptures.","Black fianchettoes.","Bishop to c4.","Black plays c5 — the Exchange Grünfeld."
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "Nc3 develops.",
+          "Black strikes the centre — the Grünfeld!",
+          "White captures.",
+          "Black recaptures.",
+          "e4 builds a big centre, kicking the knight.",
+          "Black trades.",
+          "White recaptures, with a huge pawn centre.",
+          "Bishop to g7 — Black will hammer the centre."
         ]
       },
       {
         id: "russian",
-        name: "Russian System",
-        moves: ["d4","Nf6","c4","g6","Nc3","d5","Nf3","Bg7","Qb3"],
+        name: "Russian System (Qb3)",
+        moves: ["d4","Nf6","c4","g6","Nc3","d5","Nf3","Bg7","Qb3","dxc4","Qxc4","O-O"],
         explanations: [
-          "d4.","Nf6.","c4.","g6.","Nc3.","d5.","Nf3.","Black fianchettoes.",
-          "White plays Qb3 — the Russian System, pressuring d5."
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "Nc3 develops.",
+          "Black plays the Grünfeld.",
+          "Nf3 develops.",
+          "Bishop to g7.",
+          "Qb3 eyes d5 and c4 — the Russian System.",
+          "Black captures.",
+          "White recaptures with the queen.",
+          "Black castles — a well-mapped main line."
+        ]
+      },
+      {
+        id: "classical-bf4",
+        name: "Classical (Bf4)",
+        moves: ["d4","Nf6","c4","g6","Nc3","d5","Bf4","Bg7","e3","O-O"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "Nc3 develops.",
+          "Black plays the Grünfeld.",
+          "Bf4 develops actively.",
+          "Bishop to g7.",
+          "e3 supports the centre.",
+          "Black castles — solid, flexible play."
+        ]
+      },
+      {
+        id: "taimanov-bg5",
+        name: "Taimanov (Bg5)",
+        moves: ["d4","Nf6","c4","g6","Nc3","d5","Bg5","Ne4","Bf4","Nxc3","bxc3"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "Nc3 develops.",
+          "Black plays the Grünfeld.",
+          "Bg5 pins nothing yet but eyes f6 — the Taimanov.",
+          "Black jumps to e4.",
+          "The bishop drops to f4.",
+          "Black trades knights.",
+          "White recaptures, keeping the centre."
+        ]
+      },
+      {
+        id: "fianchetto",
+        name: "Fianchetto Variation",
+        moves: ["d4","Nf6","c4","g6","g3","Bg7","Bg2","d5","cxd5","Nxd5"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black fianchettoes.",
+          "g3 — White fianchettoes too.",
+          "Bishop to g7.",
+          "Bishop to g2.",
+          "Black strikes with d5.",
+          "White captures.",
+          "Black recaptures — a calmer, positional Grünfeld."
         ]
       }
     ]
@@ -2046,30 +3555,94 @@ const OPENINGS = [
     description: "Black pins the c3 knight with Bb4, preventing e4. One of the most strategically rich defenses.",
     lines: [
       {
-        id: "main",
-        name: "Main Line",
-        moves: ["d4","Nf6","c4","e6","Nc3","Bb4"],
-        explanations: [
-          "d4.","Nf6.","c4.","e6.","Nc3.",
-          "Black plays Bb4 — the Nimzo-Indian, pinning the knight!"
-        ]
-      },
-      {
-        id: "classical",
-        name: "Classical — Qc2",
-        moves: ["d4","Nf6","c4","e6","Nc3","Bb4","Qc2"],
-        explanations: [
-          "d4.","Nf6.","c4.","e6.","Nc3.","Bb4.",
-          "White plays Qc2 — avoiding doubled pawns."
-        ]
-      },
-      {
         id: "rubinstein",
-        name: "Rubinstein — e3",
-        moves: ["d4","Nf6","c4","e6","Nc3","Bb4","e3","O-O","Bd3","d5"],
+        name: "4.e3 Rubinstein",
+        moves: ["d4","Nf6","c4","e6","Nc3","Bb4","e3","O-O","Bd3","d5","Nf3","c5"],
         explanations: [
-          "d4.","Nf6.","c4.","e6.","Nc3.","Bb4.",
-          "White plays e3 — the Rubinstein.","Black castles.","Bishop to d3.","Black challenges with d5."
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays e6.",
+          "Nc3 develops.",
+          "Black pins the knight — the Nimzo-Indian!",
+          "e3 — the flexible Rubinstein System.",
+          "Black castles.",
+          "Bd3 develops.",
+          "Black challenges the centre.",
+          "Nf3 develops.",
+          "Black strikes with c5 — a rich middlegame."
+        ]
+      },
+      {
+        id: "classical-qc2",
+        name: "4.Qc2 Classical",
+        moves: ["d4","Nf6","c4","e6","Nc3","Bb4","Qc2","O-O","a3","Bxc3+","Qxc3"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays e6.",
+          "Nc3 develops.",
+          "Black pins the knight.",
+          "Qc2 — the Classical, avoiding doubled pawns.",
+          "Black castles.",
+          "a3 questions the bishop.",
+          "Black takes the knight.",
+          "White recaptures with the queen, keeping a clean structure and the bishop pair."
+        ]
+      },
+      {
+        id: "samisch",
+        name: "4.a3 Sämisch",
+        moves: ["d4","Nf6","c4","e6","Nc3","Bb4","a3","Bxc3+","bxc3","c5","e3"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays e6.",
+          "Nc3 develops.",
+          "Black pins the knight.",
+          "a3 — the Sämisch, forcing the trade.",
+          "Black takes the knight.",
+          "White recaptures, building a big centre with doubled pawns.",
+          "Black strikes with c5.",
+          "e3 supports the centre — bishops vs pawn targets."
+        ]
+      },
+      {
+        id: "kmoch-f3",
+        name: "4.f3",
+        moves: ["d4","Nf6","c4","e6","Nc3","Bb4","f3","d5","a3","Bxc3+","bxc3","c5"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays e6.",
+          "Nc3 develops.",
+          "Black pins the knight.",
+          "f3 prepares a huge e4 centre.",
+          "Black hits back with d5.",
+          "a3 questions the bishop.",
+          "Black takes the knight.",
+          "White recaptures.",
+          "Black strikes with c5 — sharp, double-edged play."
+        ]
+      },
+      {
+        id: "leningrad-bg5",
+        name: "4.Bg5 Leningrad",
+        moves: ["d4","Nf6","c4","e6","Nc3","Bb4","Bg5","h6","Bh4","c5"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays e6.",
+          "Nc3 develops.",
+          "Black pins the knight.",
+          "Bg5 — the Leningrad, pinning back.",
+          "Black questions the bishop.",
+          "Bh4 keeps the pin.",
+          "Black counters with c5 — tense, original positions."
         ]
       }
     ]
@@ -2084,20 +3657,93 @@ const OPENINGS = [
     lines: [
       {
         id: "main",
-        name: "Main Line",
-        moves: ["d4","Nf6","c4","e6","Nf3","b6","g3","Bb7","Bg2","Be7","O-O"],
+        name: "Main Line (4.g3 Ba6)",
+        moves: ["d4","Nf6","c4","e6","Nf3","b6","g3","Ba6","b3","Bb4+","Bd2","Be7"],
         explanations: [
-          "d4.","Nf6.","c4.","e6.","Nf3.",
-          "Black plays b6 — the Queen's Indian!","White fianchettoes.","Black fianchettoes.","Bg2.","Be7.","White castles."
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "Nf3 develops, stopping ...e5.",
+          "Black fianchettoes — the Queen's Indian.",
+          "g3 prepares White's own fianchetto.",
+          "Ba6 pressures c4 — the main line.",
+          "b3 defends c4.",
+          "Bb4+ disrupts with a check.",
+          "Bd2 blocks.",
+          "Black retreats — a deeply analysed tabiya."
         ]
       },
       {
-        id: "kasparov",
-        name: "Kasparov Variation",
-        moves: ["d4","Nf6","c4","e6","Nf3","b6","Nc3","Bb7","a3","d5"],
+        id: "bb7",
+        name: "4.g3 Bb7",
+        moves: ["d4","Nf6","c4","e6","Nf3","b6","g3","Bb7","Bg2","Be7","O-O","O-O"],
         explanations: [
-          "d4.","Nf6.","c4.","e6.","Nf3.","b6.","Nc3.","Bb7.",
-          "White plays a3 — the Kasparov Variation.","Black challenges with d5."
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "Nf3 develops.",
+          "Black fianchettoes — the Queen's Indian.",
+          "g3 prepares the fianchetto.",
+          "Bishop to b7, the classical square.",
+          "Bishop to g2 — bishops glare down the long diagonal.",
+          "Bishop to e7.",
+          "White castles.",
+          "Black castles — a calm positional battle."
+        ]
+      },
+      {
+        id: "petrosian",
+        name: "Petrosian (4.a3)",
+        moves: ["d4","Nf6","c4","e6","Nf3","b6","a3","Bb7","Nc3","d5"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "Nf3 develops.",
+          "Black fianchettoes.",
+          "a3! the Petrosian, stopping ...Bb4.",
+          "Bishop to b7.",
+          "Nc3 develops without fear of a pin.",
+          "Black hits the centre with d5."
+        ]
+      },
+      {
+        id: "classical-nc3",
+        name: "Classical (4.Nc3)",
+        moves: ["d4","Nf6","c4","e6","Nf3","b6","Nc3","Bb7","Bg5","h6"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "Nf3 develops.",
+          "Black fianchettoes.",
+          "Nc3 develops, eyeing e4.",
+          "Bishop to b7.",
+          "Bg5 pins the knight.",
+          "Black questions the bishop — sharp, classical play."
+        ]
+      },
+      {
+        id: "quiet-e3",
+        name: "Quiet System (4.e3)",
+        moves: ["d4","Nf6","c4","e6","Nf3","b6","e3","Bb7","Bd3","Be7","O-O","O-O"],
+        explanations: [
+          "White takes the centre.",
+          "Black develops.",
+          "c4 grabs space.",
+          "Black plays ...e6.",
+          "Nf3 develops.",
+          "Black fianchettoes.",
+          "e3 keeps it solid and simple.",
+          "Bishop to b7.",
+          "Bd3 develops.",
+          "Bishop to e7.",
+          "White castles.",
+          "Black castles — a quiet, low-risk set-up."
         ]
       }
     ]
@@ -2113,10 +3759,24 @@ const OPENINGS = [
       {
         id: "main",
         name: "Main Line",
-        moves: ["e4","c5","Nf3","Nc6","d4","cxd4","Nxd4","Nf6","Nc3","e5","Nb5","d6","Bg5","a6","Na3","b5"],
+        moves: ["e4","c5","Nf3","Nc6","d4","cxd4","Nxd4","Nf6","Nc3","e5","Ndb5","d6","Bg5","a6","Na3","b5"],
         explanations: [
-          "e4.","c5.","Nf3.","Nc6.","d4.","cxd4.","Nxd4.","Nf6.","Nc3.",
-          "Black plays e5 — the Sveshnikov!","Knight goes to b5.","d6.","Bg5.","Black plays a6.","Knight retreats.","Black plays b5 — queenside expansion."
+          "e4.",
+          "c5.",
+          "Nf3.",
+          "Nc6.",
+          "d4.",
+          "cxd4.",
+          "Nxd4.",
+          "Nf6.",
+          "Nc3.",
+          "Black plays e5 — the Sveshnikov!",
+          "Knight goes to b5.",
+          "d6.",
+          "Bg5.",
+          "Black plays a6.",
+          "Knight retreats.",
+          "Black plays b5 — queenside expansion."
         ]
       },
       {
@@ -2124,8 +3784,23 @@ const OPENINGS = [
         name: "Modern Variation",
         moves: ["e4","c5","Nf3","Nc6","d4","cxd4","Nxd4","Nf6","Nc3","e5","Ndb5","d6","Bg5","a6","Bxf6","gxf6","Na3"],
         explanations: [
-          "e4.","c5.","Nf3.","Nc6.","d4.","cxd4.","Nxd4.","Nf6.","Nc3.","e5.","Ndb5.","d6.",
-          "White plays Bg5.","Black a6.","White captures on f6.","Black recaptures with the g-pawn.","Knight to a3."
+          "e4.",
+          "c5.",
+          "Nf3.",
+          "Nc6.",
+          "d4.",
+          "cxd4.",
+          "Nxd4.",
+          "Nf6.",
+          "Nc3.",
+          "e5.",
+          "Ndb5.",
+          "d6.",
+          "White plays Bg5.",
+          "Black a6.",
+          "White captures on f6.",
+          "Black recaptures with the g-pawn.",
+          "Knight to a3."
         ]
       }
     ]
@@ -2715,11 +4390,15 @@ const OPENINGS = [
       {
         id: "continued",
         name: "Continued",
-        moves: ["f3","e5","Kf2","d5","d4","exd4","Nf3"],
+        moves: ["f3","e5","Kf2","d5","d4","exd4","Qxd4"],
         explanations: [
-          "f3.", "e5.", "Kf2 — the hammer falls.",
-          "Black plays d5.", "White plays d4.", "Black captures.",
-          "White plays Nf3 — at least developing a piece. The king on f2 will be fine. Probably."
+          "f3 — an odd first move.",
+          "Black grabs the centre.",
+          "Kf2?! the king strolls out — the Hammerschlag.",
+          "Black expands with d5.",
+          "d4 hits back.",
+          "Black captures.",
+          "Qxd4 recaptures the pawn — White's king is airy but the position holds."
         ]
       }
     ]
@@ -2737,17 +4416,30 @@ const OPENINGS = [
         name: "Classic Botez Gambit",
         moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Ba4","Nf6","O-O","Nxe4"],
         explanations: [
-          "White e4.", "Black e5.", "Nf3.", "Nc6.", "Bb5.", "a6.", "Ba4.", "Nf6.", "White castles.",
+          "White e4.",
+          "Black e5.",
+          "Nf3.",
+          "Nc6.",
+          "Bb5.",
+          "a6.",
+          "Ba4.",
+          "Nf6.",
+          "White castles.",
           "Black captures on e4. White's queen on d1 is not hanging — but don't worry, the Botez Gambit will find a way."
         ]
       },
       {
         id: "declined",
         name: "Botez Gambit Declined",
-        moves: ["e4","e5","Nf3","Nc6","Qh5"],
+        moves: ["e4","e5","Qh5","Nc6","Bc4","g6","Qf3"],
         explanations: [
-          "e4.", "e5.", "Nf3.", "Nc6.",
-          "White plays Qh5 — immediately putting the queen where it can be lost. The Botez Gambit is a mindset, not a line."
+          "White opens e4.",
+          "Black answers e5.",
+          "Qh5?! the queen charges out early — pure Botez energy.",
+          "Black defends with the knight.",
+          "Bc4 piles on f7, threatening mate.",
+          "Black calmly plays g6 — declining to blunder.",
+          "Qf3 keeps the f7 threat alive; the queen lives to fight on."
         ]
       }
     ]
