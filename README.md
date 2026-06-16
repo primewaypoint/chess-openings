@@ -27,10 +27,26 @@ Grab the installer for your system from the [Releases](../../releases) page:
 | Mac with Intel chip | `ChessOpenings-x.x.x-Mac-Intel.dmg` |
 | Windows | `ChessOpenings-x.x.x-Windows-Setup.exe` |
 
-**First launch note:** this app is free and unsigned (code-signing certificates cost money), so your system will warn you once:
+### ⚠️ First launch — please read
 
-- **Mac:** right-click the app → **Open** → **Open**. Only needed the first time.
-- **Windows:** if SmartScreen appears, click **More info** → **Run anyway**.
+This app is **free and unsigned** (Apple/Microsoft code-signing certificates cost money), so your system blocks it once, the first time. The app is safe — here is how to open it:
+
+**🍎 Mac**
+
+1. Move **ChessOpenings** to your Applications folder.
+2. **Right-click** the app → **Open** → **Open**. (Right-click, *not* double-click.)
+
+If macOS still says **"ChessOpenings is damaged and can't be opened"**, that is just the download being flagged — it is not actually damaged. Open the **Terminal** app and paste this one line, then press Enter:
+
+```bash
+xattr -cr "/Applications/ChessOpenings.app"
+```
+
+Now open the app normally. You only ever need to do this once.
+
+**🪟 Windows**
+
+If a blue **"Windows protected your PC"** screen appears, click **More info** → **Run anyway**. Only needed the first time.
 
 ## Run from source
 
