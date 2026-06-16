@@ -597,8 +597,8 @@ body {
 }
 
 /* Study/Practice + Review: lock the page to the viewport so it never scrolls.
-   The board fits the available height; only inner zones (panel, move list,
-   and later the Lines list) scroll. */
+   Only the move list and the lines (variants) section scroll internally.
+   Nav buttons, hint, reset, etc. are always visible. */
 .study-fixed {
   height: calc(100vh - 56px);
   overflow: hidden;
@@ -606,7 +606,47 @@ body {
 .study-fixed .study-panel {
   height: 100%;
   min-height: 0;
+  overflow: hidden; /* panel itself never scrolls */
+}
+
+/* Variants (lines list): scrolls internally, capped */
+.study-fixed .variants-section {
   overflow-y: auto;
+  max-height: 160px;
+  min-height: 32px;
+  flex-shrink: 1;
+}
+
+/* Tab content blocks: flex columns that fill remaining panel space */
+.study-fixed #learnContent,
+.study-fixed #practiceContent {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Scrollable zones inside the tab content */
+.study-fixed .move-list {
+  flex-shrink: 1;
+  min-height: 0;
+}
+.study-fixed .explanation-box {
+  flex-shrink: 1;
+  min-height: 36px;
+  overflow: hidden;
+}
+
+/* Buttons that must always be visible — never shrink */
+.study-fixed .nav-buttons,
+.study-fixed .hint-btn,
+.study-fixed .reset-btn,
+.study-fixed .next-line-btn,
+.study-fixed .practice-instruction,
+.study-fixed .practice-status {
+  flex-shrink: 0;
 }
 
 .study-board-area {
