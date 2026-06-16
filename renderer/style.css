@@ -24,6 +24,7 @@
   --diff-intermediate: #b07d2e;
   --diff-advanced: #8b2e2e;
   --diff-fun: #5b3fa0;
+  --diff-trap: #b8396b;
 }
 
 body.light {
@@ -49,6 +50,7 @@ body.light {
   --diff-intermediate: #9a6b1e;
   --diff-advanced: #7a2020;
   --diff-fun: #4a2f90;
+  --diff-trap: #a82d62;
 }
 
 /* =====================
@@ -380,6 +382,7 @@ body {
 .filter-option-dot.intermediate { background: var(--diff-intermediate); }
 .filter-option-dot.advanced { background: var(--diff-advanced); }
 .filter-option-dot.fun { background: var(--diff-fun); }
+.filter-option-dot.trap { background: var(--diff-trap); }
 .filter-option-dot.all { background: var(--text-secondary); }
 
 .filter-checkmark {
@@ -509,6 +512,7 @@ body {
 .card-progress-fill.intermediate { background: var(--diff-intermediate); }
 .card-progress-fill.advanced { background: var(--diff-advanced); }
 .card-progress-fill.fun { background: var(--diff-fun); }
+.card-progress-fill.trap { background: var(--diff-trap); }
 
 .card-play-link {
   font-size: 11.5px;
@@ -549,6 +553,7 @@ body {
 .badge-intermediate { color: var(--diff-intermediate); }
 .badge-advanced { color: var(--diff-advanced); }
 .badge-fun { color: var(--diff-fun); }
+.badge-trap { color: var(--diff-trap); }
 
 /* =====================
    EMPTY STATE
@@ -1894,3 +1899,50 @@ kbd {
 .diff-progress-fill.intermediate { background: var(--diff-intermediate); }
 .diff-progress-fill.advanced { background: var(--diff-advanced); }
 .diff-progress-fill.fun { background: var(--diff-fun); }
+
+/* ============================================================
+   BOARD THEMES (square colours overridden per <body> class)
+   ============================================================ */
+body.board-green  .white-1e1d7 { background-color: #eeeed2; color: #769656; }
+body.board-green  .black-3c85d { background-color: #769656; color: #eeeed2; }
+body.board-blue   .white-1e1d7 { background-color: #dee3e6; color: #8ca2ad; }
+body.board-blue   .black-3c85d { background-color: #8ca2ad; color: #dee3e6; }
+body.board-walnut .white-1e1d7 { background-color: #e8d0aa; color: #9e6b41; }
+body.board-walnut .black-3c85d { background-color: #9e6b41; color: #e8d0aa; }
+body.board-slate  .white-1e1d7 { background-color: #dcdcdc; color: #8f8f8f; }
+body.board-slate  .black-3c85d { background-color: #8f8f8f; color: #dcdcdc; }
+
+/* ============================================================
+   BOARD THEME PICKER (settings page)
+   ============================================================ */
+.board-theme-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.board-swatch {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 6px;
+  background: var(--bg-secondary);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  text-align: center;
+}
+.board-swatch:hover { transform: translateY(-2px); }
+.board-swatch.selected { border-color: var(--accent, #6ea8fe); }
+.board-swatch-preview {
+  width: 56px;
+  height: 56px;
+  border-radius: 6px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.board-swatch-name {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.board-swatch.selected .board-swatch-name { color: var(--text-primary); }

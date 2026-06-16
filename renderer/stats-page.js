@@ -167,7 +167,7 @@
   // ── Progress by difficulty ───────────────────────────────────────
   function renderDifficultyProgress() {
     const box = document.getElementById('difficultyProgress');
-    const order = ['beginner', 'intermediate', 'advanced', 'fun'];
+    const order = ['beginner', 'intermediate', 'advanced', 'fun', 'trap'];
 
     order.forEach(diff => {
       const all = OPENINGS.filter(o => o.difficulty === diff);

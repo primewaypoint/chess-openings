@@ -45,7 +45,12 @@ const Review = (function () {
       try { done = new Set(JSON.parse(localStorage.getItem('completedLines_' + opening.id) || '[]')); }
       catch { done = new Set(); }
       opening.lines.forEach((line, idx) => {
-        if (done.has(line.id || idx)) pool.push({ opening, lineIdx: idx });
+        const lid = line.id || idx;
+        if (done.has(lid)) pool.push({
+          opening,
+          lineIdx: idx,
+          key: window.ReviewSchedule ? ReviewSchedule.lineKey(opening.id, lid) : null
+        });
       });
     });
     return pool;
@@ -58,12 +63,31 @@ const Review = (function () {
     return {};
   }
 
-  // Fisher–Yates shuffle, then take the session
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
+  // Pick the session. With the spaced-repetition module, prioritise the lines
+  // most due for review (struggling / overdue first). If that module is somehow
+  // unavailable, fall back to the old random pick — so it can never be worse.
+  let session;
+  if (window.ReviewSchedule) {
+    const today = ReviewSchedule.todayStr();
+    const schedule = ReviewSchedule.getReviewSchedule();
+    session = ReviewSchedule.selectDueLines(pool, schedule, today, SESSION_SIZE);
+  } else {
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    session = pool.slice(0, SESSION_SIZE);
   }
-  const session = pool.slice(0, SESSION_SIZE);
+
+  // Record a line's review result into the spaced-repetition schedule.
+  function recordScheduleResult(key, clean) {
+    if (!window.ReviewSchedule || !key) return;
+    const today = ReviewSchedule.todayStr();
+    const sched = ReviewSchedule.getReviewSchedule();
+    ReviewSchedule.saveReviewSchedule(
+      ReviewSchedule.recordReviewResult(sched, key, clean, today)
+    );
+  }
 
   // ── State ────────────────────────────────────────────────────────
   let qIdx = 0;           // which line of the session
@@ -359,6 +383,7 @@ const Review = (function () {
     SoundFX.complete();
     Stats.recordLine(current().opening.id);
     lineResults[qIdx] = lineHadMistake ? 'mistake' : 'clean';
+    recordScheduleResult(current().key, !lineHadMistake);
     setTimeout(nextLine, 900);
     return true;
   }

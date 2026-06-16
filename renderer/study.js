@@ -695,6 +695,8 @@ const Study = (function () {
     setTimeout(() => el.classList.remove('flash-correct', 'flash-wrong', 'flash-opponent'), 600);
   }
 
+  let hintArrowTimer = null;
+
   function showHint() {
     const line = currentLine();
     if (!line || practiceIdx >= line.moves.length) return;
@@ -703,9 +705,72 @@ const Study = (function () {
     if (!move) return;
     const el = document.querySelector(`.square-${move.from}`);
     if (el) {
-      el.style.background = 'rgba(200, 180, 40, 0.4)';
-      setTimeout(() => { el.style.background = ''; }, 1500);
+      el.style.background = 'rgba(255, 170, 40, 0.35)';
+      setTimeout(() => { el.style.background = ''; }, 2000);
     }
+    drawHintArrow(move.from, move.to);
+  }
+
+  function removeHintArrow() {
+    clearTimeout(hintArrowTimer);
+    document.querySelectorAll('#studyBoard .hint-arrow-svg').forEach(e => e.remove());
+  }
+
+  // Draw an amber arrow from -> to over the board (orientation-aware: it reads the
+  // squares' real positions, so it works whether the board is flipped or not)
+  function drawHintArrow(from, to) {
+    const boardEl = document.getElementById('studyBoard');
+    if (!boardEl) return;
+    const inner = boardEl.querySelector('.board-b72b1') || boardEl;
+    const fromEl = boardEl.querySelector(`.square-${from}`);
+    const toEl = boardEl.querySelector(`.square-${to}`);
+    if (!fromEl || !toEl) return;
+
+    removeHintArrow();
+    const bRect = inner.getBoundingClientRect();
+    const sq = fromEl.getBoundingClientRect().width || (bRect.width / 8);
+    const center = (el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.left - bRect.left + r.width / 2, y: r.top - bRect.top + r.height / 2 };
+    };
+    const a = center(fromEl), b = center(toEl);
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len, uy = dy / len;
+
+    const startX = a.x + ux * sq * 0.30, startY = a.y + uy * sq * 0.30;
+    const tipX = b.x - ux * sq * 0.16,   tipY = b.y - uy * sq * 0.16;
+    const headLen = sq * 0.42, headW = sq * 0.40;
+    const baseX = tipX - ux * headLen, baseY = tipY - uy * headLen;
+    const px = -uy, py = ux;
+
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('class', 'hint-arrow-svg');
+    svg.setAttribute('width', bRect.width);
+    svg.setAttribute('height', bRect.height);
+    svg.style.cssText = 'position:absolute;left:0;top:0;pointer-events:none;z-index:50;';
+
+    const colour = 'rgba(255, 170, 40, 0.92)';
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', startX); line.setAttribute('y1', startY);
+    line.setAttribute('x2', baseX);  line.setAttribute('y2', baseY);
+    line.setAttribute('stroke', colour);
+    line.setAttribute('stroke-width', Math.max(5, sq * 0.15));
+    line.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(line);
+
+    const head = document.createElementNS(ns, 'polygon');
+    head.setAttribute('points',
+      `${tipX},${tipY} ` +
+      `${baseX + px * headW / 2},${baseY + py * headW / 2} ` +
+      `${baseX - px * headW / 2},${baseY - py * headW / 2}`);
+    head.setAttribute('fill', colour);
+    svg.appendChild(head);
+
+    if (getComputedStyle(inner).position === 'static') inner.style.position = 'relative';
+    inner.appendChild(svg);
+    hintArrowTimer = setTimeout(removeHintArrow, 2200);
   }
 
   function resetPractice() {

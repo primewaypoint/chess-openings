@@ -34,4 +34,8 @@ const OPENING_SIDES = {
   // Symmetric / both
   'four-knights-game':'both','ruy-lopez-closed':'both','queens-gambit':'both',
   'queens-gambit-accepted':'both','double-bongcloud':'both','botez-gambit':'both',
+  // Traps — the user plays the side that springs the trap
+  'scholars-mate':'white','legals-mate':'white','blackburne-shilling':'black',
+  'englund-gambit-trap':'black','elephant-trap':'black','lasker-trap':'black',
+  'noahs-ark-trap':'black',
 };

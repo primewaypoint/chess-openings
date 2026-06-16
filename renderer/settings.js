@@ -66,3 +66,32 @@ resetBtn.addEventListener('click', () => {
     resetBtn.style.color = '';
   }, 2000);
 });
+
+// Board theme picker
+(function () {
+  const grid = document.getElementById('boardThemeGrid');
+  if (!grid || !window.BOARD_THEMES) return;
+  const current = window.getBoardTheme();
+
+  window.BOARD_THEMES.forEach((t) => {
+    const el = document.createElement('div');
+    el.className = 'board-swatch' + (t.id === current ? ' selected' : '');
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-label', t.name + ' board');
+    el.innerHTML =
+      '<div class="board-swatch-preview">' +
+        '<span style="background:' + t.light + '"></span>' +
+        '<span style="background:' + t.dark + '"></span>' +
+        '<span style="background:' + t.dark + '"></span>' +
+        '<span style="background:' + t.light + '"></span>' +
+      '</div>' +
+      '<div class="board-swatch-name">' + t.name + '</div>';
+    el.addEventListener('click', () => {
+      window.setBoardTheme(t.id);
+      grid.querySelectorAll('.board-swatch').forEach((s) => s.classList.remove('selected'));
+      el.classList.add('selected');
+      if (window.SoundFX) SoundFX.move();
+    });
+    grid.appendChild(el);
+  });
+})();

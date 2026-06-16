@@ -4530,6 +4530,234 @@ const OPENINGS = [
         ]
       }
     ]
+  },
+
+
+  // ============================================================
+  // TRAPS
+  // ============================================================
+
+  {
+    id: "scholars-mate",
+    name: "Scholar's Mate",
+    eco: "C20",
+    difficulty: "trap",
+    description: "The famous four-move checkmate — and how careless development hands it to White.",
+    lines: [
+      {
+        id: "main",
+        name: "The 4-move mate",
+        moves: ["e4","e5","Qh5","Nc6","Bc4","Nf6","Qxf7#"],
+        explanations: [
+          "White opens with e4.",
+          "Black mirrors.",
+          "Qh5?! the queen lunges out, eyeing f7 and e5.",
+          "Black defends e5 with the knight.",
+          "Bc4 adds a second attacker on f7 — mate is threatened!",
+          "Black develops naturally... but misses the threat.",
+          "Qxf7# — the Scholar's Mate! (Defend it with ...g6 and ...Nf6.)"
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "legals-mate",
+    name: "Légal's Mate",
+    eco: "C41",
+    difficulty: "trap",
+    description: "A queen sacrifice leads to mate with three minor pieces. A 200-year-old classic.",
+    lines: [
+      {
+        id: "main",
+        name: "The queen sacrifice",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","d6","Nc3","Bg4","Nxe5","Bxd1","Bxf7+","Ke7","Nd5#"],
+        explanations: [
+          "e4.",
+          "e5.",
+          "Nf3 attacks e5.",
+          "Nc6 defends.",
+          "Bc4 eyes f7.",
+          "Black plays d6.",
+          "Nc3 develops.",
+          "Bg4 pins the f3 knight to the queen.",
+          "Nxe5!? White ignores the pin — a stunning idea.",
+          "Bxd1?? Black greedily grabs the queen (5...Nxe5 was safe).",
+          "Bxf7+ — the trap springs!",
+          "Ke7, forced.",
+          "Nd5# — Légal's Mate: three little pieces deliver checkmate!"
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "blackburne-shilling",
+    name: "Blackburne Shilling Gambit",
+    eco: "C50",
+    difficulty: "trap",
+    description: "Black baits White into grabbing a pawn, then weaves a smothered mating net.",
+    lines: [
+      {
+        id: "main",
+        name: "The smothered net",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Nd4","Nxe5","Qg5","Nxf7","Qxg2","Rf1","Qxe4+","Be2","Nf3#"],
+        explanations: [
+          "e4.",
+          "e5.",
+          "Nf3 attacks e5.",
+          "Nc6 defends.",
+          "Bc4 eyes f7.",
+          "Nd4!? the cheeky Shilling Gambit — daring White to grab e5.",
+          "Nxe5?? White takes the bait (4.Nxd4 was correct).",
+          "Qg5! forking e5 and g2.",
+          "Nxf7 forking queen and rook — but it walks into the trap.",
+          "Qxg2 hitting the rook.",
+          "Rf1 saving it.",
+          "Qxe4+ grabbing a pawn with check.",
+          "Be2 blocks — but the bishop is pinned!",
+          "Nf3# — smothered mate!"
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "englund-gambit-trap",
+    name: "Englund Gambit Trap",
+    eco: "A40",
+    difficulty: "trap",
+    description: "Black's offbeat gambit sets a back-rank mating trap if White grabs too greedily.",
+    lines: [
+      {
+        id: "main",
+        name: "Back-rank ambush",
+        moves: ["d4","e5","dxe5","Nc6","Nf3","Qe7","Bf4","Qb4+","Bd2","Qxb2","Bc3","Bb4","Qd2","Bxc3","Qxc3","Qc1#"],
+        explanations: [
+          "d4.",
+          "e5!? the Englund Gambit.",
+          "dxe5 grabbing the pawn.",
+          "Nc6 hitting e5.",
+          "Nf3 defends.",
+          "Qe7 piling on e5.",
+          "Bf4?? a natural move that loses (4.Qd5 holds).",
+          "Qb4+ forking king and b2.",
+          "Bd2 blocks.",
+          "Qxb2 snatching the pawn and hitting the rook.",
+          "Bc3 trying to trap the queen.",
+          "Bb4! pinning the bishop.",
+          "Qd2 defending.",
+          "Bxc3 removing the defender.",
+          "Qxc3 recaptures...",
+          "Qc1# — back-rank checkmate!"
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "elephant-trap",
+    name: "Elephant Trap",
+    eco: "D51",
+    difficulty: "trap",
+    description: "It looks like White wins the queen for free — but a hidden check turns the tables.",
+    lines: [
+      {
+        id: "main",
+        name: "The hidden check",
+        moves: ["d4","d5","c4","e6","Nc3","Nf6","Bg5","Nbd7","cxd5","exd5","Nxd5","Nxd5","Bxd8","Bb4+","Qd2","Bxd2+","Kxd2","Kxd8"],
+        explanations: [
+          "d4.",
+          "d5.",
+          "c4 — the Queen's Gambit.",
+          "e6 declining.",
+          "Nc3 develops.",
+          "Nf6 develops.",
+          "Bg5 pins the knight.",
+          "Nbd7 — the bait!",
+          "cxd5 opening the centre.",
+          "exd5 recaptures.",
+          "Nxd5?? grabbing a pawn (the f6 knight looks pinned).",
+          "Nxd5! the pin was an illusion.",
+          "Bxd8 winning the queen...",
+          "Bb4+! the point — check!",
+          "Qd2 blocks.",
+          "Bxd2+.",
+          "Kxd2.",
+          "Kxd8 — Black recaptures and is a whole piece up!"
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "lasker-trap",
+    name: "Lasker Trap",
+    eco: "D08",
+    difficulty: "trap",
+    description: "The Albin Counter-Gambit's gem, ending in a stunning knight underpromotion.",
+    lines: [
+      {
+        id: "main",
+        name: "The underpromotion",
+        moves: ["d4","d5","c4","e5","dxe5","d4","e3","Bb4+","Bd2","dxe3","Bxb4","exf2+","Ke2","fxg1=N+"],
+        explanations: [
+          "d4.",
+          "d5.",
+          "c4.",
+          "e5!? the Albin Counter-Gambit.",
+          "dxe5 grabbing the pawn.",
+          "d4 clamping the centre.",
+          "e3?? a natural try that walks into the trap (4.Nf3 is right).",
+          "Bb4+ check!",
+          "Bd2 blocks.",
+          "dxe3! opening lines.",
+          "Bxb4?? the losing move.",
+          "exf2+ check!",
+          "Ke2.",
+          "fxg1=N+! the famous knight underpromotion — winning the queen next."
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "noahs-ark-trap",
+    name: "Noah's Ark Trap",
+    eco: "C70",
+    difficulty: "trap",
+    description: "A Ruy Lopez classic: Black's pawns slowly close in and trap the white bishop.",
+    lines: [
+      {
+        id: "main",
+        name: "Trapping the bishop",
+        moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Ba4","d6","d4","b5","Bb3","Nxd4","Nxd4","exd4","Qxd4","c5","Qd5","Be6","Qc6+","Bd7","Qd5","c4"],
+        explanations: [
+          "e4.",
+          "e5.",
+          "Nf3.",
+          "Nc6.",
+          "Bb5 — the Ruy Lopez.",
+          "a6 questioning the bishop.",
+          "Ba4.",
+          "d6 — the Steinitz.",
+          "d4 striking the centre.",
+          "b5 gaining space.",
+          "Bb3 retreating.",
+          "Nxd4! the trap begins.",
+          "Nxd4 recapturing.",
+          "exd4 winning the piece back.",
+          "Qxd4 — White regains the pawn, but...",
+          "c5! kicking the queen.",
+          "Qd5 attacking.",
+          "Be6.",
+          "Qc6+.",
+          "Bd7.",
+          "Qd5.",
+          "c4! — the Noah's Ark closes; the b3 bishop is trapped!"
+        ]
+      }
+    ]
   }
 
 ];
