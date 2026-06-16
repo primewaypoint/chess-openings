@@ -590,15 +590,30 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 32px;
-  padding: 24px 28px 40px;
-  min-height: calc(100vh - 56px);
+  padding: 24px 28px 24px;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+/* Study/Practice + Review: lock the page to the viewport so it never scrolls.
+   The board fits the available height; only inner zones (panel, move list,
+   and later the Lines list) scroll. */
+.study-fixed {
+  height: calc(100vh - 56px);
+  overflow: hidden;
+}
+.study-fixed .study-panel {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .study-board-area {
   flex-shrink: 0;
-  width: 45vw;
+  width: min(45vw, calc(100vh - 150px));
   max-width: 760px;
-  min-width: 340px;
+  min-width: 320px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1107,6 +1122,11 @@ body {
    CHESSBOARD OVERRIDES
    ===================== */
 .card-board .board-b72b1 { border-radius: 4px !important; }
+
+/* Pieces are <img>; inline images sit on the text baseline, leaving a few px
+   gap that pushes them down — very visible on the 14px thumbnail squares.
+   Block display removes the gap so pieces sit centred in their squares. */
+.piece-417db { display: block; }
 
 /* Last-move highlight (works over both square colors) */
 #studyBoard .square-lastmove {
