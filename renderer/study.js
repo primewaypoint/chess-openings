@@ -73,6 +73,7 @@ const Study = (function () {
   // ── State ────────────────────────────────────────────────────────
   let activeTab = 'learn';
   let currentLineIdx = 0;
+  let deeperExpanded = false;  // "Go deeper" section open?
   let currentMoveIdx = 0;
   let practiceIdx = 0;
   let board = null;
@@ -88,7 +89,8 @@ const Study = (function () {
   }
 
   function isFullyDone(doneSet) {
-    const lines = opening.lines || [];
+    // Only the essential lines count toward mastery — "deeper" lines are bonus.
+    const lines = essentialLines(opening);
     return lines.length > 0 && lines.every((l, i) => doneSet.has(l.id || i));
   }
 
@@ -105,17 +107,78 @@ const Study = (function () {
   function buildVariants() {
     const container = document.getElementById('variantList');
     container.innerHTML = '';
-    if (!opening.lines || opening.lines.length <= 1) {
-      document.getElementById('variantsSection').style.display = 'none';
+
+    const all = opening.lines || [];
+    // Real indices into opening.lines, split by tier
+    const essIdx    = all.map((l, i) => i).filter(i => all[i].tier !== 'deeper');
+    const deeperIdx = all.map((l, i) => i).filter(i => all[i].tier === 'deeper');
+
+    const section = document.getElementById('variantsSection');
+    section.classList.remove('deeper-open');
+
+    // Nothing to pick between → hide the whole section
+    if (all.length <= 1 && deeperIdx.length === 0) {
+      section.style.display = 'none';
       return;
     }
-    opening.lines.forEach((line, idx) => {
+    section.style.display = '';
+
+    const makeItem = (idx) => {
+      const line = all[idx];
       const el = document.createElement('div');
       el.className = 'variant-item' + (idx === currentLineIdx ? ' active' : '');
       el.textContent = line.name || `Line ${idx + 1}`;
       el.addEventListener('click', () => selectVariant(idx));
-      container.appendChild(el);
+      return el;
+    };
+
+    essIdx.forEach(idx => container.appendChild(makeItem(idx)));
+
+    // No deeper lines → make sure no locked height lingers
+    if (deeperIdx.length === 0) {
+      container.style.height = '';
+      container.style.overflowY = '';
+      return;
+    }
+
+    // If the user is currently on a deeper line, keep the section open
+    if (deeperIdx.includes(currentLineIdx)) deeperExpanded = true;
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'go-deeper-toggle' + (deeperExpanded ? ' open' : '');
+    toggle.innerHTML =
+      `<span class="go-deeper-caret">▾</span>` +
+      `Go deeper <span class="go-deeper-count">${deeperIdx.length}</span>`;
+    toggle.addEventListener('click', () => {
+      deeperExpanded = !deeperExpanded;
+      buildVariants();
     });
+    container.appendChild(toggle);
+
+    if (deeperExpanded) {
+      section.classList.add('deeper-open');
+      // Lock the list to the EXACT height it has while closed (essentials +
+      // toggle). Opening then never grows the panel — the deeper lines appear
+      // inside the same box and you scroll down to them. Nav buttons / Reset
+      // never move. Use getBoundingClientRect() for sub-pixel precision so the
+      // locked height matches the natural height exactly (offsetHeight rounds to
+      // an integer, which would shift the bar below by a fraction of a pixel).
+      const lockedH = container.getBoundingClientRect().height;
+      const group = document.createElement('div');
+      group.className = 'deeper-group';
+      deeperIdx.forEach(idx => {
+        const item = makeItem(idx);
+        item.classList.add('variant-deeper');
+        group.appendChild(item);
+      });
+      container.appendChild(group);
+      container.style.height = lockedH + 'px';
+      container.style.overflowY = 'auto';
+    } else {
+      container.style.height = '';
+      container.style.overflowY = '';
+    }
   }
 
   function selectVariant(idx) {
@@ -518,7 +581,7 @@ const Study = (function () {
         } else {
           nextBtn.textContent = 'Next line ►';
           nextBtn.dataset.mode = 'next';
-          nextBtn.style.display = (opening.lines?.length || 0) > 1 ? '' : 'none';
+          nextBtn.style.display = essentialLines(opening).length > 1 ? '' : 'none';
         }
       }
     } else {
@@ -593,20 +656,26 @@ const Study = (function () {
   }
 
   function nextLineIdx() {
-    const total = opening.lines?.length || 0;
-    if (total <= 1) return -1;
+    // Auto-advance only cycles through ESSENTIAL lines so the core training loop
+    // never drags the user into optional "deeper" lines. Deeper lines are reached
+    // only by clicking them directly in the Lines list.
+    const all = opening.lines || [];
+    const idxs = all.map((l, i) => i).filter(i => all[i].tier !== 'deeper');
+    if (idxs.length <= 1) return -1;
     const done = getPersistedDone();
-    // Prefer the next line never completed, wrapping around
-    for (let i = 1; i <= total; i++) {
-      const idx = (currentLineIdx + i) % total;
-      if (!done.has(opening.lines[idx].id || idx)) return idx;
+    const pos = idxs.indexOf(currentLineIdx);
+    const start = pos === -1 ? 0 : pos; // if on a deeper line, start from the first essential
+    // Prefer the next essential line never completed, wrapping around
+    for (let i = 1; i <= idxs.length; i++) {
+      const idx = idxs[(start + i) % idxs.length];
+      if (!done.has(all[idx].id || idx)) return idx;
     }
-    // Everything saved as complete — prefer lines not replayed this session
-    for (let i = 1; i <= total; i++) {
-      const idx = (currentLineIdx + i) % total;
-      if (!sessionDone.has(opening.lines[idx].id || idx)) return idx;
+    // Everything saved as complete — prefer essentials not replayed this session
+    for (let i = 1; i <= idxs.length; i++) {
+      const idx = idxs[(start + i) % idxs.length];
+      if (!sessionDone.has(all[idx].id || idx)) return idx;
     }
-    return (currentLineIdx + 1) % total;
+    return idxs[(start + 1) % idxs.length];
   }
 
   function goToNextLine() {
@@ -827,11 +896,14 @@ const Study = (function () {
       localStorage.setItem(key, JSON.stringify([...lines]));
     } catch {}
 
-    // Mark opening as fully completed when all lines done
-    const allLines = opening.lines?.length || 1;
+    // Mark opening as fully completed when all ESSENTIAL lines are done.
+    // "deeper" lines are optional bonus and never gate completion.
+    const essentials = essentialLines(opening);
     try {
-      const lines = new Set(JSON.parse(localStorage.getItem('completedLines_' + opening.id) || '[]'));
-      if (lines.size >= allLines) {
+      const done = new Set(JSON.parse(localStorage.getItem('completedLines_' + opening.id) || '[]'));
+      const essentialsDone = essentials.length > 0 &&
+        essentials.every((l, i) => done.has(l.id || i));
+      if (essentialsDone) {
         const completed = new Set(JSON.parse(localStorage.getItem('completed') || '[]'));
         if (!completed.has(opening.id)) {
           completed.add(opening.id);

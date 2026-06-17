@@ -102,6 +102,95 @@ const OPENINGS = [
           "Black captures.",
           "White recaptures, with a comfortable space edge."
         ]
+      },
+      {
+        id: "fried-liver",
+        name: "Fried Liver Attack",
+        tier: "deeper",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","d5","exd5","Nxd5","Nxf7","Kxf7","Qf3+","Ke6","Nc3"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bishop eyes f7.",
+          "Black develops actively — the Two Knights.",
+          "Ng5 lunges at the weak f7 square.",
+          "Black strikes back in the centre.",
+          "White captures the pawn.",
+          "Black recaptures with the knight (the critical choice).",
+          "Nxf7! the knight sacrifice — the Fried Liver begins.",
+          "Black must take, dragging the king out.",
+          "Qf3+ forks the king and the d5 knight.",
+          "Ke6 defends the knight, but the king is dangerously exposed.",
+          "Nc3 piles on d5 — White has a raging attack for the piece."
+        ]
+      },
+      {
+        id: "evans-gambit",
+        name: "Evans Gambit",
+        tier: "deeper",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Bc5","b4","Bxb4","c3","Ba5","d4","exd4","O-O"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bishop targets f7.",
+          "Black copies — the Giuoco Piano.",
+          "b4! the Evans Gambit — offering a pawn for time.",
+          "Black accepts the gambit.",
+          "c3 gains a tempo, hitting the bishop.",
+          "Black retreats the bishop.",
+          "d4 blasts open the centre while ahead in development.",
+          "Black captures.",
+          "O-O — White castles with a huge lead in development for the pawn."
+        ]
+      },
+      {
+        id: "traxler",
+        name: "Traxler Counterattack",
+        tier: "deeper",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","Bc5","Nxf7","Bxf2+","Kxf2","Nxe4+","Kg1","Qh4"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bishop eyes f7.",
+          "Black develops — the Two Knights.",
+          "Ng5 lunges at f7.",
+          "Bc5!? the wild Traxler — ignoring the threat to counterattack.",
+          "Nxf7 forks the queen and rook.",
+          "Bxf2+! Black strikes first with a bishop sacrifice.",
+          "White must take.",
+          "Nxe4+ rips open the king with check.",
+          "King tucks into the corner.",
+          "Qh4 — Black has a furious attack for the sacrificed material."
+        ]
+      },
+      {
+        id: "two-knights-na5",
+        name: "Two Knights — Main Line (…Na5)",
+        tier: "deeper",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","d5","exd5","Na5","Bb5+","c6","dxc6","bxc6","Be2"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bishop eyes f7.",
+          "Black develops — the Two Knights.",
+          "Ng5 attacks f7.",
+          "d5 strikes back, blunting the bishop.",
+          "White grabs the pawn.",
+          "Na5! the main line — chasing the bishop instead of the Fried Liver.",
+          "Bb5+ keeps the extra pawn for now.",
+          "c6 challenges the bishop.",
+          "White grabs a second pawn.",
+          "bxc6 opens lines for the pieces.",
+          "Be2 retreats — Black has lasting initiative for the pawn."
+        ]
       }
     ]
   },
@@ -1362,6 +1451,60 @@ const OPENINGS = [
           "Knight to a5 — the Chigorin Variation.",
           "Bishop retreats to c2."
         ]
+      },
+      {
+        id: "marshall-attack",
+        name: "Marshall Attack",
+        tier: "deeper",
+        moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Ba4","Nf6","O-O","Be7","Re1","b5","Bb3","O-O","c3","d5","exd5","Nxd5","Nxe5","Nxe5","Rxe5","c6"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bishop pins the knight — the Ruy Lopez.",
+          "a6 questions the bishop.",
+          "Bishop retreats to a4.",
+          "Knight develops, hitting e4.",
+          "White castles.",
+          "Black develops the bishop.",
+          "Re1 defends e4.",
+          "b5 gains space and prepares ...d5.",
+          "Bishop tucks back to b3.",
+          "Black castles, ready to strike.",
+          "c3 supports a future d4.",
+          "d5!? the Marshall Attack — a bold pawn sacrifice.",
+          "White captures.",
+          "Black recaptures with the knight.",
+          "White grabs the e5 pawn with the knight.",
+          "Black trades knights.",
+          "Rook recaptures, sitting exposed on e5.",
+          "c6 — Black gets a huge initiative and attack for the pawn."
+        ]
+      },
+      {
+        id: "ruy-open",
+        name: "Open Variation",
+        tier: "deeper",
+        moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Ba4","Nf6","O-O","Nxe4","d4","b5","Bb3","d5","dxe5","Be6"],
+        explanations: [
+          "White takes the centre.",
+          "Black mirrors.",
+          "Knight attacks e5.",
+          "Knight defends.",
+          "Bishop pins — the Ruy Lopez.",
+          "a6 questions the bishop.",
+          "Bishop to a4.",
+          "Knight develops.",
+          "White castles.",
+          "Nxe4! the Open Variation — Black grabs the centre pawn.",
+          "d4 challenges the centre at once.",
+          "b5 kicks the bishop to save the e4 knight.",
+          "Bishop retreats to b3.",
+          "d5 builds a strong pawn chain supporting e4.",
+          "dxe5 opens the position.",
+          "Be6 — Black has free, active piece play in a sharp middlegame."
+        ]
       }
     ]
   },
@@ -1448,6 +1591,46 @@ const OPENINGS = [
           "Black fianchettoes for safety.",
           "Nf3 develops.",
           "Bishop to g7, bracing for the coming storm."
+        ]
+      },
+      {
+        id: "sveshnikov",
+        name: "Sveshnikov Variation",
+        tier: "deeper",
+        moves: ["e4","c5","Nf3","Nc6","d4","cxd4","Nxd4","Nf6","Nc3","e5","Ndb5","d6"],
+        explanations: [
+          "White takes the centre.",
+          "Black answers c5 — the Sicilian.",
+          "Knight develops, eyeing d4.",
+          "Black develops the knight.",
+          "d4 opens the centre.",
+          "Black captures.",
+          "White recaptures with the knight — the Open Sicilian.",
+          "Black develops, hitting e4.",
+          "Nc3 defends e4.",
+          "e5! the bold Sveshnikov — kicking the knight and claiming space.",
+          "Ndb5 leaps to b5, eyeing the d6 hole.",
+          "d6 plugs the hole — sharp, well-charted play for both sides."
+        ]
+      },
+      {
+        id: "accelerated-dragon",
+        name: "Accelerated Dragon",
+        tier: "deeper",
+        moves: ["e4","c5","Nf3","Nc6","d4","cxd4","Nxd4","g6","Nc3","Bg7","Be3","Nf6"],
+        explanations: [
+          "White takes the centre.",
+          "Black answers c5.",
+          "Knight develops.",
+          "Black develops the knight.",
+          "d4 strikes the centre.",
+          "Black captures.",
+          "White recaptures — the Open Sicilian.",
+          "g6 — the Accelerated Dragon, fianchettoing fast.",
+          "Nc3 develops.",
+          "Bishop to g7, the Dragon bishop on the long diagonal.",
+          "Be3 prepares to castle queenside.",
+          "Nf6 develops — Black aims for quick ...d5 counterplay."
         ]
       }
     ]
@@ -4557,6 +4740,21 @@ const OPENINGS = [
           "Black develops naturally... but misses the threat.",
           "Qxf7# — the Scholar's Mate! (Defend it with ...g6 and ...Nf6.)"
         ]
+      },
+      {
+        id: "defense",
+        name: "How to Defend It",
+        moves: ["e4","e5","Qh5","Nc6","Bc4","g6","Qf3","Nf6"],
+        explanations: [
+          "White opens with e4.",
+          "Black mirrors.",
+          "Qh5?! threatening Qxf7#.",
+          "Nc6 defends e5 (but not yet f7).",
+          "Bc4 doubles up on f7 — the mate is coming!",
+          "g6! the key defense, kicking the queen away.",
+          "Qf3 keeps eyeing f7.",
+          "Nf6! guards f7 and gains time — the mate is gone and Black is better developed."
+        ]
       }
     ]
   },
@@ -4586,6 +4784,24 @@ const OPENINGS = [
           "Bxf7+ — the trap springs!",
           "Ke7, forced.",
           "Nd5# — Légal's Mate: three little pieces deliver checkmate!"
+        ]
+      },
+      {
+        id: "defense",
+        name: "The Safe Path (5.h3)",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","d6","Nc3","Bg4","h3","Bxf3","Qxf3"],
+        explanations: [
+          "e4.",
+          "e5.",
+          "Nf3 attacks e5.",
+          "Nc6 defends.",
+          "Bc4 eyes f7.",
+          "Black plays d6.",
+          "Nc3 develops.",
+          "Bg4 pins the f3 knight.",
+          "h3! questioning the bishop before any Nxe5 trick.",
+          "Bxf3 trades off.",
+          "Qxf3 — no Légal's Mate here; the position is safe and roughly equal."
         ]
       }
     ]
@@ -4617,6 +4833,22 @@ const OPENINGS = [
           "Qxe4+ grabbing a pawn with check.",
           "Be2 blocks — but the bishop is pinned!",
           "Nf3# — smothered mate!"
+        ]
+      },
+      {
+        id: "defense",
+        name: "The Refutation (4.Nxd4)",
+        moves: ["e4","e5","Nf3","Nc6","Bc4","Nd4","Nxd4","exd4","O-O"],
+        explanations: [
+          "e4.",
+          "e5.",
+          "Nf3 attacks e5.",
+          "Nc6 defends.",
+          "Bc4 eyes f7.",
+          "Nd4!? the Shilling Gambit, baiting 4.Nxe5??.",
+          "Nxd4! the calm refutation — just take the knight.",
+          "exd4 recaptures.",
+          "O-O — White is simply better; the trap never triggers."
         ]
       }
     ]
@@ -4650,6 +4882,24 @@ const OPENINGS = [
           "Bxc3 removing the defender.",
           "Qxc3 recaptures...",
           "Qc1# — back-rank checkmate!"
+        ]
+      },
+      {
+        id: "defense",
+        name: "How White Refutes It (6.Nc3)",
+        moves: ["d4","e5","dxe5","Nc6","Nf3","Qe7","Bf4","Qb4+","Bd2","Qxb2","Nc3"],
+        explanations: [
+          "d4.",
+          "e5!? the Englund Gambit.",
+          "dxe5 grabbing the pawn.",
+          "Nc6 hitting e5.",
+          "Nf3 defends.",
+          "Qe7 piling on e5 and eyeing b4.",
+          "Bf4 holds e5.",
+          "Qb4+ the trap try, hitting b2.",
+          "Bd2 blocks.",
+          "Qxb2 grabs the pawn.",
+          "Nc3! the refutation — the greedy queen is now nearly trapped deep in White's camp."
         ]
       }
     ]
@@ -4686,6 +4936,22 @@ const OPENINGS = [
           "Kxd2.",
           "Kxd8 — Black recaptures and is a whole piece up!"
         ]
+      },
+      {
+        id: "defense",
+        name: "Avoiding It (6.Nf3)",
+        moves: ["d4","d5","c4","e6","Nc3","Nf6","Bg5","Nbd7","Nf3"],
+        explanations: [
+          "d4.",
+          "d5.",
+          "c4 — the Queen's Gambit.",
+          "e6 declining.",
+          "Nc3 develops.",
+          "Nf6 develops.",
+          "Bg5 pins.",
+          "Nbd7 — the bait, daring 6.cxd5 exd5 7.Nxd5?? Nxd5! 8.Bxd8 Bb4+.",
+          "Nf3! White simply develops, sidestepping the Elephant Trap entirely."
+        ]
       }
     ]
   },
@@ -4716,6 +4982,22 @@ const OPENINGS = [
           "exf2+ check!",
           "Ke2.",
           "fxg1=N+! the famous knight underpromotion — winning the queen next."
+        ]
+      },
+      {
+        id: "defense",
+        name: "The Correct Path (4.Nf3)",
+        moves: ["d4","d5","c4","e5","dxe5","d4","Nf3","Nc6","g3"],
+        explanations: [
+          "d4.",
+          "d5.",
+          "c4.",
+          "e5!? the Albin Counter-Gambit.",
+          "dxe5 grabbing the pawn.",
+          "d4 clamping the centre.",
+          "Nf3! the correct move — NOT 4.e3??, which walks into the underpromotion trap.",
+          "Nc6 supports d4.",
+          "g3 — White fianchettoes and calmly plays to win the d4 pawn."
         ]
       }
     ]
@@ -4756,8 +5038,42 @@ const OPENINGS = [
           "Qd5.",
           "c4! — the Noah's Ark closes; the b3 bishop is trapped!"
         ]
+      },
+      {
+        id: "defense",
+        name: "Sidestepping the Trap (5.c3)",
+        moves: ["e4","e5","Nf3","Nc6","Bb5","a6","Ba4","d6","c3","Bd7","d4"],
+        explanations: [
+          "e4.",
+          "e5.",
+          "Nf3.",
+          "Nc6.",
+          "Bb5 — the Ruy Lopez.",
+          "a6 questioning the bishop.",
+          "Ba4.",
+          "d6 — the Steinitz Defense.",
+          "c3! the key prophylaxis, giving the bishop a c2 retreat.",
+          "Bd7 develops.",
+          "d4 — now the central break is safe; the Noah's Ark bishop trap no longer works."
+        ]
       }
     ]
   }
 
 ];
+
+// ── Line tiers (v1.5.0) ──────────────────────────────────────────────
+// Every opening ships ~5 curated "essential" lines. Optionally it can also
+// carry advanced "deeper" lines (tier: "deeper") shown behind a "Go deeper"
+// toggle. Deeper lines are a bonus and do NOT count toward completion/mastery.
+function essentialLines(opening) {
+  return (opening.lines || []).filter(l => l.tier !== 'deeper');
+}
+function deeperLines(opening) {
+  return (opening.lines || []).filter(l => l.tier === 'deeper');
+}
+
+// Node (validation scripts) can require this file; the browser ignores it.
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { OPENINGS, essentialLines, deeperLines };
+}

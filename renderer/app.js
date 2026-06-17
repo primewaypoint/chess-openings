@@ -297,9 +297,14 @@
 
     filtered.forEach((opening, cardIdx) => {
       const boardId = 'thumb-' + opening.id;
-      const totalLines = opening.lines ? opening.lines.length : 1;
+      // Progress is measured against essential lines only — "deeper" lines are
+      // optional bonus and never lower the percentage or block 100%.
+      const essentials = essentialLines(opening);
+      const totalLines = essentials.length || 1;
       const completedLines = getCompletedLines(opening.id);
-      const progressPct = totalLines > 0 ? Math.round((completedLines.size / totalLines) * 100) : 0;
+      const essentialIds = new Set(essentials.map((l, i) => l.id || i));
+      const completedEssential = [...completedLines].filter(id => essentialIds.has(id)).length;
+      const progressPct = Math.min(100, Math.round((completedEssential / totalLines) * 100));
       const isDone = completed.has(opening.id);
       const isFav = favorites.has(opening.id);
 

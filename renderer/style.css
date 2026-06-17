@@ -609,12 +609,18 @@ body {
   overflow: hidden; /* panel itself never scrolls */
 }
 
-/* Variants (lines list): scrolls internally, capped */
+/* Variants (lines list): closed → the 5 essential lines are always fully
+   visible and never scroll. Open ("Go deeper") → the lines list (essentials +
+   deeper) becomes a capped scroll area, so it never pushes the nav buttons or
+   Reset off-screen. */
 .study-fixed .variants-section {
-  overflow-y: auto;
-  max-height: 160px;
-  min-height: 32px;
-  flex-shrink: 1;
+  overflow: visible;
+  flex-shrink: 0;
+}
+/* When open, JS locks #variantList to its closed height and sets overflow.
+   This only adds a little breathing room for the scrollbar. */
+.study-fixed .variants-section.deeper-open #variantList {
+  padding-right: 4px;
 }
 
 /* Tab content blocks: flex columns that fill remaining panel space */
@@ -842,6 +848,53 @@ body {
 }
 .variant-item:hover { background: var(--bg-card-hover); color: var(--text-primary); border-color: var(--border); }
 .variant-item.active { border-color: var(--text-secondary); color: var(--text-primary); }
+
+/* "Go deeper" — optional advanced lines (v1.5.0) */
+.go-deeper-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 2px;
+  padding: 7px 11px;
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  text-align: left;
+}
+.go-deeper-toggle:hover { color: var(--text-secondary); border-color: var(--text-muted); }
+.go-deeper-caret {
+  display: inline-block;
+  font-size: 10px;
+  transition: transform 0.18s ease;
+  transform: rotate(-90deg);
+}
+.go-deeper-toggle.open .go-deeper-caret { transform: rotate(0deg); }
+.go-deeper-count {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1px 7px;
+}
+.deeper-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border-subtle);
+}
+.variant-item.variant-deeper { font-size: 12px; }
 
 /* Practice */
 .practice-instruction {
