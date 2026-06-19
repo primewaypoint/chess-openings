@@ -79,22 +79,37 @@ const Study = (function () {
   let board = null;
   let game = new Chess();
 
-  // Lines completed in this visit — lets a mastered opening be practiced
-  // again from scratch without resetting saved progress
+  // Lines practiced in this visit — drives Next line / "All lines done" and
+  // lets a mastered opening be practiced again without touching saved progress
   const sessionDone = new Set();
 
-  function getPersistedDone() {
-    try { return new Set(JSON.parse(localStorage.getItem('completedLines_' + opening.id) || '[]')); }
-    catch { return new Set(); }
+  // ── Practice line pools ──────────────────────────────────────────
+  // Essential lines are the core ones; deeper lines are opt-in bonus.
+  function essentialIdxs() {
+    const all = opening.lines || [];
+    return all.map((l, i) => i).filter(i => all[i].tier !== 'deeper');
   }
-
-  function isFullyDone(doneSet) {
-    // Only the essential lines count toward mastery — "deeper" lines are bonus.
-    const lines = essentialLines(opening);
-    return lines.length > 0 && lines.every((l, i) => doneSet.has(l.id || i));
+  function deeperIdxs() {
+    const all = opening.lines || [];
+    return all.map((l, i) => i).filter(i => all[i].tier === 'deeper');
   }
-
-  let masteredAtLoad = isFullyDone(getPersistedDone());
+  // True once the user has actually completed a deeper line this visit.
+  function hasPracticedDeeper() {
+    const all = opening.lines || [];
+    return all.some((l, i) => l.tier === 'deeper' && sessionDone.has(l.id || i));
+  }
+  // Lines Practice expects you to complete: the essentials, plus the deeper
+  // lines but ONLY once you've chosen to practice a deeper line yourself.
+  function practicePoolIdxs() {
+    return hasPracticedDeeper() ? essentialIdxs().concat(deeperIdxs()) : essentialIdxs();
+  }
+  // Every required line practiced THIS visit? Drives the "All lines done" button.
+  // Note: this looks only at what was practiced, never at what Learn marked done.
+  function allLinesPracticed() {
+    const all = opening.lines || [];
+    const pool = practicePoolIdxs();
+    return pool.length > 0 && pool.every(i => sessionDone.has(all[i].id || i));
+  }
 
   // ── Init panel UI ────────────────────────────────────────────────
   document.getElementById('panelTitle').textContent = opening.name;
@@ -380,6 +395,12 @@ const Study = (function () {
       renderMoveList();
       updateBoardLearn();
     } else {
+      // Practice always starts at the first essential line — never wherever
+      // Learn left the selection (which could be the last line, or a deeper one).
+      const ess = essentialIdxs();
+      currentLineIdx = ess.length ? ess[0] : 0;
+      deeperExpanded = false;
+      buildVariants();
       practiceIdx = 0;
       game = new Chess();
       rebuildBoard();
@@ -569,19 +590,17 @@ const Study = (function () {
       updateStreak();
       sessionDone.add(line?.id || currentLineIdx);
       if (nextBtn) {
-        // Offer the way out when every line is saved as complete — but when
-        // retraining an already-mastered opening, only after every line has
-        // been replayed this session
-        const allSaved = isFullyDone(getPersistedDone());
-        const allDone = allSaved && (!masteredAtLoad || isFullyDone(sessionDone));
-        if (allDone) {
+        // "All done" depends purely on what's been PRACTICED this visit — never
+        // on what Learn marked complete. Deeper lines only join the required
+        // pool once the user has practiced one (see practicePoolIdxs).
+        if (allLinesPracticed()) {
           nextBtn.textContent = '✓ All lines done — Back to openings';
           nextBtn.dataset.mode = 'home';
           nextBtn.style.display = '';
         } else {
           nextBtn.textContent = 'Next line ►';
           nextBtn.dataset.mode = 'next';
-          nextBtn.style.display = essentialLines(opening).length > 1 ? '' : 'none';
+          nextBtn.style.display = practicePoolIdxs().length > 1 ? '' : 'none';
         }
       }
     } else {
@@ -656,21 +675,14 @@ const Study = (function () {
   }
 
   function nextLineIdx() {
-    // Auto-advance only cycles through ESSENTIAL lines so the core training loop
-    // never drags the user into optional "deeper" lines. Deeper lines are reached
-    // only by clicking them directly in the Lines list.
+    // Advance to the next line in the practice pool not yet practiced THIS visit,
+    // wrapping around. The pool is the essentials, and grows to include the
+    // deeper lines once the user has opted into practicing a deeper line.
     const all = opening.lines || [];
-    const idxs = all.map((l, i) => i).filter(i => all[i].tier !== 'deeper');
+    const idxs = practicePoolIdxs();
     if (idxs.length <= 1) return -1;
-    const done = getPersistedDone();
     const pos = idxs.indexOf(currentLineIdx);
-    const start = pos === -1 ? 0 : pos; // if on a deeper line, start from the first essential
-    // Prefer the next essential line never completed, wrapping around
-    for (let i = 1; i <= idxs.length; i++) {
-      const idx = idxs[(start + i) % idxs.length];
-      if (!done.has(all[idx].id || idx)) return idx;
-    }
-    // Everything saved as complete — prefer essentials not replayed this session
+    const start = pos === -1 ? 0 : pos;
     for (let i = 1; i <= idxs.length; i++) {
       const idx = idxs[(start + i) % idxs.length];
       if (!sessionDone.has(all[idx].id || idx)) return idx;
@@ -879,7 +891,6 @@ const Study = (function () {
     } catch {}
 
     sessionDone.clear();
-    masteredAtLoad = false;
     document.getElementById('progressBar').style.width = '0%';
   }
 
