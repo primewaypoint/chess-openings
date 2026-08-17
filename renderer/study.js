@@ -285,7 +285,16 @@ const Study = (function () {
       list.appendChild(el);
     });
 
-    list.querySelector('.active')?.scrollIntoView({ block: 'nearest' });
+    // Keep the active move visible by scrolling ONLY inside the move list —
+    // never scrollIntoView(), which on mobile drags the whole page down on
+    // every Next. Uses live rects so it doesn't depend on offsetParent.
+    const active = list.querySelector('.active');
+    if (active) {
+      const lr = list.getBoundingClientRect();
+      const ar = active.getBoundingClientRect();
+      const delta = (ar.top - lr.top) - (list.clientHeight / 2 - active.offsetHeight / 2);
+      list.scrollTop += delta;
+    }
   }
 
   function updateBoardLearn(animate) {
