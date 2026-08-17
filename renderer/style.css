@@ -657,7 +657,12 @@ body {
 
 .study-board-area {
   flex-shrink: 0;
-  width: min(45vw, calc(100vh - 150px));
+  /* The board is square, so its width also sets its height. Cap it by the real
+     vertical budget so the bottom rank is never clipped in a small window:
+     header padding is inside the border-box height (100vh-56 already counts the
+     56px padding-top → usable 100vh-112), minus the layout padding (48) and the
+     Back button + gap (~45). Fullscreen is width-bound (45vw/max) so unaffected. */
+  width: min(45vw, calc(100vh - 210px));
   max-width: 760px;
   min-width: 320px;
   display: flex;
