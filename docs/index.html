@@ -396,6 +396,16 @@
       color: var(--text-2);
     }
     .dl-note strong { color: var(--text); }
+    .dl-note code {
+      font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      background: var(--bg);
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      padding: 2px 7px;
+      color: var(--gold);
+      white-space: nowrap;
+    }
 
     /* ── Footer ──────────────────────────────────────── */
     footer {
@@ -580,7 +590,8 @@
       </div>
       <div class="dl-note reveal" style="--d:0.22s">
         <strong>First launch:</strong> the app is free and unsigned (signing certificates cost money), so your
-        system warns you once. On Mac: right-click → <strong>Open</strong> → <strong>Open</strong>.
+        system blocks it once. On Mac, open <strong>Terminal</strong> and run
+        <code>xattr -cr /Applications/ChessOpenings.app</code>, then open the app normally.
         On Windows: click <strong>More info</strong> → <strong>Run anyway</strong>. Only the first time.
       </div>
     </div>
