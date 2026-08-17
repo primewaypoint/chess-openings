@@ -204,7 +204,10 @@
       top: 0; left: 0;
       background: rgba(232, 181, 77, 0.42);
       opacity: 0;
-      transition: transform 0.45s cubic-bezier(0.3, 0.8, 0.3, 1), opacity 0.3s ease;
+      /* Only fade — the highlight must snap to the move's squares, never slide
+         across the board (a sliding square lags behind the piece and lands
+         between squares mid-move). */
+      transition: opacity 0.3s ease;
     }
     #board .piece {
       position: absolute;
@@ -723,8 +726,13 @@
       }
       const mover = at(from);
       if (mover) { place(mover.el, to); mover.square = to; }
-      place(hlFrom, from); place(hlTo, to);
-      hlFrom.style.opacity = 1; hlTo.style.opacity = 1;
+      // Fade the highlight out, reposition it while invisible, then fade back
+      // in on the new squares — so it never slides or teleports across the board.
+      hlFrom.style.opacity = 0; hlTo.style.opacity = 0;
+      requestAnimationFrame(() => {
+        place(hlFrom, from); place(hlTo, to);
+        requestAnimationFrame(() => { hlFrom.style.opacity = 1; hlTo.style.opacity = 1; });
+      });
       caption.style.opacity = 0;
       setTimeout(() => { caption.innerHTML = label; caption.style.opacity = 1; }, 130);
     }
