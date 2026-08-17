@@ -2079,13 +2079,18 @@ body.board-slate  .black-3c85d { background-color: #8f8f8f; color: #dcdcdc; }
    naturally. iPad landscape (>820px) keeps the desktop layout.
    ============================================================ */
 @media (max-width: 820px) {
-  /* ---- Header: shrink actions and drop the search box ---- */
+  /* ---- Header: flex so it works with ANY number of children ----
+     (index has logo+search+actions, settings/stats have logo+spacer+actions).
+     Grid with a fixed column count broke the pages with an empty middle div. */
   .header {
-    grid-template-columns: 1fr auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     column-gap: 8px;
     padding: 0 12px;
   }
   .header-search { display: none; }
+  .header > div:empty { display: none; }   /* drop the unused middle spacer */
   .header-right { gap: 6px; }
   .theme-toggle { width: 32px; height: 32px; }
   .streak-widget { padding: 5px 8px; }
@@ -2113,13 +2118,13 @@ body.board-slate  .black-3c85d { background-color: #8f8f8f; color: #dcdcdc; }
     padding: 14px 14px 112px;   /* bottom room for the fixed nav bar */
   }
 
-  /* Board on top, centred. Cap its size to a fraction of the *small* viewport
-     height (svh accounts for Safari's toolbars) so the board never grows so
-     tall that it pushes the tabs / explanation behind the fixed nav bar. */
+  /* Board on top, centred. Sized ONLY by width (never a viewport-height unit),
+     so scrolling — which shows/hides the browser toolbar and changes the
+     height — can never resize the board. Capped so it doesn't dominate the
+     screen; the page scrolls and the fixed nav bar keeps Next reachable. */
   .study-board-area {
     width: 100%;
-    width: min(100%, 44svh);
-    max-width: 440px;
+    max-width: 360px;
     min-width: 0;
     align-self: center;
   }
