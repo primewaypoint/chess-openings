@@ -255,9 +255,14 @@ const Study = (function () {
     });
   }
 
-  // Rebuild board on window resize so it fills the new container size
+  // Rebuild the board only when the WIDTH changes. On mobile, scrolling
+  // shows/hides Safari's toolbars which fires resize with a new HEIGHT — if we
+  // rebuilt on that, the board would jump around wildly while scrolling.
   let resizeTimer;
+  let lastWidth = window.innerWidth;
   window.addEventListener('resize', () => {
+    if (window.innerWidth === lastWidth) return; // height-only change: ignore
+    lastWidth = window.innerWidth;
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(rebuildBoard, 120);
   });
