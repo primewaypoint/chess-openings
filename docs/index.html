@@ -415,7 +415,13 @@
       border-radius: 6px;
       padding: 2px 7px;
       color: var(--gold);
-      white-space: nowrap;
+      /* Wrap on narrow screens instead of forcing the note to overflow the
+         viewport — a fixed-width command like the xattr one is wider than
+         an iPhone screen. */
+      white-space: normal;
+      word-break: break-word;
+      display: inline-block;
+      line-height: 1.5;
     }
 
     /* ── Footer ──────────────────────────────────────── */
@@ -514,7 +520,7 @@
       <div class="stat reveal"><div class="num"><span data-count="91">0</span></div><div class="lbl">Openings</div></div>
       <div class="stat reveal" style="--d:0.08s"><div class="num"><span data-count="412">0</span></div><div class="lbl">Curated lines</div></div>
       <div class="stat reveal" style="--d:0.16s"><div class="num"><span data-count="4259">0</span></div><div class="lbl">Explained moves</div></div>
-      <div class="stat reveal" style="--d:0.24s"><div class="num"><span class="accent">€0</span></div><div class="lbl">Forever</div></div>
+      <div class="stat reveal" style="--d:0.24s"><div class="num"><span data-count="5">0</span></div><div class="lbl">Difficulty levels</div></div>
     </div>
   </div>
 
