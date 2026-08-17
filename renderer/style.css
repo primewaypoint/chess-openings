@@ -1542,6 +1542,10 @@ kbd {
   gap: 13px;
   min-width: 0;
 }
+/* The title/sub wrapper must be allowed to shrink, otherwise the nowrap sub
+   text keeps its full width and shoves the button on top of it on narrow
+   screens. */
+.review-banner-left > div { min-width: 0; }
 .review-banner-icon {
   width: 38px;
   height: 38px;
@@ -2092,6 +2096,13 @@ body.board-slate  .black-3c85d { background-color: #8f8f8f; color: #dcdcdc; }
     padding: 12px 14px 40px;
   }
 
+  /* ---- Daily Review banner: compact, no overlap on narrow screens ----
+     The description is secondary; dropping it guarantees the title + gold
+     button + close always fit without the button landing on the text. */
+  .review-banner { padding: 12px 14px; }
+  .review-banner-sub { display: none; }
+  .review-banner-title { font-size: 15px; }
+
   /* ---- Study / Review: unlock the viewport lock and stack ---- */
   .study-fixed { height: auto; overflow: visible; }
   .study-layout {
@@ -2099,12 +2110,15 @@ body.board-slate  .black-3c85d { background-color: #8f8f8f; color: #dcdcdc; }
     align-items: stretch;
     height: auto;
     gap: 14px;
-    padding: 14px 14px 96px;   /* bottom room for the fixed nav bar */
+    padding: 14px 14px 112px;   /* bottom room for the fixed nav bar */
   }
 
-  /* Board on top, full width (capped), centred */
+  /* Board on top, centred. Cap its size to a fraction of the *small* viewport
+     height (svh accounts for Safari's toolbars) so the board never grows so
+     tall that it pushes the tabs / explanation behind the fixed nav bar. */
   .study-board-area {
     width: 100%;
+    width: min(100%, 44svh);
     max-width: 440px;
     min-width: 0;
     align-self: center;
@@ -2138,20 +2152,47 @@ body.board-slate  .black-3c85d { background-color: #8f8f8f; color: #dcdcdc; }
   #learnContent .move-list        { order: 2; }
   #learnContent .reset-btn        { order: 3; }
 
-  /* ---- Move navigation pinned to the bottom, always reachable ----
+  /* ---- Prominent move-navigation bar pinned to the bottom ----
      Only the active tab's bar shows (the other tab's content is display:none,
-     so its fixed bar is not rendered). */
+     so its fixed bar is not rendered). Big, obvious touch targets: a filled
+     gold "Next / Skip" as the primary action, a clear outlined "Prev / Back". */
   .study-fixed .nav-buttons {
     position: fixed;
     left: 0; right: 0; bottom: 0;
     z-index: 150;
-    gap: 8px;
+    gap: 10px;
     margin: 0;
-    padding: 9px 12px calc(9px + env(safe-area-inset-bottom));
+    padding: 10px 14px calc(12px + env(safe-area-inset-bottom));
     background: var(--bg-header);
     border-top: 1px solid var(--border-subtle);
+    box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.45);
   }
-  .study-fixed .nav-buttons .nav-btn { flex: 1; padding: 12px 8px; }
+  /* Jump-to-first / jump-to-last aren't needed on a phone — keep it to the two
+     that matter so they can be big. */
+  #btnFirst, #btnLast, #btnPracticeFirst { display: none; }
+
+  .study-fixed .nav-buttons .nav-btn {
+    flex: 1;
+    min-height: 52px;
+    padding: 0 10px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 13px;
+  }
+  /* Primary "advance" button — filled gold, impossible to miss */
+  #btnNext, #btnPracticeNext {
+    flex: 1.9;
+    background: #e8b54d;
+    color: #1a1a1a;
+    border-color: #e8b54d;
+  }
+  #btnNext:disabled, #btnPracticeNext:disabled { opacity: 0.35; }
+  /* Secondary back button — legible, not the faint default */
+  #btnPrev, #btnPracticePrev {
+    color: var(--text-primary);
+    background: var(--bg-input);
+  }
+  #btnPrev:disabled, #btnPracticePrev:disabled { opacity: 0.4; }
 
   /* Bigger tap targets for touch */
   .variant-item,
