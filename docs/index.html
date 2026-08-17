@@ -218,8 +218,16 @@
       z-index: 2;
       pointer-events: none;
     }
-    #board .piece img { width: 100%; height: 100%; display: block; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.25)); }
-    #board .piece.captured { opacity: 0; transform: scale(0.55) !important; z-index: 1; }
+    #board .piece img {
+      width: 100%; height: 100%; display: block;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.25));
+      transition: transform 0.38s cubic-bezier(0.3, 0.8, 0.3, 1);
+    }
+    /* Captured piece fades and shrinks IN PLACE. The scale lives on the <img>,
+       not the .piece — otherwise it clobbers the translate() that positions the
+       piece and flings it to the a8 corner mid-capture. */
+    #board .piece.captured { opacity: 0; z-index: 1; }
+    #board .piece.captured img { transform: scale(0.48); }
     #board.resetting .piece, #board.resetting .hl { transition: opacity 0.5s ease; opacity: 0; }
     .board-caption {
       margin-top: 20px;
@@ -698,7 +706,7 @@
 
     let pieces = []; // { el, square }
 
-    function setup() {
+    function setup(fadeIn) {
       pieces.forEach(p => p.el.remove());
       pieces = [];
       START.forEach(([type, sq]) => {
@@ -706,9 +714,11 @@
         el.className = 'piece';
         el.innerHTML = `<img src="pieces/${type}.png" alt="">`;
         place(el, sq);
+        if (fadeIn) el.style.opacity = '0';
         board.appendChild(el);
         pieces.push({ el, square: sq });
       });
+      if (fadeIn) requestAnimationFrame(() => pieces.forEach(p => p.el.style.opacity = '1'));
       hlFrom.style.opacity = 0;
       hlTo.style.opacity = 0;
     }
@@ -751,8 +761,8 @@
         } else {
           board.classList.add('resetting');
           later(() => {
-            setup();
             board.classList.remove('resetting');
+            setup(true);
             caption.innerHTML = '&nbsp;';
             i = 0;
             later(step, 900);
