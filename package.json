@@ -1,7 +1,7 @@
 {
   "name": "chess-openings",
-  "version": "1.5.3",
-  "description": "Chess Opening Trainer — free, offline, open source",
+  "version": "1.5.4",
+  "description": "Chess Opening Trainer — offline, open source",
   "author": "primewaypoint",
   "license": "GPL-3.0",
   "main": "main.js",
