@@ -130,9 +130,13 @@
   }
   renderHeatmap();
 
-  // Re-render on window resize so the grid always fills the card
-  let heatmapResizeTimer;
+  // Re-render only when the WIDTH changes. On mobile, scrolling toggles the
+  // browser toolbar (height change) which would otherwise re-render the heatmap
+  // on every scroll frame and make it flicker.
+  let heatmapResizeTimer, heatmapLastW = window.innerWidth;
   window.addEventListener('resize', () => {
+    if (window.innerWidth === heatmapLastW) return;
+    heatmapLastW = window.innerWidth;
     clearTimeout(heatmapResizeTimer);
     heatmapResizeTimer = setTimeout(renderHeatmap, 150);
   });

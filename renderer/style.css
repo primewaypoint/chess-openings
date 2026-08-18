@@ -2208,7 +2208,7 @@ body.board-slate  .black-3c85d { background-color: #8f8f8f; color: #dcdcdc; }
 
 /* Extra squeeze for small phones */
 @media (max-width: 430px) {
-  .header-logo .logo-text { display: none; }   /* keep just the crown icon */
+  .kbd-hint { display: none; }   /* no physical keyboard on phones */
   .openings-grid { padding: 10px 10px 36px; }
   .study-layout { padding: 12px 10px 96px; }
 }
