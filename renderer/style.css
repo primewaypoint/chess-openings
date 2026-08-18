@@ -1215,6 +1215,21 @@ body {
 .settings-danger-btn:hover { opacity: 1; border-color: var(--diff-advanced); }
 .settings-danger-btn.confirming { opacity: 1; border-color: var(--diff-advanced); }
 
+.settings-secondary-btn {
+  background: none;
+  border: 1px solid var(--border-2);
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.settings-secondary-btn:hover { border-color: var(--text-secondary); background: var(--bg-card-hover); }
+.settings-secondary-btn.confirming { border-color: var(--gold, #e8b54d); color: var(--gold, #e8b54d); }
+
 /* =====================
    SCROLLBAR
    ===================== */

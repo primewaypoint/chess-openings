@@ -207,7 +207,7 @@
     const pool = reviewPoolSize();
     if (pool === 0) { el.style.display = 'none'; return; }
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayStr(); // local date — see date-utils.js
     // Dismissed banners stay hidden for the rest of the day only
     if (localStorage.getItem('reviewBannerHidden') === today) {
       el.style.display = 'none';

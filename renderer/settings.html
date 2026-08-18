@@ -47,6 +47,27 @@
       <div class="settings-page-title">Settings</div>
 
       <div class="settings-section">
+        <div class="settings-section-title">Backup</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Export progress</div>
+              <div class="settings-row-desc">Save streak, mastered openings, review schedule and stats to a file. Everything here lives only on this device — back it up before switching phones or reinstalling.</div>
+            </div>
+            <button class="settings-secondary-btn" id="exportBtn">Export</button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Import progress</div>
+              <div class="settings-row-desc">Restore from a previously exported file. This replaces your current progress on this device.</div>
+            </div>
+            <button class="settings-secondary-btn" id="importBtn">Import</button>
+            <input type="file" id="importFile" accept="application/json" style="display:none">
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
         <div class="settings-section-title">Progress</div>
         <div class="settings-card">
           <div class="settings-row">
@@ -114,6 +135,7 @@
     </div>
   </main>
 
+  <script src="date-utils.js"></script>
   <script src="sounds.js"></script>
   <script src="board-theme.js"></script>
   <script src="settings.js"></script>

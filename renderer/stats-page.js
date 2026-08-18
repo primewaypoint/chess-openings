@@ -61,7 +61,7 @@
     container.innerHTML = '';
     monthsEl.innerHTML = '';
     const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
+    const todayS = todayStr(); // local date — see date-utils.js
 
     // Fit as many full weeks as the card width allows (17px per column)
     const avail = (wrapWidth || 600) - (labels ? labels.offsetWidth : 26) - 14;
@@ -109,16 +109,16 @@
       for (let day = 0; day < 7; day++) {
         const d = new Date(start);
         d.setDate(start.getDate() + week * 7 + day);
-        const dateStr = d.toISOString().split('T')[0];
+        const dateStr = localDateStr(d);
         const cell = document.createElement('div');
 
-        if (dateStr > todayStr) {
+        if (dateStr > todayS) {
           cell.className = 'heat-cell future';
         } else {
           const n = activity[dateStr] || 0;
           cell.className = 'heat-cell l' + level(n);
           cell.title = `${dateStr} — ${n} line${n !== 1 ? 's' : ''}`;
-          if (dateStr === todayStr) cell.classList.add('today');
+          if (dateStr === todayS) cell.classList.add('today');
           // Subtle wave-in so the grid feels alive on load
           cell.style.animationDelay = Math.min(cellIdx * 4, 500) + 'ms';
         }

@@ -406,7 +406,7 @@ const Review = (function () {
     finished = true;
     cancelAutoPlay();
 
-    localStorage.setItem('dailyReviewDate', new Date().toISOString().split('T')[0]);
+    localStorage.setItem('dailyReviewDate', todayStr()); // local date — see date-utils.js
 
     // Daily Review counts toward the streak
     const res = recordStreakDay();

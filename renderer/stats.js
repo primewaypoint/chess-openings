@@ -3,7 +3,7 @@
 // Training statistics — localStorage-backed, shared by study, review and stats pages
 const Stats = (function () {
 
-  function today() { return new Date().toISOString().split('T')[0]; }
+  function today() { return todayStr(); } // local date — see date-utils.js
 
   function load(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; }

@@ -95,3 +95,83 @@ resetBtn.addEventListener('click', () => {
     grid.appendChild(el);
   });
 })();
+
+// ── Backup: export / import progress ────────────────────────────
+// Backs up the ENTIRE localStorage (streak, mastery, review schedule, stats,
+// preferences) as one JSON file. This is the only way to move progress
+// between devices or survive a reinstall — there is no server/account.
+const exportBtn = document.getElementById('exportBtn');
+const importBtn = document.getElementById('importBtn');
+const importFile = document.getElementById('importFile');
+
+exportBtn?.addEventListener('click', () => {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key) data[key] = localStorage.getItem(key);
+  }
+  const payload = {
+    app: 'ChessOpenings',
+    exportedAt: new Date().toISOString(),
+    data
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const stamp = typeof todayStr === 'function' ? todayStr() : new Date().toISOString().split('T')[0];
+  a.href = url;
+  a.download = `chessopenings-backup-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+
+  exportBtn.textContent = '✓ Saved';
+  setTimeout(() => { exportBtn.textContent = 'Export'; }, 2000);
+});
+
+importBtn?.addEventListener('click', () => {
+  if (!importBtn.classList.contains('confirming')) {
+    importBtn.classList.add('confirming');
+    importBtn.textContent = 'Choose file to confirm';
+    setTimeout(() => {
+      importBtn.classList.remove('confirming');
+      importBtn.textContent = 'Import';
+    }, 4000);
+    return;
+  }
+  importFile.click();
+});
+
+importFile?.addEventListener('change', () => {
+  const file = importFile.files && importFile.files[0];
+  importFile.value = ''; // allow picking the same file again later
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const payload = JSON.parse(reader.result);
+      if (!payload || payload.app !== 'ChessOpenings' || typeof payload.data !== 'object') {
+        throw new Error('not a ChessOpenings backup file');
+      }
+      Object.keys(payload.data).forEach(key => {
+        localStorage.setItem(key, payload.data[key]);
+      });
+      importBtn.classList.remove('confirming');
+      importBtn.textContent = '✓ Restored — reloading…';
+      setTimeout(() => window.location.reload(), 900);
+    } catch (e) {
+      importBtn.classList.remove('confirming');
+      importBtn.textContent = 'Invalid file';
+      importBtn.style.borderColor = 'var(--diff-advanced)';
+      importBtn.style.color = 'var(--diff-advanced)';
+      setTimeout(() => {
+        importBtn.textContent = 'Import';
+        importBtn.style.borderColor = '';
+        importBtn.style.color = '';
+      }, 2500);
+    }
+  };
+  reader.readAsText(file);
+});

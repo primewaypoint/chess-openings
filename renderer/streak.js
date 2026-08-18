@@ -14,26 +14,20 @@ function getStreakDataGlobal() {
 // Returns 0 when the streak is broken (last completed line was before yesterday)
 function getEffectiveStreak(data) {
   if (!data.lastDate || !data.count) return 0;
-  const today = new Date().toISOString().split('T')[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-  return (data.lastDate === today || data.lastDate === yesterday) ? data.count : 0;
+  return (data.lastDate === todayStr() || data.lastDate === daysAgoStr(1)) ? data.count : 0;
 }
 
 // Marks today as completed (extends or restarts the streak).
 // Returns { count, isNew } — isNew is false when today was already recorded.
 function recordStreakDay() {
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayStr();
   const data = getStreakDataGlobal();
   if (data.lastDate === today) return { count: data.count, isNew: false };
 
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-  const newCount = data.lastDate === yesterday ? data.count + 1 : 1;
+  const newCount = data.lastDate === daysAgoStr(1) ? data.count + 1 : 1;
   const completedDates = new Set(data.completedDates || []);
   // Backfill all days in the streak so no date is ever missing
-  for (let i = 0; i < newCount; i++) {
-    const d = new Date(Date.now() - i * 86400000);
-    completedDates.add(d.toISOString().split('T')[0]);
-  }
+  for (let i = 0; i < newCount; i++) completedDates.add(daysAgoStr(i));
   const sortedDates = [...completedDates].sort().slice(-60);
   localStorage.setItem('streakData',
     JSON.stringify({ count: newCount, lastDate: today, completedDates: sortedDates }));
@@ -94,11 +88,7 @@ function renderStreakModal() {
   // Reconstruct any missing dates from count+lastDate (handles old data without completedDates)
   const completedDates = new Set(data.completedDates || []);
   if (count > 0 && data.lastDate) {
-    const base = new Date(data.lastDate + 'T12:00:00');
-    for (let i = 0; i < count; i++) {
-      const d = new Date(base.getTime() - i * 86400000);
-      completedDates.add(d.toISOString().split('T')[0]);
-    }
+    for (let i = 0; i < count; i++) completedDates.add(daysAgoStr(i, data.lastDate + 'T12:00:00'));
   }
   renderWeekDots([...completedDates]);
 }
@@ -108,7 +98,7 @@ function renderWeekDots(completedDates) {
   if (!container) return;
 
   const today      = new Date();
-  const todayStr   = today.toISOString().split('T')[0];
+  const todayS     = todayStr();
   const dayOfWeek  = today.getDay(); // 0=Sun
   const labels     = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
   const completed  = new Set(completedDates);
@@ -118,10 +108,10 @@ function renderWeekDots(completedDates) {
   for (let i = 0; i < 7; i++) {
     const d = new Date(today);
     d.setDate(today.getDate() - dayOfWeek + i);
-    const dateStr  = d.toISOString().split('T')[0];
-    const isToday  = dateStr === todayStr;
+    const dateStr  = localDateStr(d);
+    const isToday  = dateStr === todayS;
     const isDone   = completed.has(dateStr);
-    const isFuture = dateStr > todayStr;
+    const isFuture = dateStr > todayS;
 
     const col   = document.createElement('div');
     col.className = 'week-col';
