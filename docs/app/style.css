@@ -58,6 +58,16 @@ body.light {
    ===================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Header height that grows to clear the iOS status bar when the app runs
+   standalone (installed PWA) — env() resolves to 0 in a normal browser tab,
+   so nothing changes there. Fixes the header overlapping the clock/battery
+   row when "Open as Web App" is used on the Home Screen icon. */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --header-h: calc(56px + var(--safe-top));
+}
+
 /* Buttons/links: no double-tap-to-zoom, no 300ms tap delay on mobile Safari.
    Fixes iOS zooming into the board area when Next/Skip is tapped rapidly. */
 button, a, [role="button"], .opening-card, .variant-item, .go-deeper-toggle {
@@ -82,7 +92,8 @@ body {
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 56px;
+  height: var(--header-h);
+  padding-top: var(--safe-top);
   background: var(--bg-header);
   border-bottom: 1px solid var(--border-subtle);
   display: grid;
@@ -421,7 +432,7 @@ body {
    MAIN CONTENT
    ===================== */
 .main-content {
-  padding-top: 56px;
+  padding-top: var(--header-h);
 }
 
 /* =====================
@@ -606,7 +617,7 @@ body {
    Only the move list and the lines (variants) section scroll internally.
    Nav buttons, hint, reset, etc. are always visible. */
 .study-fixed {
-  height: calc(100vh - 56px);
+  height: calc(100vh - var(--header-h));
   overflow: hidden;
 }
 .study-fixed .study-panel {
@@ -668,7 +679,7 @@ body {
      header padding is inside the border-box height (100vh-56 already counts the
      56px padding-top → usable 100vh-112), minus the layout padding (48) and the
      Back button + gap (~45). Fullscreen is width-bound (45vw/max) so unaffected. */
-  width: min(45vw, calc(100vh - 210px));
+  width: min(45vw, calc(100vh - var(--header-h) - 154px));
   max-width: 760px;
   min-width: 320px;
   display: flex;
