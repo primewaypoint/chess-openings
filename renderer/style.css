@@ -93,7 +93,6 @@ body {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: var(--header-h);
-  padding-top: var(--safe-top);
   background: var(--bg-header);
   border-bottom: 1px solid var(--border-subtle);
   display: grid;
@@ -101,7 +100,13 @@ body {
   grid-template-columns: 1fr minmax(140px, 320px) 1fr;
   column-gap: 14px;
   align-items: center;
-  padding: 0 20px;
+  /* Longhand only — a later "padding: 0 20px" shorthand in this same rule
+     used to silently overwrite padding-top and pull content back up behind
+     the notch/Dynamic Island in standalone mode. Never reintroduce a padding
+     shorthand here. */
+  padding-top: var(--safe-top);
+  padding-left: 20px;
+  padding-right: 20px;
   z-index: 200;
   transition: background 0.2s ease;
 }
@@ -2130,7 +2135,11 @@ body.board-slate  .black-3c85d { background-color: #8f8f8f; color: #dcdcdc; }
     align-items: center;
     justify-content: space-between;
     column-gap: 8px;
-    padding: 0 12px;
+    /* Longhand, NOT the "padding: 0 12px" shorthand — that would zero out the
+       base rule's padding-top: var(--safe-top), pulling header content back
+       up to y=0 and behind the Dynamic Island/notch in standalone mode. */
+    padding-left: 12px;
+    padding-right: 12px;
   }
   .header-search { display: none; }
   .header > div:empty { display: none; }   /* drop the unused middle spacer */
