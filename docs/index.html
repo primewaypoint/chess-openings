@@ -408,25 +408,28 @@
     }
     .dl-steps li {
       display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      font-size: 12px;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
       color: var(--text-2);
-      line-height: 1.4;
     }
+    /* The li's only two flex children are the number circle and this text
+       span — text + <strong> must NOT be direct flex children themselves,
+       or flexbox treats each text run as its own item and wraps them
+       independently instead of as one flowing phrase. */
+    .dl-steps li .dl-step-t { flex: 1; }
     .dl-steps li strong { color: var(--text); font-weight: 600; }
-    .dl-steps li span {
+    .dl-steps li .dl-step-n {
       flex-shrink: 0;
-      width: 16px; height: 16px;
+      width: 18px; height: 18px;
       border-radius: 50%;
       background: var(--gold-soft);
       color: var(--gold);
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 1px;
     }
     .dl-note {
       margin-top: 30px;
@@ -650,9 +653,9 @@
           <p>Play right away — install for offline later</p>
           <span class="get">Open the app →</span>
           <ol class="dl-steps">
-            <li><span>1</span>Once open, tap the <strong>Share</strong> icon</li>
-            <li><span>2</span>Scroll down, tap <strong>Add to Home Screen</strong></li>
-            <li><span>3</span>Tap <strong>Add</strong> — now it works offline</li>
+            <li><span class="dl-step-n">1</span><span class="dl-step-t">Tap <strong>Share</strong></span></li>
+            <li><span class="dl-step-n">2</span><span class="dl-step-t">Tap <strong>Add to Home Screen</strong></span></li>
+            <li><span class="dl-step-n">3</span><span class="dl-step-t">Tap <strong>Add</strong></span></li>
           </ol>
         </a>
       </div>
