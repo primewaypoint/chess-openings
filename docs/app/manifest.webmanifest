@@ -1,0 +1,15 @@
+{
+  "name": "ChessOpenings",
+  "short_name": "ChessOpenings",
+  "description": "Offline, open source chess opening trainer.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "../assets/icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "../assets/icon.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

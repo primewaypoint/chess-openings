@@ -1,0 +1,135 @@
+'use strict';
+
+// Shared streak modal — included by index.html and study.html
+
+function getStreakDataGlobal() {
+  try {
+    return JSON.parse(localStorage.getItem('streakData') ||
+      '{"count":0,"lastDate":null,"completedDates":[]}');
+  } catch {
+    return { count: 0, lastDate: null, completedDates: [] };
+  }
+}
+
+// Returns 0 when the streak is broken (last completed line was before yesterday)
+function getEffectiveStreak(data) {
+  if (!data.lastDate || !data.count) return 0;
+  return (data.lastDate === todayStr() || data.lastDate === daysAgoStr(1)) ? data.count : 0;
+}
+
+// Marks today as completed (extends or restarts the streak).
+// Returns { count, isNew } — isNew is false when today was already recorded.
+function recordStreakDay() {
+  const today = todayStr();
+  const data = getStreakDataGlobal();
+  if (data.lastDate === today) return { count: data.count, isNew: false };
+
+  const newCount = data.lastDate === daysAgoStr(1) ? data.count + 1 : 1;
+  const completedDates = new Set(data.completedDates || []);
+  // Backfill all days in the streak so no date is ever missing
+  for (let i = 0; i < newCount; i++) completedDates.add(daysAgoStr(i));
+  const sortedDates = [...completedDates].sort().slice(-60);
+  localStorage.setItem('streakData',
+    JSON.stringify({ count: newCount, lastDate: today, completedDates: sortedDates }));
+  return { count: newCount, isNew: true };
+}
+
+// Pop animation on the header flame when the streak goes up
+function bumpStreakWidget() {
+  const widget = document.getElementById('streakWidget');
+  if (!widget) return;
+  widget.classList.remove('bump');
+  void widget.offsetWidth; // restart the animation
+  widget.classList.add('bump');
+  setTimeout(() => widget.classList.remove('bump'), 700);
+}
+
+function initStreakModal() {
+  const widget  = document.getElementById('streakWidget');
+  const overlay = document.getElementById('streakModal');
+  if (!widget || !overlay) return;
+
+  widget.addEventListener('click', () => {
+    renderStreakModal();
+    overlay.classList.add('open');
+  });
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') overlay.classList.remove('open');
+  });
+}
+
+function renderStreakModal() {
+  const data  = getStreakDataGlobal();
+  const count = getEffectiveStreak(data);
+
+  const flameEl = document.getElementById('streakModalFlame');
+  if (flameEl) flameEl.classList.toggle('zero', count === 0);
+
+  const countEl = document.getElementById('streakModalCount');
+  if (countEl) countEl.textContent = count === 1 ? '1 day streak' : `${count} day streak`;
+
+  const msgEl = document.getElementById('streakModalMsg');
+  if (msgEl) {
+    let msg;
+    if      (count === 0)  msg = 'Start a streak by completing a line today!';
+    else if (count === 1)  msg = 'Great start! Come back tomorrow.';
+    else if (count < 7)    msg = `${count} days in a row — keep it up!`;
+    else if (count === 7)  msg = "A full week! You're on fire.";
+    else if (count < 30)   msg = `${count} days strong. Incredible!`;
+    else                   msg = `${count} days. Absolutely unstoppable.`;
+    msgEl.textContent = msg;
+  }
+
+  // Reconstruct any missing dates from count+lastDate (handles old data without completedDates)
+  const completedDates = new Set(data.completedDates || []);
+  if (count > 0 && data.lastDate) {
+    for (let i = 0; i < count; i++) completedDates.add(daysAgoStr(i, data.lastDate + 'T12:00:00'));
+  }
+  renderWeekDots([...completedDates]);
+}
+
+function renderWeekDots(completedDates) {
+  const container = document.getElementById('streakWeek');
+  if (!container) return;
+
+  const today      = new Date();
+  const todayS     = todayStr();
+  const dayOfWeek  = today.getDay(); // 0=Sun
+  const labels     = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const completed  = new Set(completedDates);
+
+  container.innerHTML = '';
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - dayOfWeek + i);
+    const dateStr  = localDateStr(d);
+    const isToday  = dateStr === todayS;
+    const isDone   = completed.has(dateStr);
+    const isFuture = dateStr > todayS;
+
+    const col   = document.createElement('div');
+    col.className = 'week-col';
+
+    const label = document.createElement('div');
+    label.className = 'week-label' + (isToday ? ' today' : '');
+    label.textContent = labels[i];
+
+    const dot = document.createElement('div');
+    dot.className = 'week-dot' +
+      (isDone             ? ' done'   : '') +
+      (isToday && !isDone ? ' today'  : '') +
+      (isFuture           ? ' future' : '');
+
+    col.appendChild(label);
+    col.appendChild(dot);
+    container.appendChild(col);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initStreakModal);
