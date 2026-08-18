@@ -58,6 +58,12 @@ body.light {
    ===================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Buttons/links: no double-tap-to-zoom, no 300ms tap delay on mobile Safari.
+   Fixes iOS zooming into the board area when Next/Skip is tapped rapidly. */
+button, a, [role="button"], .opening-card, .variant-item, .go-deeper-toggle {
+  touch-action: manipulation;
+}
+
 html { font-size: 14px; }
 
 body {
