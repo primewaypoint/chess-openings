@@ -247,7 +247,7 @@ body {
    ===================== */
 .filter-bar {
   position: sticky;
-  top: 56px;
+  top: var(--header-h);
   z-index: 100;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border-subtle);
@@ -589,7 +589,7 @@ body {
    ===================== */
 .progress-bar-container {
   position: fixed;
-  top: 56px; left: 0; right: 0;
+  top: var(--header-h); left: 0; right: 0;
   height: 2px;
   background: transparent;
   z-index: 150;
@@ -1715,7 +1715,17 @@ kbd {
   opacity: 1;
   pointer-events: all;
 }
-.review-empty { position: fixed; opacity: 1; pointer-events: all; background: var(--bg-primary); }
+/* This can be the very first thing shown (nothing due yet) — never cover the
+   header, so its Home logo / nav icons stay a guaranteed way out even if the
+   "Browse openings" button is ever missed or fails to register a tap. */
+.review-empty {
+  position: fixed;
+  top: var(--header-h); left: 0; right: 0; bottom: 0;
+  opacity: 1;
+  pointer-events: all;
+  background: var(--bg-primary);
+  z-index: 150;
+}
 
 .review-summary-box,
 .review-empty-box {
