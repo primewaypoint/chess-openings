@@ -1189,7 +1189,8 @@ body {
   font-size: 13px;
   color: var(--text-secondary);
   text-align: right;
-  flex-shrink: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .settings-danger-btn {

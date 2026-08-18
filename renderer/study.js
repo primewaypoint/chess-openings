@@ -982,6 +982,38 @@ const Study = (function () {
   renderMoveList();
   updateBoardLearn();
 
-  return { goNext, goPrev, goFirst, goLast, reset, switchTab, showHint, resetPractice, practicePrev, practiceFirst, practiceNext, goToNextLine, resetOpeningProgress };
+  // Move-navigation must never scroll the PAGE. Some mobile browsers (Edge on
+  // iOS) still nudge the page down when you tap a button repeatedly. Wrap the
+  // nav actions so any page-scroll they trigger is immediately undone — synchronously
+  // and again on the next frame, to also catch the browser's async scroll.
+  function noPageScroll(fn) {
+    return function () {
+      const y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      const r = fn.apply(this, arguments);
+      const restore = () => {
+        const now = window.pageYOffset || document.documentElement.scrollTop || 0;
+        if (now !== y) window.scrollTo(0, y);
+      };
+      restore();
+      requestAnimationFrame(restore);
+      return r;
+    };
+  }
+
+  return {
+    goNext:  noPageScroll(goNext),
+    goPrev:  noPageScroll(goPrev),
+    goFirst: noPageScroll(goFirst),
+    goLast:  noPageScroll(goLast),
+    reset,
+    switchTab,
+    showHint: noPageScroll(showHint),
+    resetPractice,
+    practicePrev:  noPageScroll(practicePrev),
+    practiceFirst: noPageScroll(practiceFirst),
+    practiceNext:  noPageScroll(practiceNext),
+    goToNextLine,
+    resetOpeningProgress
+  };
 
 })();
