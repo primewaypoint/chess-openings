@@ -1711,29 +1711,28 @@ kbd {
 .review-session {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;   /* wide enough that nothing (dot or halo) can ever touch a neighbour */
   margin-bottom: 14px;
 }
 .review-dot {
-  /* Whole-pixel size and border: a 9px circle with a 1.5px border rendered the
-     ring unevenly (it looked notched/cut on the current dot). */
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: var(--bg-input);
   border: 2px solid var(--border);
-  flex-shrink: 0;          /* never let the flex row squash them out of round */
-  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 .review-dot.current {
-  /* FILLED, not a ring. A 2px border on a 10px circle is too thin to rasterise
-     evenly, and in high-contrast gold the unevenness reads as a notch cut out
-     of the circle (the grey dots hide it only because they are low contrast).
-     A solid disc has no thin ring to render badly, so it is always perfectly
-     round; the halo carries the "you are here" emphasis. */
+  /* Bigger solid disc, nothing else. Earlier attempts used a box-shadow halo
+     for emphasis, but its 3px spread reached past the 6px gap and visually
+     collided with the next dot — where the translucent gold overlapped the
+     neighbour's dark fill it read as a bite taken out of the circle. No
+     box-shadow, no border, no overlap possible: just a bigger plain circle. */
+  width: 13px;
+  height: 13px;
   background: #e8b54d;
-  border-color: #e8b54d;
-  box-shadow: 0 0 0 3px rgba(232, 181, 77, 0.22);
+  border: none;
 }
 .review-dot.done.clean    { background: var(--diff-beginner); border-color: var(--diff-beginner); }
 .review-dot.done.mistake  { background: var(--diff-intermediate); border-color: var(--diff-intermediate); }

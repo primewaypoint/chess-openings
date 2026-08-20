@@ -5,7 +5,7 @@
 // app shell on install and then serve cache-first (falling back to the network
 // only for things not yet cached). Bump CACHE_VERSION whenever any app file
 // changes so returning users pick up the new version.
-const CACHE_VERSION = 'chessopenings-1.6.0-20260820200619';
+const CACHE_VERSION = 'chessopenings-1.6.0-20260820213225';
 
 const PRECACHE = [
   './',
