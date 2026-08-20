@@ -1726,10 +1726,14 @@ kbd {
   transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .review-dot.current {
+  /* FILLED, not a ring. A 2px border on a 10px circle is too thin to rasterise
+     evenly, and in high-contrast gold the unevenness reads as a notch cut out
+     of the circle (the grey dots hide it only because they are low contrast).
+     A solid disc has no thin ring to render badly, so it is always perfectly
+     round; the halo carries the "you are here" emphasis. */
+  background: #e8b54d;
   border-color: #e8b54d;
-  /* A halo instead of transform: scale(1.25) — scaling a 9px bordered circle by
-     a fraction is what broke the ring's roundness. */
-  box-shadow: 0 0 0 3px rgba(232, 181, 77, 0.18);
+  box-shadow: 0 0 0 3px rgba(232, 181, 77, 0.22);
 }
 .review-dot.done.clean    { background: var(--diff-beginner); border-color: var(--diff-beginner); }
 .review-dot.done.mistake  { background: var(--diff-intermediate); border-color: var(--diff-intermediate); }
