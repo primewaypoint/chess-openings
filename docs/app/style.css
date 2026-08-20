@@ -1715,16 +1715,21 @@ kbd {
   margin-bottom: 14px;
 }
 .review-dot {
-  width: 9px;
-  height: 9px;
+  /* Whole-pixel size and border: a 9px circle with a 1.5px border rendered the
+     ring unevenly (it looked notched/cut on the current dot). */
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--bg-input);
-  border: 1.5px solid var(--border);
-  transition: all 0.2s ease;
+  border: 2px solid var(--border);
+  flex-shrink: 0;          /* never let the flex row squash them out of round */
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .review-dot.current {
   border-color: #e8b54d;
-  transform: scale(1.25);
+  /* A halo instead of transform: scale(1.25) — scaling a 9px bordered circle by
+     a fraction is what broke the ring's roundness. */
+  box-shadow: 0 0 0 3px rgba(232, 181, 77, 0.18);
 }
 .review-dot.done.clean    { background: var(--diff-beginner); border-color: var(--diff-beginner); }
 .review-dot.done.mistake  { background: var(--diff-intermediate); border-color: var(--diff-intermediate); }

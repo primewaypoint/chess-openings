@@ -243,9 +243,8 @@
       <div class="review-banner-left">
         <div class="review-banner-icon">
           <svg viewBox="0 0 18 18" fill="none">
-            <rect x="2" y="4.5" width="10" height="11" rx="1.6" stroke="currentColor" stroke-width="1.4"/>
-            <path d="M5.5 2.5h9A1.5 1.5 0 0116 4v9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-            <path d="M4.8 10l1.7 1.7 2.9-3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="2.6" y="2.6" width="12.8" height="12.8" rx="3" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M6 9.1l2.1 2.1 4-4.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div>
