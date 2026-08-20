@@ -628,16 +628,27 @@ body {
 .study-fixed .study-panel {
   height: 100%;
   min-height: 0;
-  overflow: hidden; /* panel itself never scrolls */
+  /* Last-resort safety net: with the lines list already at its minimum, a very
+     short window could still leave no room for the controls. Scrolling the
+     panel is ugly but always beats silently clipping buttons out of reach. */
+  overflow-y: auto;
 }
 
-/* Variants (lines list): closed → the 5 essential lines are always fully
-   visible and never scroll. Open ("Go deeper") → the lines list (essentials +
-   deeper) becomes a capped scroll area, so it never pushes the nav buttons or
-   Reset off-screen. */
+/* Variants (lines list). This is the ONE flexible block in the panel: the
+   practice/learn controls below it have a fixed natural height and must always
+   be fully visible, so when the window is short it is the lines list that
+   gives up space and scrolls internally — never the controls that get clipped.
+   Open ("Go deeper") additionally locks the list height in JS. */
 .study-fixed .variants-section {
-  overflow: visible;
-  flex-shrink: 0;
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-height: 88px;   /* keep ~2 lines readable before it scrolls */
+  display: flex;
+  flex-direction: column;
+}
+.study-fixed .variants-section #variantList {
+  overflow-y: auto;
+  min-height: 0;
 }
 /* When open, JS locks #variantList to its closed height and sets overflow.
    This only adds a little breathing room for the scrollbar. */
@@ -645,15 +656,24 @@ body {
   padding-right: 4px;
 }
 
-/* Tab content blocks: flex columns that fill remaining panel space */
+/* Tab content blocks — the two tabs shrink differently.
+   Learn has a natural absorber inside it (the move list, which scrolls), so it
+   can flex and let that shrink. Practice has none — every child is a control
+   that must stay reachable — so it keeps its natural height and the lines list
+   above gives up the space instead. */
 .study-fixed #learnContent,
 .study-fixed #practiceContent {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  flex: 1;
   min-height: 0;
+}
+.study-fixed #learnContent {
+  flex: 1 1 auto;
   overflow: hidden;
+}
+.study-fixed #practiceContent {
+  flex: 0 0 auto;
 }
 
 /* Scrollable zones inside the tab content */
