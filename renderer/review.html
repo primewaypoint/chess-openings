@@ -109,9 +109,10 @@
         <rect x="2" y="4.5" width="10" height="11" rx="1.6" stroke="currentColor" stroke-width="1.2"/>
         <path d="M5.5 2.5h9A1.5 1.5 0 0116 4v9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
       </svg>
-      <div class="review-empty-title">Nothing to review yet</div>
-      <div class="review-empty-msg">Complete a few lines in Practice mode first — then come back to test your memory.</div>
-      <button class="review-summary-btn" onclick="window.location.href='index.html'">Browse openings</button>
+      <div class="review-empty-title" id="reviewEmptyTitle">Nothing to review yet</div>
+      <div class="review-empty-msg" id="reviewEmptyMsg">Complete a few lines in Practice mode first — then come back to test your memory.</div>
+      <button class="review-summary-btn" id="reviewEmptyBtn" onclick="window.location.href='index.html'">Browse openings</button>
+      <button class="review-empty-alt" id="reviewAnywayBtn" style="display:none">Review anyway</button>
     </div>
   </div>
 

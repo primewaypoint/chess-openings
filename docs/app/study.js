@@ -76,6 +76,11 @@ const Study = (function () {
   let deeperExpanded = false;  // "Go deeper" section open?
   let currentMoveIdx = 0;
   let practiceIdx = 0;
+  // Consecutive wrong attempts at the SAME move — after a few, offer to reveal
+  // the move so a stuck user is never left guessing with no way forward.
+  let wrongStreak = 0;
+  let wrongStreakIdx = -1;
+  const REVEAL_AFTER = 3;
   let board = null;
   let game = new Chess();
 
@@ -206,6 +211,7 @@ const Study = (function () {
       updateBoardLearn();
     } else {
       cancelAutoPlay();
+      resetWrongStreak();
       practiceIdx = 0;
       game = new Chess();
       rebuildBoard();
@@ -396,6 +402,7 @@ const Study = (function () {
   // ── Tab switch ───────────────────────────────────────────────────
   function switchTab(tab) {
     cancelAutoPlay();
+    resetWrongStreak();
     activeTab = tab;
     document.getElementById('tabLearn').classList.toggle('active', tab === 'learn');
     document.getElementById('tabPractice').classList.toggle('active', tab === 'practice');
@@ -520,6 +527,8 @@ const Study = (function () {
       flashSquare(target, 'correct');
       showCheckBadge(target);
       practiceIdx++;
+      wrongStreak = 0; wrongStreakIdx = -1;
+      syncRevealBtn();
       setPracticeExplanation(line.explanations?.[practiceIdx - 1]);
       highlightLastMove();
       setTimeout(() => {
@@ -535,9 +544,17 @@ const Study = (function () {
       flashSquare(target, 'wrong');
       const attacker = findAttackerAfterMove(source, target);
       if (attacker) drawArrow(attacker, target);
+
+      // Track repeated failures on this same move
+      if (wrongStreakIdx !== practiceIdx) { wrongStreakIdx = practiceIdx; wrongStreak = 0; }
+      wrongStreak++;
+
       const status = document.getElementById('practiceStatus');
-      status.textContent = 'Wrong move — try again';
+      status.textContent = wrongStreak >= REVEAL_AFTER
+        ? 'Stuck? Reveal the move below.'
+        : 'Wrong move — try again';
       status.className = 'practice-status wrong';
+      syncRevealBtn();
       setTimeout(() => updatePracticeUI(), 1200);
       return 'snapback';
     }
@@ -648,6 +665,7 @@ const Study = (function () {
     if (practiceIdx <= 0) return;
     cancelAutoPlay();
     clearSelection();
+    resetWrongStreak();
     practiceIdx--;
     // Step past the opponent's move so Back always lands on the user's turn
     if (openingSide !== 'both' && !isUserTurn() && practiceIdx > 0) practiceIdx--;
@@ -664,6 +682,7 @@ const Study = (function () {
   function practiceFirst() {
     cancelAutoPlay();
     clearSelection();
+    resetWrongStreak();
     practiceIdx = 0;
     game = new Chess();
     setBoardPosition();
@@ -678,6 +697,7 @@ const Study = (function () {
     if (!line || practiceIdx >= line.moves.length) return;
     cancelAutoPlay();
     clearSelection();
+    resetWrongStreak();
     const moved = game.move(line.moves[practiceIdx]);
     practiceIdx++;
     if (moved) { if (moved.captured) SoundFX.capture(); else SoundFX.move(); }
@@ -792,6 +812,51 @@ const Study = (function () {
 
   let hintArrowTimer = null;
 
+  // Show/hide the "Show me the move" escape hatch. It only appears once the
+  // user has failed the same move REVEAL_AFTER times, so it never nags someone
+  // who is doing fine.
+  function syncRevealBtn() {
+    const btn = document.getElementById('revealBtn');
+    if (!btn) return;
+    const line = currentLine();
+    const stuck = activeTab === 'practice'
+      && wrongStreak >= REVEAL_AFTER
+      && line && practiceIdx < line.moves.length;
+    btn.style.display = stuck ? '' : 'none';
+  }
+
+  function resetWrongStreak() {
+    wrongStreak = 0;
+    wrongStreakIdx = -1;
+    syncRevealBtn();
+  }
+
+  // Reveal the expected move: name it, arrow it, and show its explanation.
+  // Deliberately does NOT play it — the user still makes the move themselves,
+  // which is what makes it stick.
+  function revealMove() {
+    const line = currentLine();
+    if (!line || practiceIdx >= line.moves.length) return;
+    const san = line.moves[practiceIdx];
+    const temp = new Chess(game.fen());
+    const move = temp.move(san);
+    if (!move) return;
+
+    drawHintArrow(move.from, move.to);
+    const el = document.querySelector(`.square-${move.from}`);
+    if (el) {
+      el.style.background = 'rgba(255, 170, 40, 0.35)';
+      setTimeout(() => { el.style.background = ''; }, 2600);
+    }
+
+    const status = document.getElementById('practiceStatus');
+    status.textContent = `Play ${san}`;
+    status.className = 'practice-status revealed';
+
+    const why = line.explanations?.[practiceIdx];
+    if (why) setPracticeExplanation(why);
+  }
+
   function showHint() {
     const line = currentLine();
     if (!line || practiceIdx >= line.moves.length) return;
@@ -870,6 +935,7 @@ const Study = (function () {
 
   function resetPractice() {
     cancelAutoPlay();
+    resetWrongStreak();
     practiceIdx = 0;
     game = new Chess();
     rebuildBoard();
@@ -1008,6 +1074,7 @@ const Study = (function () {
     reset,
     switchTab,
     showHint: noPageScroll(showHint),
+    revealMove: noPageScroll(revealMove),
     resetPractice,
     practicePrev:  noPageScroll(practicePrev),
     practiceFirst: noPageScroll(practiceFirst),

@@ -670,6 +670,7 @@ body {
 /* Buttons that must always be visible — never shrink */
 .study-fixed .nav-buttons,
 .study-fixed .hint-btn,
+.study-fixed .reveal-btn,
 .study-fixed .reset-btn,
 .study-fixed .next-line-btn,
 .study-fixed .practice-instruction,
@@ -953,6 +954,23 @@ body {
 .practice-status.correct { color: var(--diff-beginner); }
 .practice-status.wrong { color: var(--diff-advanced); }
 .practice-status.complete { color: var(--diff-beginner); }
+.practice-status.revealed { color: #e8b54d; }
+
+/* "Show me the move" — only rendered once the user has failed the same move
+   several times, so it reads as a way out rather than a permanent crutch. */
+.reveal-btn {
+  width: 100%;
+  background: rgba(232, 181, 77, 0.12);
+  border: 1px solid rgba(232, 181, 77, 0.5);
+  border-radius: 7px;
+  padding: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8b54d;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.reveal-btn:hover { background: rgba(232, 181, 77, 0.2); border-color: #e8b54d; }
 
 /* Flash squares */
 .flash-correct  { background-color: var(--correct-flash) !important; }
@@ -1815,6 +1833,21 @@ kbd {
   transition: opacity 0.15s ease;
 }
 .review-summary-btn:hover { opacity: 0.85; }
+
+/* Secondary action on the "All caught up" state — reviewing ahead of schedule
+   is deliberately the quieter option. */
+.review-empty-alt {
+  display: block;
+  margin: 10px auto 0;
+  background: none;
+  border: none;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+.review-empty-alt:hover { color: var(--text-secondary); }
 
 /* =====================
    STATS PAGE

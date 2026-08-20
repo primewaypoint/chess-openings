@@ -53,6 +53,27 @@
     return orderForReview(pool, schedule, today).slice(0, size);
   }
 
+  // Is this line actually due today? A line never reviewed before counts as
+  // due (you completed it in Practice but have never been re-tested on it).
+  function isDue(schedule, key, today) {
+    var e = (schedule || {})[key];
+    if (!e || !e.due) return true;
+    return e.due <= today;
+  }
+
+  // Only the lines genuinely due today, most overdue first. Unlike
+  // selectDueLines this never pads the list with lines that aren't due yet —
+  // so "N lines due" can be reported honestly.
+  function dueLines(pool, schedule, today) {
+    return orderForReview(pool, schedule, today).filter(function (item) {
+      return isDue(schedule, item.key, today);
+    });
+  }
+
+  function countDue(pool, schedule, today) {
+    return dueLines(pool, schedule, today).length;
+  }
+
   // Returns a NEW schedule object with the result applied.
   function recordReviewResult(schedule, key, clean, today) {
     var next = {};
@@ -85,6 +106,9 @@
     lineKey: lineKey,
     orderForReview: orderForReview,
     selectDueLines: selectDueLines,
+    isDue: isDue,
+    dueLines: dueLines,
+    countDue: countDue,
     recordReviewResult: recordReviewResult,
     getReviewSchedule: getReviewSchedule,
     saveReviewSchedule: saveReviewSchedule

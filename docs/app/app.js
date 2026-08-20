@@ -201,6 +201,25 @@
     return n;
   }
 
+  // How many completed lines are actually DUE for review today. Mirrors what
+  // review.html will serve, so the banner never promises work that isn't there.
+  // Falls back to the raw pool size if the scheduler module isn't loaded.
+  function reviewDueCount() {
+    if (!window.ReviewSchedule) return reviewPoolSize();
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k || !k.startsWith('completedLines_')) continue;
+      const openingId = k.slice('completedLines_'.length);
+      try {
+        JSON.parse(localStorage.getItem(k) || '[]').forEach(lid => {
+          keys.push({ key: ReviewSchedule.lineKey(openingId, lid) });
+        });
+      } catch {}
+    }
+    return ReviewSchedule.countDue(keys, ReviewSchedule.getReviewSchedule(), todayStr());
+  }
+
   function renderReviewBanner() {
     const el = document.getElementById('reviewBanner');
     if (!el) return;
@@ -215,8 +234,11 @@
     }
 
     const doneToday = localStorage.getItem('dailyReviewDate') === today;
+    const due = reviewDueCount();
+    // Nothing due and already reviewed today → nothing to nag about.
+    if (due === 0 && doneToday) { el.style.display = 'none'; return; }
     el.style.display = '';
-    el.classList.toggle('done', doneToday);
+    el.classList.toggle('done', doneToday || due === 0);
     el.innerHTML = `
       <div class="review-banner-left">
         <div class="review-banner-icon">
@@ -228,18 +250,23 @@
         </div>
         <div>
           <div class="review-banner-title">Daily Review</div>
-          <div class="review-banner-sub">${doneToday
-            ? 'Done for today — come back tomorrow or review again'
-            : "Test your memory on lines you've already learned"}</div>
+          <div class="review-banner-sub">${
+            due === 0
+              ? 'All caught up — nothing due today'
+              : due + (due === 1 ? ' line due today' : ' lines due today')
+          }</div>
         </div>
       </div>
       <div class="review-banner-right">
-        <button class="review-banner-btn">${doneToday ? '✓ Review again' : 'Start review →'}</button>
+        <button class="review-banner-btn">${
+          due === 0 ? 'Review ahead' : (doneToday ? 'Review again →' : 'Start review →')
+        }</button>
         <button class="review-banner-close" title="Hide for today">×</button>
       </div>`;
 
     el.querySelector('.review-banner-btn').addEventListener('click', () => {
-      window.location.href = 'review.html';
+      // Nothing due → the user is explicitly choosing to work ahead
+      window.location.href = due === 0 ? 'review.html?all=1' : 'review.html';
     });
 
     el.querySelector('.review-banner-close').addEventListener('click', () => {

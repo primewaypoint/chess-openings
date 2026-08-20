@@ -57,20 +57,50 @@ const Review = (function () {
   }
 
   const pool = buildPool();
-  if (pool.length === 0) {
+
+  function showEmptyState(title, msg, allowAnyway) {
     document.querySelector('.study-layout').style.display = 'none';
     document.getElementById('reviewEmpty').style.display = '';
+    document.getElementById('reviewEmptyTitle').textContent = title;
+    document.getElementById('reviewEmptyMsg').textContent = msg;
+    const anyway = document.getElementById('reviewAnywayBtn');
+    if (anyway) anyway.style.display = allowAnyway ? '' : 'none';
+  }
+
+  // Nothing completed yet — there is nothing that COULD be reviewed.
+  if (pool.length === 0) {
+    showEmptyState(
+      'Nothing to review yet',
+      'Complete a few lines in Practice mode first — then come back to test your memory.',
+      false
+    );
     return {};
   }
 
-  // Pick the session. With the spaced-repetition module, prioritise the lines
-  // most due for review (struggling / overdue first). If that module is somehow
-  // unavailable, fall back to the old random pick — so it can never be worse.
+  // Build the session from the lines genuinely DUE today (most overdue first),
+  // capped at SESSION_SIZE. Never pad with lines that aren't due — a short
+  // session is the honest answer when only two lines are due.
+  // ?all=1 lets the user review ahead of schedule on purpose.
+  const reviewAll = new URLSearchParams(window.location.search).get('all') === '1';
   let session;
   if (window.ReviewSchedule) {
     const today = ReviewSchedule.todayStr();
     const schedule = ReviewSchedule.getReviewSchedule();
-    session = ReviewSchedule.selectDueLines(pool, schedule, today, SESSION_SIZE);
+    const due = ReviewSchedule.dueLines(pool, schedule, today);
+
+    if (due.length === 0 && !reviewAll) {
+      // Everything is scheduled for a future day — say so instead of inventing work.
+      showEmptyState(
+        'All caught up',
+        'No lines are due for review today. Come back tomorrow, or review ahead if you want the practice.',
+        true
+      );
+      const anyway = document.getElementById('reviewAnywayBtn');
+      if (anyway) anyway.onclick = () => { window.location.href = 'review.html?all=1'; };
+      return {};
+    }
+    session = (due.length ? due : ReviewSchedule.orderForReview(pool, schedule, today))
+      .slice(0, SESSION_SIZE);
   } else {
     for (let i = pool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
