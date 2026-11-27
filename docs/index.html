@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChessOpenings — Offline chess opening trainer</title>
+  <meta name="description" content="Learn and practice 91 chess openings on Mac and Windows. Free to play, fully offline. No account, no ads, no subscription.">
+  <style>
+    :root {
+      --bg: #0d0d0f;
+      --bg-2: #121214;
+      --card: #17171a;
+      --card-2: #1d1d21;
+      --border: #26262b;
+      --border-2: #34343a;
+      --text: #ededf0;
+      --text-2: #a2a2ab;
+      --text-3: #61616a;
+      --gold: #e8b54d;
+      --gold-soft: rgba(232, 181, 77, 0.12);
+      --green: #4caf6e;
+      --sq-light: #ecd9b9;
+      --sq-dark: #ae8a68;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: var(--gold); text-decoration: none; }
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 0 28px; }
+
+    /* ── Nav ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      transition: background 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(13, 13, 15, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom-color: var(--border);
+      padding: 12px 0;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 700; font-size: 16px; }
+    .nav-logo svg { width: 22px; height: 17px; color: var(--gold); }
+    .nav-logo .thin { font-weight: 300; }
+    .nav-cta {
+      font-size: 13.5px; font-weight: 600;
+      padding: 8px 18px;
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+      color: var(--text);
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .nav-cta:hover { border-color: var(--gold); background: var(--gold-soft); }
+
+    /* ── Hero ────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0 80px;
+      background:
+        radial-gradient(ellipse 70% 55% at 70% 20%, rgba(232, 181, 77, 0.055), transparent 70%),
+        var(--bg);
+      overflow: hidden;
+    }
+    #glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(560px circle at var(--mx, 70%) var(--my, 30%), rgba(232, 181, 77, 0.06), transparent 65%);
+      transition: opacity 0.4s ease;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .hero-label::before {
+      content: "";
+      width: 22px; height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+    h1 {
+      font-size: clamp(38px, 5.4vw, 60px);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+    }
+    h1 .rv {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(26px);
+      animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+      animation-delay: var(--d, 0s);
+    }
+    h1 .gold { color: var(--gold); }
+    @keyframes rise {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-sub {
+      margin-top: 22px;
+      font-size: clamp(15.5px, 2vw, 17.5px);
+      color: var(--text-2);
+      max-width: 480px;
+      opacity: 0;
+      animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.55s forwards;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 600; }
+    .hero-cta {
+      margin-top: 36px;
+      display: flex;
+      gap: 13px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.7s forwards;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+    .btn svg { width: 15px; height: 15px; }
+    .btn-gold { background: var(--gold); color: #1b1505; }
+    .btn-gold:hover {
+      background: #f1c463;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(232, 181, 77, 0.25);
+    }
+    .btn-ghost { border: 1px solid var(--border-2); color: var(--text); background: rgba(255,255,255,0.02); }
+    .btn-ghost:hover { border-color: var(--text-3); background: var(--card); transform: translateY(-2px); }
+    .hero-note {
+      margin-top: 20px;
+      font-size: 12.5px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+      opacity: 0;
+      animation: rise 0.7s ease 0.85s forwards;
+    }
+
+    /* ── Live board ──────────────────────────────────── */
+    .board-stage {
+      perspective: 1100px;
+      opacity: 0;
+      animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.45s forwards;
+    }
+    .board-tilt {
+      transform: rotateY(-7deg) rotateX(4deg);
+      transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .board-stage:hover .board-tilt { transform: rotateY(0) rotateX(0); }
+    #board {
+      position: relative;
+      width: min(440px, 100%);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      /* Checkerboard as an inline SVG image — Safari fails to repaint
+         conic-gradients under 3D transforms after a reload */
+      background-color: #ecd9b9;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2' shape-rendering='crispEdges'%3E%3Crect width='2' height='2' fill='%23ecd9b9'/%3E%3Crect x='1' width='1' height='1' fill='%23ae8a68'/%3E%3Crect y='1' width='1' height='1' fill='%23ae8a68'/%3E%3C/svg%3E");
+      background-size: 25% 25%;
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.55),
+        0 0 0 1px var(--border),
+        0 0 90px rgba(232, 181, 77, 0.06);
+    }
+    #board .hl {
+      position: absolute;
+      width: 12.5%; height: 12.5%;
+      top: 0; left: 0;
+      background: rgba(232, 181, 77, 0.42);
+      opacity: 0;
+      /* Only fade — the highlight must snap to the move's squares, never slide
+         across the board (a sliding square lags behind the piece and lands
+         between squares mid-move). */
+      transition: opacity 0.3s ease;
+    }
+    #board .piece {
+      position: absolute;
+      width: 12.5%; height: 12.5%;
+      top: 0; left: 0;
+      transition: transform 0.5s cubic-bezier(0.3, 0.8, 0.3, 1), opacity 0.35s ease;
+      will-change: transform;
+      z-index: 2;
+      pointer-events: none;
+    }
+    #board .piece img {
+      width: 100%; height: 100%; display: block;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.25));
+      transition: transform 0.38s cubic-bezier(0.3, 0.8, 0.3, 1);
+    }
+    /* Captured piece fades and shrinks IN PLACE. The scale lives on the <img>,
+       not the .piece — otherwise it clobbers the translate() that positions the
+       piece and flings it to the a8 corner mid-capture. */
+    #board .piece.captured { opacity: 0; z-index: 1; }
+    #board .piece.captured img { transform: scale(0.48); }
+    #board.resetting .piece, #board.resetting .hl { transition: opacity 0.5s ease; opacity: 0; }
+    .board-caption {
+      margin-top: 20px;
+      text-align: center;
+      font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+      font-size: 13.5px;
+      color: var(--text-2);
+      min-height: 21px;
+      letter-spacing: 0.01em;
+      transition: opacity 0.25s ease;
+    }
+    .board-caption .num { color: var(--gold); }
+    .board-name {
+      margin-top: 6px;
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    /* ── Stats ───────────────────────────────────────── */
+    .stats {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      text-align: center;
+    }
+    .stat { padding: 42px 12px; }
+    .stat + .stat { border-left: 1px solid var(--border); }
+    .stat .num {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat .num .accent { color: var(--gold); }
+    .stat .lbl { margin-top: 4px; font-size: 12.5px; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+
+    /* ── Sections ────────────────────────────────────── */
+    section { padding: 96px 0; }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: clamp(26px, 3.6vw, 34px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
+    }
+    p.body { color: var(--text-2); font-size: 16px; max-width: 660px; }
+    p.body + p.body { margin-top: 14px; }
+    p.body strong { color: var(--text); }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: var(--d, 0s);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ── Features ────────────────────────────────────── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 44px;
+    }
+    .feature {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px 24px;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+    .feature:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-2);
+      background: var(--card-2);
+    }
+    .feature::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232, 181, 77, 0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .feature:hover::after { opacity: 1; }
+    .feature .ficon {
+      width: 42px; height: 42px;
+      border-radius: 11px;
+      background: var(--gold-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feature .ficon svg { width: 21px; height: 21px; color: var(--gold); }
+    .feature h3 { font-size: 15.5px; font-weight: 600; margin-bottom: 7px; }
+    .feature p { font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
+
+    /* ── Mission ─────────────────────────────────────── */
+    .mission { border-top: 1px solid var(--border); background: var(--bg-2); }
+    .mission-quote {
+      margin-top: 30px;
+      padding: 22px 26px;
+      border-left: 2px solid var(--gold);
+      background: var(--card);
+      border-radius: 0 12px 12px 0;
+      max-width: 660px;
+      font-size: 15.5px;
+      color: var(--text);
+      font-style: italic;
+    }
+    .mission-quote span { display: block; margin-top: 8px; font-style: normal; font-size: 13px; color: var(--text-3); }
+
+    /* ── Download ────────────────────────────────────── */
+    .download { border-top: 1px solid var(--border); }
+    .dl-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(228px, 1fr));
+      gap: 14px;
+      margin-top: 44px;
+    }
+    .dl-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 24px 28px;
+      text-align: center;
+      color: var(--text);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .dl-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+    }
+    .dl-card .os { width: 30px; height: 30px; margin-bottom: 14px; color: var(--text); }
+    .dl-card h3 { font-size: 15.5px; font-weight: 600; }
+    .dl-card p { font-size: 13px; color: var(--text-3); margin-top: 4px; }
+    .dl-card .get {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold);
+      transition: transform 0.2s ease;
+    }
+    .dl-card:hover .get { transform: translateX(3px); }
+    .dl-steps {
+      list-style: none;
+      text-align: left;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .dl-steps li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-2);
+    }
+    /* The li's only two flex children are the number circle and this text
+       span — text + <strong> must NOT be direct flex children themselves,
+       or flexbox treats each text run as its own item and wraps them
+       independently instead of as one flowing phrase. */
+    .dl-steps li .dl-step-t { flex: 1; }
+    .dl-steps li strong { color: var(--text); font-weight: 600; }
+    .dl-steps li .dl-step-n {
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      color: var(--gold);
+      font-size: 10.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dl-note {
+      margin-top: 30px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+    .dl-note strong { color: var(--text); }
+    .dl-note code {
+      font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      background: var(--bg);
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      padding: 2px 7px;
+      color: var(--gold);
+      /* Wrap on narrow screens instead of forcing the note to overflow the
+         viewport — a fixed-width command like the xattr one is wider than
+         an iPhone screen. */
+      white-space: normal;
+      word-break: break-word;
+      display: inline-block;
+      line-height: 1.5;
+    }
+
+    /* ── Footer ──────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 44px 0 60px;
+      text-align: center;
+      font-size: 13.5px;
+      color: var(--text-3);
+    }
+    footer svg { width: 26px; height: 20px; color: var(--gold); opacity: 0.85; margin-bottom: 12px; }
+    footer a { color: var(--text-2); transition: color 0.2s ease; }
+    footer a:hover { color: var(--gold); }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 880px) {
+      .hero { padding: 110px 0 64px; min-height: auto; }
+      .hero-grid { grid-template-columns: 1fr; gap: 52px; }
+      .board-tilt { transform: none; }
+      .features, .dl-cards { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(3) { border-left: none; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--border); }
+      section { padding: 72px 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+      h1 .rv, .hero-sub, .hero-cta, .hero-note, .board-stage { opacity: 1; transform: none; }
+    }
+  </style>
+  <noscript>
+    <style>
+      .reveal, h1 .rv, .hero-sub, .hero-cta, .hero-note, .board-stage { opacity: 1 !important; transform: none !important; animation: none !important; }
+    </style>
+  </noscript>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="wrap nav-inner">
+      <a class="nav-logo" href="#">
+        <svg viewBox="0 0 18 14" fill="none"><path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span><span class="thin">Chess</span>Openings</span>
+      </a>
+      <a class="nav-cta" href="#download">Download</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div id="glow"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-label">Offline · No ads</div>
+        <h1>
+          <span class="rv" style="--d:0.05s">Master</span>
+          <span class="rv" style="--d:0.13s">the</span>
+          <span class="rv" style="--d:0.21s">opening.</span><br>
+          <span class="rv gold" style="--d:0.34s">Own</span>
+          <span class="rv gold" style="--d:0.42s">the</span>
+          <span class="rv gold" style="--d:0.50s">game.</span>
+        </h1>
+        <p class="hero-sub">
+          Learn and practice <strong>91 chess openings</strong> with move-by-move explanations —
+          in your browser, or installed on Mac, Windows, iPhone and iPad.
+          <strong>No account. No ads. No subscription. Ever.</strong>
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-gold" href="app/index.html">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+            Play now
+          </a>
+          <a class="btn btn-ghost" href="#download">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download
+          </a>
+        </div>
+        <p class="hero-note">© 2026 primewaypoint. All rights reserved.</p>
+      </div>
+
+      <div class="board-stage">
+        <div class="board-tilt">
+          <div id="board">
+            <div class="hl" id="hlFrom"></div>
+            <div class="hl" id="hlTo"></div>
+          </div>
+        </div>
+        <div class="board-caption" id="caption">&nbsp;</div>
+        <div class="board-name">Fried Liver Attack — live replay</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat reveal"><div class="num"><span data-count="91">0</span></div><div class="lbl">Openings</div></div>
+      <div class="stat reveal" style="--d:0.08s"><div class="num"><span data-count="412">0</span></div><div class="lbl">Curated lines</div></div>
+      <div class="stat reveal" style="--d:0.16s"><div class="num"><span data-count="4259">0</span></div><div class="lbl">Explained moves</div></div>
+      <div class="stat reveal" style="--d:0.24s"><div class="num"><span data-count="5">0</span></div><div class="lbl">Difficulty levels</div></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="section-label reveal">Built for training</div>
+      <h2 class="reveal" style="--d:0.06s">Everything you need to build a repertoire</h2>
+      <div class="features">
+        <div class="feature reveal" style="--d:0.05s">
+          <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <h3>Learn mode</h3>
+          <p>Step through every move with plain-language explanations of the ideas behind it — not just the notation.</p>
+        </div>
+        <div class="feature reveal" style="--d:0.11s">
+          <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+          <h3>Practice mode</h3>
+          <p>Play the moves yourself. The opponent replies automatically — and wrong moves show you which piece punishes them.</p>
+        </div>
+        <div class="feature reveal" style="--d:0.17s">
+          <div class="ficon"><svg viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13"/></svg></div>
+          <h3>91 openings, 412 lines</h3>
+          <p>From beginner classics to the Najdorf — plus fun gambits like the Bongcloud. Essential lines by default, with optional Go deeper variations. Filtered by difficulty and color.</p>
+        </div>
+        <div class="feature reveal" style="--d:0.05s">
+          <div class="ficon"><svg viewBox="0 0 14 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M7 17c3.5 0 6-2.5 6-5.5 0-2-1-3.5-2-4.5 0 1.5-.8 2.5-1.8 2.8C9.5 8 8.5 5.5 7 3c0 2.5-1.5 4-1.5 5.5C4.5 8.2 4 7.5 4 6.5 2.5 8 1 10 1 11.5 1 14.5 3.5 17 7 17z"/></svg></div>
+          <h3>Daily streaks</h3>
+          <p>Build a training habit with streak tracking and a weekly calendar of the days you showed up.</p>
+        </div>
+        <div class="feature reveal" style="--d:0.11s">
+          <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <h3>Favorites and search</h3>
+          <p>Star the openings in your repertoire, search instantly, and track progress per opening and per line.</p>
+        </div>
+        <div class="feature reveal" style="--d:0.17s">
+          <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+          <h3>Polished details</h3>
+          <p>Dark and light themes, subtle sounds, keyboard shortcuts, smooth animations. Built with care, not bloat.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mission">
+    <div class="wrap">
+      <div class="section-label reveal">Why this exists</div>
+      <h2 class="reveal" style="--d:0.06s">Opening training shouldn't cost a subscription</h2>
+      <p class="body reveal" style="--d:0.1s">
+        Most opening trainers lock their best features behind a monthly fee. But the Italian Game,
+        the Sicilian and the Queen's Gambit are <strong>centuries old — they belong to everyone</strong>.
+        ChessOpenings was built on that conviction: one focused tool, done well and free to play.
+      </p>
+      <p class="body reveal" style="--d:0.14s">
+        It runs <strong>entirely offline</strong>. No servers, no tracking, no data ever leaving your computer.
+      </p>
+      <div class="mission-quote reveal" style="--d:0.18s">
+        "I never wanted customers. I wanted better chess players."
+        <span>— primewaypoint, creator</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="download" id="download">
+    <div class="wrap">
+      <div class="section-label reveal">Download</div>
+      <h2 class="reveal" style="--d:0.06s">Get it for your system</h2>
+      <div class="dl-cards">
+        <a class="dl-card reveal" style="--d:0.05s" href="https://github.com/primewaypoint/chess-openings/releases/latest/download/ChessOpenings-Mac-AppleSilicon.dmg">
+          <svg class="os" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="10" rx="1.5"/><path d="M2 17.5h20l-1.2 2.3a1.5 1.5 0 01-1.33.8H4.53a1.5 1.5 0 01-1.33-.8z"/></svg>
+          <h3>Mac — Apple Silicon</h3>
+          <p>M1 chip or newer</p>
+          <span class="get">Download .dmg →</span>
+        </a>
+        <a class="dl-card reveal" style="--d:0.11s" href="https://github.com/primewaypoint/chess-openings/releases/latest/download/ChessOpenings-Mac-Intel.dmg">
+          <svg class="os" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="10" rx="1.5"/><path d="M2 17.5h20l-1.2 2.3a1.5 1.5 0 01-1.33.8H4.53a1.5 1.5 0 01-1.33-.8z"/></svg>
+          <h3>Mac — Intel</h3>
+          <p>Intel-based Macs</p>
+          <span class="get">Download .dmg →</span>
+        </a>
+        <a class="dl-card reveal" style="--d:0.17s" href="https://github.com/primewaypoint/chess-openings/releases/latest/download/ChessOpenings-Windows-Setup.exe">
+          <svg class="os" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="12" rx="1.5"/><rect x="10.5" y="16" width="3" height="2.5"/><rect x="8" y="18.5" width="8" height="1.6" rx="0.8"/></svg>
+          <h3>Windows</h3>
+          <p>Windows 10 / 11 (64-bit)</p>
+          <span class="get">Download installer →</span>
+        </a>
+        <a class="dl-card reveal" style="--d:0.23s" href="app/index.html">
+          <svg class="os" viewBox="0 0 320 512" fill="currentColor"><path d="M272 0H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h224c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zM160 480c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm112-108c0 6.6-5.4 12-12 12H60c-6.6 0-12-5.4-12-12V60c0-6.6 5.4-12 12-12h200c6.6 0 12 5.4 12 12v312z"/></svg>
+          <h3>iPhone &amp; iPad</h3>
+          <p>Play right away — install for offline later</p>
+          <span class="get">Open the app →</span>
+          <ol class="dl-steps">
+            <li><span class="dl-step-n">1</span><span class="dl-step-t">Tap <strong>Share</strong></span></li>
+            <li><span class="dl-step-n">2</span><span class="dl-step-t">Tap <strong>Add to Home Screen</strong></span></li>
+            <li><span class="dl-step-n">3</span><span class="dl-step-t">Tap <strong>Add</strong></span></li>
+          </ol>
+        </a>
+      </div>
+      <div class="dl-note reveal" style="--d:0.22s">
+        <strong>First launch:</strong> the app is free and unsigned (signing certificates cost money), so your
+        system blocks it once. On Mac, open <strong>Terminal</strong> and run
+        <code>xattr -cr /Applications/ChessOpenings.app</code>, then open the app normally.
+        On Windows: click <strong>More info</strong> → <strong>Run anyway</strong>. Only the first time.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <svg viewBox="0 0 18 14" fill="none"><path d="M1 13h16M1 13L3.5 5.5L7 9.5L9 1.5L11 9.5L14.5 5.5L17 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p>Created by <strong>primewaypoint</strong> · © 2026 All rights reserved · <a href="LICENSE.txt">License</a> · <a href="THIRD-PARTY-NOTICES.txt">Third-party notices</a></p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Nav background on scroll ─────────────────────
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scrollY > 40);
+    }, { passive: true });
+
+    // ── Cursor glow in hero ──────────────────────────
+    const hero = document.querySelector('.hero');
+    const glow = document.getElementById('glow');
+    hero.addEventListener('pointermove', e => {
+      const r = hero.getBoundingClientRect();
+      glow.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      glow.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+
+    // ── Scroll reveals ───────────────────────────────
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+    }
+
+    // ── Animated counters ────────────────────────────
+    const cio = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        cio.unobserve(en.target);
+        const el = en.target;
+        const target = +el.dataset.count;
+        if (reduced) { el.textContent = target; return; }
+        const t0 = performance.now(), dur = 1300;
+        (function tick(t) {
+          const p = Math.min((t - t0) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * ease);
+          if (p < 1) requestAnimationFrame(tick);
+        })(t0);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+    // ── Live board: Fried Liver Attack ───────────────
+    const board   = document.getElementById('board');
+    const hlFrom  = document.getElementById('hlFrom');
+    const hlTo    = document.getElementById('hlTo');
+    const caption = document.getElementById('caption');
+
+    const START = [];
+    'abcdefgh'.split('').forEach((f, i) => {
+      START.push(['wP', f + '2'], ['bP', f + '7']);
+    });
+    [['a','R'],['b','N'],['c','B'],['d','Q'],['e','K'],['f','B'],['g','N'],['h','R']]
+      .forEach(([f, t]) => { START.push(['w' + t, f + '1'], ['b' + t, f + '8']); });
+
+    // [from, to, caption]
+    const MOVES = [
+      ['e2','e4','<span class="num">1.</span> e4'],
+      ['e7','e5','<span class="num">1...</span> e5'],
+      ['g1','f3','<span class="num">2.</span> Nf3'],
+      ['b8','c6','<span class="num">2...</span> Nc6'],
+      ['f1','c4','<span class="num">3.</span> Bc4 — the Italian Game'],
+      ['g8','f6','<span class="num">3...</span> Nf6'],
+      ['f3','g5','<span class="num">4.</span> Ng5 — eyeing f7'],
+      ['d7','d5','<span class="num">4...</span> d5'],
+      ['e4','d5','<span class="num">5.</span> exd5'],
+      ['f6','d5','<span class="num">5...</span> Nxd5?'],
+      ['g5','f7','<span class="num">6.</span> Nxf7! — the Fried Liver'],
+      ['e8','f7','<span class="num">6...</span> Kxf7'],
+      ['d1','f3','<span class="num">7.</span> Qf3+ — the king is dragged out']
+    ];
+
+    function xy(sq) {
+      return { x: sq.charCodeAt(0) - 97, y: 8 - +sq[1] };
+    }
+    function place(el, sq) {
+      const p = xy(sq);
+      el.style.transform = `translate(${p.x * 100}%, ${p.y * 100}%)`;
+    }
+
+    let pieces = []; // { el, square }
+
+    function setup(fadeIn) {
+      pieces.forEach(p => p.el.remove());
+      pieces = [];
+      START.forEach(([type, sq]) => {
+        const el = document.createElement('div');
+        el.className = 'piece';
+        el.innerHTML = `<img src="pieces/${type}.png" alt="">`;
+        place(el, sq);
+        if (fadeIn) el.style.opacity = '0';
+        board.appendChild(el);
+        pieces.push({ el, square: sq });
+      });
+      if (fadeIn) requestAnimationFrame(() => pieces.forEach(p => p.el.style.opacity = '1'));
+      hlFrom.style.opacity = 0;
+      hlTo.style.opacity = 0;
+    }
+
+    function at(sq) { return pieces.find(p => p.square === sq); }
+
+    function playMove(i) {
+      const [from, to, label] = MOVES[i];
+      const victim = at(to);
+      if (victim) {
+        victim.el.classList.add('captured');
+        victim.square = null;
+        setTimeout(() => victim.el.remove(), 400);
+        pieces = pieces.filter(p => p !== victim);
+      }
+      const mover = at(from);
+      if (mover) { place(mover.el, to); mover.square = to; }
+      // Fade the highlight out, reposition it while invisible, then fade back
+      // in on the new squares — so it never slides or teleports across the board.
+      hlFrom.style.opacity = 0; hlTo.style.opacity = 0;
+      requestAnimationFrame(() => {
+        place(hlFrom, from); place(hlTo, to);
+        requestAnimationFrame(() => { hlFrom.style.opacity = 1; hlTo.style.opacity = 1; });
+      });
+      caption.style.opacity = 0;
+      setTimeout(() => { caption.innerHTML = label; caption.style.opacity = 1; }, 130);
+    }
+
+    let loopTimer = null;
+    function later(fn, ms) { clearTimeout(loopTimer); loopTimer = setTimeout(fn, ms); }
+
+    function runLoop() {
+      let i = 0;
+      const step = () => {
+        // Browsers throttle timers in hidden tabs — idle until visible again
+        if (document.hidden) { later(step, 600); return; }
+        if (i < MOVES.length) {
+          playMove(i++);
+          later(step, i === MOVES.length ? 3200 : 1150);
+        } else {
+          board.classList.add('resetting');
+          later(() => {
+            board.classList.remove('resetting');
+            setup(true);
+            caption.innerHTML = '&nbsp;';
+            i = 0;
+            later(step, 900);
+          }, 600);
+        }
+      };
+      later(step, 1400);
+    }
+
+    function restart() {
+      clearTimeout(loopTimer);
+      board.classList.remove('resetting');
+      caption.innerHTML = '&nbsp;';
+      setup();
+      runLoop();
+    }
+
+    setup();
+    if (reduced) {
+      // Show the final tactical position statically
+      MOVES.forEach((m, i) => playMove(i));
+    } else {
+      runLoop();
+      // Recover from back/forward-cache restores and tab switches,
+      // where timers die or the board froze mid-reset
+      window.addEventListener('pageshow', e => { if (e.persisted) restart(); });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) restart(); });
+    }
+
+    // Failsafe: if the CSS entrance animation ever fails to run,
+    // force the board visible once its delay has passed
+    setTimeout(() => {
+      const stage = document.querySelector('.board-stage');
+      if (stage) stage.style.opacity = '1';
+    }, 1700);
+  })();
+  </script>
+
+</body>
+</html>

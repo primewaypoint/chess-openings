@@ -1,0 +1,12 @@
+# Dependencies (restored with: npm install)
+node_modules/
+
+# Build output (regenerated with: npm run build)
+dist/
+
+# Installers — too large for git; attach them to GitHub Releases instead
+*.dmg
+*.exe
+
+# macOS junk
+.DS_Store

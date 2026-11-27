@@ -1,0 +1,26 @@
+ChessOpenings
+Copyright (c) 2026 primewaypoint. All rights reserved.
+
+1. You may download, install and use ChessOpenings, free of charge, for your
+   own personal or educational use.
+
+2. Without prior written permission from primewaypoint you may not:
+   a) copy, publish, distribute, share or re-upload the app or any part of it;
+   b) modify it, translate it into another programming language or create
+      derivative works from it;
+   c) sell it, rent it, or use it or any part of it for commercial purposes;
+   d) reuse its source code, texts, opening explanations or design in another
+      product.
+
+3. Exceptions: rights you have under mandatory law, and the rights GitHub's
+   Terms of Service give to view and fork public repositories on GitHub.
+
+4. Third-party components keep their own licenses, listed in
+   THIRD-PARTY-NOTICES.txt. This license does not restrict them.
+
+5. Versions up to and including 1.6.0 were released under the GNU GPL v3.0.
+   This license applies to version 2.0.0 and later.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. TO THE EXTENT
+PERMITTED BY LAW, THE AUTHOR IS NOT LIABLE FOR ANY CLAIM OR DAMAGES ARISING
+FROM ITS USE.
